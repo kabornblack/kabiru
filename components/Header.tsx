@@ -127,7 +127,7 @@ const NavItemWithDropdown: React.FC<NavItemProps> = ({
                   Icon={item.icon}
                   className="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#B8860B] dark:group-hover:text-[#B8860B]"
                 />
-                <span className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-black dark:group-hover:text-white text-xs uppercase tracking-[4px] leading-5 pb-8">
+                <span className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B] dark:group-hover:text-[#B8860B] text-xs uppercase tracking-[4px] leading-5 pb-8">
                   {item.title}
                 </span>
               </div>
@@ -140,18 +140,18 @@ const NavItemWithDropdown: React.FC<NavItemProps> = ({
 };
 
 // Main Header Component
-function Header1() {
+function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const homeDropdownItems = [
     {
       icon: FaInfoCircle,
-      href: "/about",
+      href: "#about",
       title: "about",
     },
     {
       icon: FaUserTie,
-      href: "/contact",
+      href: "#contact",
       title: "contact",
     },
   ];
@@ -172,7 +172,7 @@ function Header1() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center justify-center">
+            <div className="hidden lg:flex items-center justify-center">
               <NavItemWithDropdown
                 icon={FaUser}
                 // icon={ImageIcon}
@@ -180,15 +180,15 @@ function Header1() {
               />
 
               <Link
-                href="/skills"
-                className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white group"
+                href="#skills"
+                className="text-gray-600 dark:text-gray-400 hover:text-[#B8860B]  group"
               >
-                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-black dark:hover:text-white border-r border-gray-50 dark:border-gray-950 gap-2">
+                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B]  border-r border-gray-50 dark:border-gray-950 gap-2">
                   <ParallaxIcon
                     Icon={FaTools}
                     className="w-7 h-7 -mb-6 group-hover:text-[#B8860B]"
                   />
-                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-black dark:group-hover:text-white text-xs uppercase tracking-[2px] leading-2 pb-8">
+                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B]  text-xs uppercase tracking-[2px] leading-2 pb-8">
                     Skills
                   </p>
                 </div>
@@ -198,12 +198,12 @@ function Header1() {
                 href="/portfolio"
                 className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white group"
               >
-                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-black dark:hover:text-white border-r border-gray-50 dark:border-gray-950 gap-2">
+                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B] border-r border-gray-50 dark:border-gray-950 gap-2">
                   <ParallaxIcon
                     Icon={FaBriefcase}
                     className="w-7 h-7 -mb-6 group-hover:text-[#B8860B]"
                   />
-                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-black dark:group-hover:text-white text-xs uppercase tracking-[2px] leading-2 pb-8">
+                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B] text-xs uppercase tracking-[2px] leading-2 pb-8">
                     Portfolio
                   </p>
                 </div>
@@ -211,15 +211,14 @@ function Header1() {
             </div>
           </div>
           {/* Desktop Social Links */}
-          <div className="hidden md:flex space-x-4 px-12 justify-center items-center h-32">
+          <div className="hidden lg:flex space-x-4 px-12 justify-center items-center h-32">
             <Socials />
-            {/* <DownloadCV /> */}
           </div>
 
           {/* Mobile Burger Menu */}
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="md:hidden px-8 h-32 flex items-center justify-center text-gray-600 dark:text-gray-400"
+            className="lg:hidden px-8 h-32 flex items-center justify-center text-gray-600 dark:text-gray-400"
           >
             <ParallaxIcon
               Icon={isMenuOpen ? FaTimes : FaBars}
@@ -235,7 +234,7 @@ function Header1() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute top-32 left-0 w-full bg-white dark:bg-[#171717] border-t border-gray-200 dark:border-gray-950 shadow-xl md:hidden"
+                className="absolute top-32 left-0 w-full bg-white dark:bg-[#171717] border-t border-gray-200 dark:border-gray-950 shadow-xl lg:hidden"
               >
                 {/* Mobile Navigation Links */}
                 <div className="py-4 px-4 space-y-4">
@@ -259,7 +258,7 @@ function Header1() {
                     </Link>
                   ))}
                   {/* Skills */}
-                  <Link href="/skills" onClick={() => setIsMenuOpen(false)}>
+                  <Link href="#skills" onClick={() => setIsMenuOpen(false)}>
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -296,7 +295,6 @@ function Header1() {
                     className="flex justify-center items-center gap-8 p-4 border-t border-gray-200 dark:border-gray-800"
                   >
                     <Socials />
-                    {/* <DownloadCV /> */}
                     <div className="mt-4"></div>
                   </motion.div>
                 </div>
@@ -309,4 +307,4 @@ function Header1() {
   );
 }
 
-export default Header1;
+export default Header;
