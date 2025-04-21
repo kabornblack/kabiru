@@ -5,7 +5,7 @@ import { SparklesCore } from "./ui/sparkles";
 
 export function Hero() {
   return (
-    <div className="h-screen w-full bg-black flex flex-col items-center justify-center overflow-hidden">
+    <div className="h-screen w-full bg-gray-950 flex flex-col items-center justify-center overflow-hidden">
       <h1 className="md:text-6xl text-4xl lg:text-7xl font-bold text-center text-[#B8860B] relative mt-48 pb-8 z-20">
         Kabiru Shaibu
       </h1>
@@ -27,7 +27,7 @@ export function Hero() {
         />
 
         {/* Radial Gradient to prevent sharp edges */}
-        <div className="absolute inset-0 w-full h-full bg-black [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
+        <div className="absolute inset-0 w-full h-full bg-gray-950 [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
       </div>
     </div>
   );

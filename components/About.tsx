@@ -13,37 +13,26 @@ export default function AboutPage() {
 
   return (
     <div
-      className={`relative top-0 left-0 w-full min-h-screen transform transition-all duration-700 ${
+      className={`relative top-0 left-0 w-full min-h-screen transform transition-all duration-700 bg-gray-950 ${
         isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
       }`}
-      style={{
-        background: `linear-gradient(
-          to bottom, 
-          var(--bg-start), 
-          var(--bg-end)
-        )`,
-      }}
     >
-      <div className="flex px-8 md:px-32  justify-start items-start min-h-screen py-10">
+      <div className="flex px-8 md:px-32 max-w-7xl mx-auto justify-center items-start text-center min-h-screen py-10 ">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
           className="flex flex-col space-y-8 cursor-text"
         >
-          <h1 className="font-hubballi font-bold text-2xl md:text-4xl tracking-[5px] leading-6 text-gray-500 dark:text-white uppercase">
+          <h1 className="font-hubballi font-bold text-2xl md:text-4xl tracking-[5px] leading-6 pb-10 uppercase">
             About
           </h1>
-          <div className=" blur-sm opacity-5">
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-            <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-          </div>
+
           <div className="space-y-4">
             <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[5px] font-hubballi">
               Who am I?
             </h3>
-            <p className="tsxt-lg md:text-xl text-gray-600 dark:text-white font-hubballi">
+            <p className="tsxt-lg md:text-xl text-gray-600  font-hubballi">
               My name is{" "}
               <span className="text-[#B8860B] font-semibold">
                 Kabiru Shaibu{" "}
@@ -53,16 +42,12 @@ export default function AboutPage() {
               elegant digital solutions.
             </p>
           </div>
-          <div className=" blur-sm opacity-5">
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-            <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-          </div>
+
           <div className="space-y-4">
             <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[5px] font-hubballi">
               What do I do?
             </h3>
-            <p className="tsxt-lg md:text-xl text-gray-600 dark:text-white font-hubballi">
+            <p className="tsxt-lg md:text-xl text-gray-600  font-hubballi">
               I specialize in software development with over 5 years of
               experience building robust applications and scalable systems. My
               expertise spans frontend, backend, and full-stack development,
@@ -70,11 +55,7 @@ export default function AboutPage() {
               efficient code.
             </p>
           </div>
-          <div className=" blur-sm opacity-5">
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-            <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-          </div>
+
           <div className="space-y-4">
             <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[5px] font-hubballi">
               How did it all start?
@@ -94,11 +75,7 @@ export default function AboutPage() {
               applications, the journey has been exciting and rewarding.`}
             </p>
           </div>
-          <div className=" blur-sm opacity-5">
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-            <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-          </div>
+
           <div className="space-y-4">
             <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[5px] font-hubballi">
               What is my development philosophy?
@@ -110,11 +87,7 @@ export default function AboutPage() {
               that add value to users' lives.`}
             </p>
           </div>
-          <div className=" blur-sm opacity-5">
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-            <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-          </div>
+
           <div className="space-y-4">
             <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[5px] font-hubballi">
               What are my core skills?
@@ -127,11 +100,7 @@ export default function AboutPage() {
               workflows and deployments.`}
             </p>
           </div>
-          <div className=" blur-sm opacity-5">
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-            <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-          </div>
+
           <div className="space-y-4">
             <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[5px] font-hubballi">
               What drives me?
@@ -143,11 +112,7 @@ export default function AboutPage() {
               industry.
             </p>
           </div>
-          <div className=" blur-sm opacity-5">
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-            <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
-            <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-          </div>
+
           <div className="space-y-4">
             <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[5px] font-hubballi">
               What are my future goals?
@@ -160,6 +125,11 @@ export default function AboutPage() {
             </p>
           </div>
         </motion.div>
+      </div>
+      <div className=" py-20 blur-sm opacity-5">
+        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
+        <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
+        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
       </div>
     </div>
   );

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Quicksand } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
-import { ModeToggle } from "@/components/mode-toggle";
-import { Providers } from "./theme-provider";
+// import { ModeToggle } from "@/components/mode-toggle";
+// import { Providers } from "./theme-provider";
 import { googleFonts } from "./google-fonts";
 
 const inter = Inter({
@@ -32,15 +32,15 @@ export default function RootLayout({
       <head>
         <link href={googleFonts.href} rel={googleFonts.rel} />
       </head>
-      <Providers>
-        <body className="antialiased">
-          <Header />
-          {children}
-          <div className="fixed bottom-5 right-8 z-50 animate-bounce hover:animate-none">
-            <ModeToggle />
-          </div>
-        </body>
-      </Providers>
+      {/* <Providers> */}
+      <body className="antialiased">
+        <Header />
+        {children}
+        <div className="fixed bottom-5 right-8 z-50 animate-bounce hover:animate-none">
+          {/* <ModeToggle /> */}
+        </div>
+      </body>
+      {/* </Providers> */}
     </html>
   );
 }

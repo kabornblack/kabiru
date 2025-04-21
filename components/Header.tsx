@@ -163,7 +163,7 @@ function Header() {
           {/* Home link - always visible */}
           <div className="flex">
             <Link
-              href="/"
+              href="#home"
               className="text-gray-600 dark:text-gray-400 hover:text-[#B8860B]"
             >
               <div className="h-32 w-32 flex items-center justify-center hover:text-[#B8860B] border-r border-gray-50 dark:border-gray-950">
