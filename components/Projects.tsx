@@ -1,202 +1,259 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { useMotionValueEvent, useScroll } from "framer-motion";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+import { motion, AnimatePresence } from "motion/react";
+import React, { useEffect, useState } from "react";
 
-// Project data
-export const projects = [
-  {
-    title: "C-U school",
-    description:
-      "Educational website. orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker i",
-    githubUrl: "https://github.com/kabornblack/C-U-Language-School",
-    liveUrl: "https://www.cuilschool.ee/",
-    tags: ["React", "NextJs", "TypeScript"],
-    image: "/cuschool.png",
-  },
-  {
-    title: "Swapify",
-    description:
-      "Barter and donation platform.orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker i",
-    githubUrl: "https://github.com/swapify-ou",
-    liveUrl: "https://www.swapify.ee",
-    tags: ["React", "JavaScript", "NextJs", "Dart"],
-    image: "/swapify.png",
-  },
-  {
-    title: "Upto-date",
-    description:
-      "Users can share a fact orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker i",
-    githubUrl: "https://github.com/kabornblack/Upto-date",
-    liveUrl: "https://uptodate-kabbi.netlify.app/",
-    tags: ["HTML", "CSS", "React", "Superbase"],
-    image: "/uptodate.png",
-  },
-  {
-    title: "Disney-Clone",
-    description:
-      "A clone of the Disney website orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker i",
-    githubUrl: "https://github.com/kabornblack/Disney-clone",
-    liveUrl: "https://disney-clone-omega-henna.vercel.app/",
-    tags: ["React", "NextJs", "TypeScript"],
-    image: "/disneyclone.png",
-  },
-];
-
-// StickyScroll component
-export const StickyScroll = ({
-  content,
-  contentClassName,
+export const ImagesSlider = ({
+  images,
+  children,
+  overlay = true,
+  overlayClassName,
+  className,
+  autoplay = true,
+  direction = "up",
+  startIndex = 0,
+  delay = 0,
+  onImageChange,
 }: {
-  content: {
-    title: string;
-    description: string;
-    tags?: string[];
-    image?: string;
-    githubUrl?: string;
-    liveUrl?: string;
-  }[];
-  contentClassName?: string;
+  images: string[];
+  children?: React.ReactNode;
+  overlay?: React.ReactNode;
+  overlayClassName?: string;
+  className?: string;
+  autoplay?: boolean;
+  direction?: "up" | "down";
+  startIndex?: number;
+  delay?: number;
+  onImageChange?: (currentImage: string) => void;
 }) => {
-  const [activeCard, setActiveCard] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    container: ref,
-    offset: ["start start", "end start"],
-  });
-  const cardLength = content.length;
+  const [currentIndex, setCurrentIndex] = useState(startIndex);
+  const [loadedImages, setLoadedImages] = useState<string[]>([]);
 
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    const cardsBreakpoints = content.map((_, index) => index / cardLength);
-    const closestBreakpointIndex = cardsBreakpoints.reduce(
-      (acc, breakpoint, index) => {
-        const distance = Math.abs(latest - breakpoint);
-        if (distance < Math.abs(latest - cardsBreakpoints[acc])) {
-          return index;
-        }
-        return acc;
+  // Function to generate a random image index that's different from the current one
+  const getRandomIndex = () => {
+    if (images.length <= 1) return 0;
+
+    const randomIndex = Math.floor(Math.random() * (images.length - 1));
+    // Adjust index to avoid current image
+    return randomIndex >= currentIndex ? randomIndex + 1 : randomIndex;
+  };
+
+  // Modified to use random selection instead of sequential
+  const handleNext = () => {
+    setCurrentIndex(getRandomIndex());
+  };
+
+  const handlePrevious = () => {
+    setCurrentIndex(getRandomIndex());
+  };
+
+  useEffect(() => {
+    loadImages();
+  }, []);
+
+  const loadImages = () => {
+    const loadPromises = images.map((image) => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = image;
+        img.onload = () => resolve(image);
+        img.onerror = reject;
+      });
+    });
+
+    Promise.all(loadPromises)
+      .then((loadedImages) => {
+        setLoadedImages(loadedImages as string[]);
+      })
+      .catch((error) => console.error("Failed to load images", error));
+  };
+
+  // Notify parent component when image changes (if callback provided)
+  useEffect(() => {
+    if (onImageChange && loadedImages.length > 0) {
+      onImageChange(loadedImages[currentIndex]);
+    }
+  }, [currentIndex, loadedImages, onImageChange]);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "ArrowRight") {
+        handleNext();
+      } else if (event.key === "ArrowLeft") {
+        handlePrevious();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    // autoplay with delay
+    let interval: NodeJS.Timeout;
+    if (autoplay) {
+      // Add the initial delay
+      const timeoutId = setTimeout(() => {
+        interval = setInterval(() => {
+          handleNext();
+        }, 5000); // Set to 5 seconds as requested
+      }, delay);
+
+      return () => {
+        window.removeEventListener("keydown", handleKeyDown);
+        clearTimeout(timeoutId);
+        clearInterval(interval);
+      };
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
+  const slideVariants = {
+    initial: {
+      scale: 0,
+      opacity: 0,
+      rotateX: 45,
+    },
+    visible: {
+      scale: 1,
+      rotateX: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: [0.645, 0.045, 0.355, 1.0],
       },
-      0
-    );
-    setActiveCard(closestBreakpointIndex);
-  });
+    },
+    upExit: {
+      opacity: 1,
+      y: "-150%",
+      transition: {
+        duration: 1,
+      },
+    },
+    downExit: {
+      opacity: 1,
+      y: "150%",
+      transition: {
+        duration: 1,
+      },
+    },
+  };
+
+  const areImagesLoaded = loadedImages.length > 0;
 
   return (
-    <motion.div
-      className="relative flex h-[30rem] justify-center space-x-10 overflow-y-auto rounded-md p-20 bg-gray-900"
-      ref={ref}
+    <div
+      className={cn(
+        "overflow-hidden h-full w-full relative flex items-center justify-center",
+        className
+      )}
+      style={{
+        perspective: "1000px",
+      }}
     >
-      <div className="div relative flex items-start px-4">
-        <div className="max-w-2xl">
-          {content.map((item, index) => (
-            <div key={item.title + index} className="my-36">
-              <motion.h2
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: activeCard === index ? 1 : 0.3,
-                }}
-                className="text-2xl font-bold text-slate-100"
-              >
-                {item.title}
-              </motion.h2>
-              <motion.p
-                initial={{
-                  opacity: 0,
-                }}
-                animate={{
-                  opacity: activeCard === index ? 1 : 0.3,
-                }}
-                className="text-kg mt-4 max-w-sm text-slate-300"
-              >
-                {item.description}
-              </motion.p>
-              {item.tags && (
-                <motion.div
-                  initial={{
-                    opacity: 0,
-                  }}
-                  animate={{
-                    opacity: activeCard === index ? 1 : 0.3,
-                  }}
-                  className="mt-3 flex flex-wrap gap-2"
-                >
-                  {item.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full bg-slate-800 px-3 py-1 text-xs text-slate-200"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </motion.div>
-              )}
-            </div>
-          ))}
-          <div className="h-40" />
-        </div>
-      </div>
-      <div
-        className={cn(
-          "sticky top-10 hidden h-60 w-80 overflow-hidden rounded-md bg-slate-900 md:block",
-          contentClassName
-        )}
-      >
-        {content[activeCard].image && (
-          <div className="relative h-full w-full group">
-            <Image
-              src={content[activeCard].image}
-              alt={content[activeCard].title}
-              fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-            />
+      {areImagesLoaded && children}
+      {areImagesLoaded && overlay && (
+        <div
+          className={cn("absolute inset-0 bg-black/60 z-40", overlayClassName)}
+        />
+      )}
 
-            {/* Animated links container */}
-            <div
-              className="absolute left-0 right-0 bottom-0 flex justify-center gap-4 bg-black/70 p-3
-              transform translate-y-full transition-transform duration-300 ease-in-out
-              group-hover:translate-y-0"
-            >
-              {content[activeCard].githubUrl && (
-                <motion.a
-                  href={content[activeCard].githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded bg-slate-800 px-3 py-1 text-sm text-white hover:bg-slate-700"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  GitHub
-                </motion.a>
-              )}
-              {content[activeCard].liveUrl && (
-                <motion.a
-                  href={content[activeCard].liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="rounded bg-slate-800 px-3 py-1 text-sm text-white hover:bg-slate-700"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Live Demo
-                </motion.a>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
-    </motion.div>
+      {areImagesLoaded && (
+        <AnimatePresence>
+          <motion.img
+            key={currentIndex}
+            src={loadedImages[currentIndex]}
+            initial="initial"
+            animate="visible"
+            exit={direction === "up" ? "upExit" : "downExit"}
+            variants={slideVariants}
+            className="image h-full w-full absolute inset-0 object-cover object-center"
+          />
+        </AnimatePresence>
+      )}
+    </div>
   );
 };
 
-// Main Projects component
-export function Projects() {
+export const ImagesSliderDemo = () => {
+  // All available images
+  const allImages = [
+    "/swapify.png",
+    "/cuschool.png",
+    "/global.png",
+    "/disneyclone.png",
+    "/next.png",
+    "/ts.png",
+    "/axios.PNG",
+    "/react.png",
+  ];
+
   return (
-    <div className="w-full py-4">
-      <StickyScroll content={projects} />
+    <div>
+      <div className="flex flex-col max-w-7xl mx-auto pt-20 mb-44 px-10 md:px-20 lg:px-32">
+        <div className="text-center pt-10 pb-20">
+          <h1 className="font-['Playfair_Display'] text-[#B8860B] font-bold text-2xl md:text-4xl tracking-[5px] leading-6 uppercase relative inline-block opacity-80 pb-1">
+            Some projects
+            <div className="absolute left-0 -bottom-1 w-full h-[1px] bg-gradient-to-r from-transparent via-[#B8860B] to-transparent"></div>
+          </h1>
+        </div>
+
+        {/* Small screens - show 1 slider */}
+        <div className="block md:hidden w-full">
+          <div className="h-64 relative overflow-hidden">
+            <ImagesSlider
+              images={allImages}
+              autoplay={true}
+              delay={0}
+              startIndex={0}
+              direction="up"
+              className="h-full"
+              overlay={false}
+            />
+          </div>
+        </div>
+
+        {/* Medium screens - show 2 sliders in a row */}
+        <div className="hidden md:flex lg:hidden w-full space-x-6">
+          {[0, 1].map((index) => (
+            <div key={index} className="h-64 w-1/2 relative overflow-hidden ">
+              <ImagesSlider
+                images={allImages}
+                autoplay={true}
+                delay={index * 1000}
+                startIndex={index}
+                direction={index % 2 === 0 ? "up" : "down"}
+                className="h-full"
+                overlay={false}
+              />
+            </div>
+          ))}
+        </div>
+
+        {/* Large screens - show 4 sliders in a row */}
+        <div className="hidden lg:flex w-full space-x-6">
+          {[0, 1, 2, 3].map((index) => (
+            <div key={index} className="h-64 w-1/4 relative overflow-hidden ">
+              <ImagesSlider
+                images={allImages}
+                autoplay={true}
+                delay={index * 1000}
+                startIndex={index}
+                direction={index % 2 === 0 ? "up" : "down"}
+                className="h-full"
+                overlay={false}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className=" pb-10 blur-sm opacity-5">
+        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
+        <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
+        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
+      </div>
     </div>
   );
-}
+};
+
+export default ImagesSliderDemo;

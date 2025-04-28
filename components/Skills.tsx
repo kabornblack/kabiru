@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-// import Skill from "@/components/Skill";
 import { python, tech } from "@/components/data/skillData";
 import Image from "next/image";
 
@@ -14,19 +13,19 @@ const AnimatedImageSlider = () => {
 
   const images = [
     {
-      src: "/type.png",
+      src: "/react.png",
       alt: "type",
     },
     {
-      src: "/props.png",
+      src: "/axios.PNG",
       alt: "props",
     },
     {
-      src: "/onnext.png",
+      src: "/ts.png",
       alt: "onnext",
     },
     {
-      src: "/effect.png",
+      src: "/next.png",
       alt: "effect",
     },
   ];
@@ -85,8 +84,8 @@ const AnimatedImageSlider = () => {
   };
 
   return (
-    <div className="w-full px-2 pl-5 lg:pl-16">
-      <div className="relative h-80 md:h-96 lg:h-[450px] w-full overflow-hidden rounded-xl">
+    <div className="w-full px-2 lg:pl-6">
+      <div className="relative h-80 md:h-96 lg:h-[450px] w-full overflow-hidden">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
             key={currentIndex}
@@ -101,7 +100,7 @@ const AnimatedImageSlider = () => {
               src={images[currentIndex].src}
               alt={images[currentIndex].alt}
               fill
-              className="object-cover rounded-lg"
+              className="object-cover"
               priority
             />
           </motion.div>
@@ -110,7 +109,7 @@ const AnimatedImageSlider = () => {
         {/* Navigation buttons */}
         <button
           onClick={handlePrevious}
-          className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white hover:bg-black/60"
+          className="absolute left-4 top-1/2 z-10 -translate-y-1/2 bg-black/40 p-2 text-white hover:bg-black/60"
           aria-label="Previous image"
         >
           <svg
@@ -131,7 +130,7 @@ const AnimatedImageSlider = () => {
 
         <button
           onClick={handleNext}
-          className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/40 p-2 text-white hover:bg-black/60"
+          className="absolute right-4 top-1/2 z-10 -translate-y-1/2 bg-black/40 p-2 text-white hover:bg-black/60"
           aria-label="Next image"
         >
           <svg
@@ -176,32 +175,40 @@ const AnimatedImageSlider = () => {
 
 export default function Skills() {
   return (
-    <div className="top-0 left-0 w-full min-h-screen transform transition-all duration-700 bg-gray-950 ">
-      <div className="flex px-8 md:px-32 justify-center items-start -mt-24 min-h-screen max-w-7xl mx-auto text-center border-x">
+    <div className="top-0 left-0 w-full min-h-screen transform transition-all duration-700 bg-gray-950 -mt-44">
+      <div className="flex px-8 md:px-32 justify-center items-start -mt-32 min-h-screen max-w-7xl mx-auto text-center">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.2 }}
           className="flex flex-col space-y-8 cursor-text"
         >
-          <div className="flex max-w-7xl justify-start items-start  pt-48">
-            <div className="flex flex-col space-y-8 cursor-text">
-              <h1 className="font-hubballi font-bold text-2xl md:text-4xl tracking-[5px] leading-6 pb-10 uppercase">
-                Skills
-              </h1>
-              <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[5px] font-hubballi">
-                It started in 2020
-              </h3>
+          <div className="flex max-w-7xl justify-start items-start  pt-36">
+            <div className="flex flex-col space-y-6 cursor-text">
               <motion.div
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.2 }}
-                className="flex flex-wrap justify-center gap-2  mb-4 pb-4"
+                className="text-center mb-16"
+              >
+                <h1 className="font-['Playfair_Display'] text-[#B8860B] font-bold text-2xl md:text-4xl tracking-[5px] leading-6 uppercase relative inline-block opacity-80">
+                  Skills
+                  <div className="absolute left-0 -bottom-1 w-full h-[1px] bg-gradient-to-r from-transparent via-[#B8860B] to-transparent"></div>
+                </h1>
+              </motion.div>
+              <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[5px] font-hubballi">
+                It started in 2020
+              </h3>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                className="flex flex-wrap justify-center gap-3 pb-10 -mt-3"
               >
                 {python.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 text-sm bg-gray-400 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    className="px-3 py-1 text-xs bg-white text-gray-800 uppercase"
                   >
                     {tag}
                   </span>
@@ -215,12 +222,12 @@ export default function Skills() {
                 initial={{ opacity: 0, y: 50 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1, delay: 0.2 }}
-                className="flex flex-wrap justify-center gap-2  mb-4 pb-10"
+                className="flex flex-wrap justify-center gap-2  mb-4 pb-4"
               >
                 {tech.map((tag) => (
                   <span
                     key={tag}
-                    className="px-3 py-1 text-sm bg-gray-400 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                    className="px-3 py-1 text-xs bg-white  text-gray-800 uppercase"
                   >
                     {tag}
                   </span>
@@ -229,7 +236,7 @@ export default function Skills() {
             </div>
           </div>
 
-          <div className=" py-10 blur-sm opacity-5">
+          <div className=" pb-10 blur-sm opacity-5">
             <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
             <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
             <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
@@ -237,103 +244,87 @@ export default function Skills() {
 
           <div className="flex flex-col justify-center gap-6 text-center">
             {/* Project Details */}
-            <div className="flex flex-col gap-3 w-auto">
-              <h4 className="text-[#B8860B] text-lg md:text-xl uppercase leading-1 tracking-[1px] font-hubballi">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="flex flex-col gap-3 w-auto text-center"
+            >
+              <h4 className="text-[#B8860B] text-lg md:text-xl uppercase leading-1 tracking-[1px] font-semibold font-hubballi pb-3">
                 Recent Project
               </h4>
-              <p className="text-lg md:text-xl text-gray-600 dark:text-white font-hubballi -mb-3">
+              <p className="text-lg md:text-xl font-semibold text-gray-300 font-hubballi -mb-3">
                 SWAPIFY
               </p>
               <a
                 href="https://swapify.ee/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-lg md:text-xl max-w-auto text-gray-600 underline font-hubballi"
+                className="text-lg md:text-xl flex justify-center items-center gap-1.5 text-gray-600 hover:text-gray-400 transition-colors duration-200 font-hubballi group pt-2 px-20"
               >
-                www.swapify.ee
+                <span className="">www.swapify.ee</span>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 inline-block transform group-hover:translate-x-0.5 transition-transform"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                  />
+                </svg>
               </a>
-            </div>
-            {/* <div className="flex flex-col gap-3">
-              <h4 className="text-[#B8860B] text-lg md:text-xl w-auto uppercase leading-1 tracking-[1px] font-hubballi">
-                Recent Project
-              </h4>
-              <p className="text-lg md:text-xl text-gray-600 dark:text-white font-hubballi -mb-3">
-                SWAPIFY
-              </p>
-              <a
-                href="https://swapify.ee/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-auto text-lg md:text-xl text-gray-600 underline font-hubballi"
-              >
-                www.swapify.ee
-              </a>
-            </div> */}
+            </motion.div>
 
             {/* Description */}
-            <div className="flex flex-col gap-3 py-8">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="flex flex-col gap-3 py-8"
+            >
               <h4 className="text-[#B8860B] text-lg md:text-xl uppercase leading-1 tracking-[1px] font-hubballi pb-4">
-                Description
+                Project Description
               </h4>
-              <div className="flex justify-center items-center h-auto w-auto py-2 px-6 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.5 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                // className="flex justify-center items-center h-auto w-auto py-2 px-6 bg-white border-gray-200 shadow-sm"
+                className="relative pt-4 pb-4 px-4 bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-100 shadow-sm"
+              >
                 <p className="">
                   A barter and donation platform where users can swap goods or
                   donate unused items to individuals and organizations who needs
-                  them.
+                  them
                 </p>
-              </div>
-            </div>
-            {/* <div className="flex flex-col gap-3 pt-10">
-              <h4 className="text-[#B8860B] text-lg md:text-xl uppercase leading-1 tracking-[1px] font-hubballi">
-                Description
-              </h4>
-              <p className="text-lg md:text-xl text-gray-600 dark:text-white font-hubballi">
-                A barter and donation platform where users can swap goods or
-                donate unused items to individuals and organizations who needs
-                them.
-              </p>
-            </div> */}
-
-            {/* Link to Home Page */}
-            {/* <div className="flex flex-col gap-3 pb-8">
-              <h4 className="text-[#B8860B] text-lg md:text-xl uppercase leading-1 tracking-[1px] font-hubballi pb-4">
-                Link to the home page
-              </h4>
-              <div className="flex justify-center items-center h-10 w-auto bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                <p className="">Front-end Developer</p>
-                <a
-                  href="https://swapify.ee/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex justify-center items-center h-10 w-auto bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm text-lg md:text-xl text-gray-400 underline font-hubballi"
-                >
-                  www.swapify.ee
-                </a>
-              </div>
-            </div> */}
-            {/* <div className="flex flex-col justify-center gap-3 py-6">
-              <h4 className="text-[#B8860B] text-lg md:text-xl uppercase leading-1 tracking-[1px] font-hubballi">
-                Link to the home page
-              </h4>
-              <a
-                href="https://swapify.ee/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-lg md:text-xl text-gray-400 underline font-hubballi"
-              >
-                www.swapify.ee
-              </a>
-            </div> */}
+              </motion.div>
+            </motion.div>
 
             {/* Role */}
-            <div className="flex flex-col gap-3 pb-8">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="flex flex-col gap-3 pb-8"
+            >
               <h4 className="text-[#B8860B] text-lg md:text-xl uppercase leading-1 tracking-[1px] font-hubballi pb-4">
                 Role
               </h4>
-              <div className="flex justify-center items-center h-10 w-auto bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.5 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                // className="flex justify-center items-center h-10 w-auto bg-gray-800 border text-gray-100"
+                className="relative pt-4 pb-4 px-4 bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-100 shadow-sm"
+              >
                 <p className="">Front-end Developer</p>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
 
             {/* Activity */}
             <div className="flex flex-col gap-3">
@@ -341,172 +332,245 @@ export default function Skills() {
                 Activity
               </h4>
 
-              <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-sm md:text-base text-gray-600 dark:text-white font-hubballi">
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+              <motion.ul
+                initial={{ opacity: 0, y: 50, scale: 0.8 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 1, delay: 0.2 }}
+                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 text-sm md:text-base text-gray-600 dark:text-white font-hubballi"
+              >
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Routing
                   </strong>
                   <div className="mt-3">
                     Used Next.js routing for client-side navigation.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Styling
                   </strong>
                   <div className="mt-3">
                     Used Tailwind CSS for rapid and consistent styling.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Pagination
                   </strong>
                   <div className="mt-3">
                     Implemented pagination logic in the{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       ProductList
                     </span>{" "}
                     component.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Responsive Design
                   </strong>
                   <div className="mt-3">
                     Used Tailwind CSS classes to create responsive layouts.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Error Handling
                   </strong>
                   <div className="mt-3">
                     Implemented error handling for API requests and form
                     submissions.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Image Upload
                   </strong>
                   <div className="mt-3">
                     Integrated Cloudinary for image uploads in the{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       ItemImagesStep
                     </span>{" "}
                     component.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Accessibility
                   </strong>
                   <div className="mt-3">
                     Implemented ARIA attributes for better accessibility e.g in
                     the{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       DeleteConfirmationModal
                     </span>
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Performance Optimization
                   </strong>
                   <div className="mt-3">
                     Used React hooks and functional components for better
                     performance.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Component Development
                   </strong>
                   <div className="mt-3">
                     Created reusable UI components like{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       ProductCard
                     </span>{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       AccountSettings
                     </span>{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       SidebarProfile
                     </span>
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Form Handling
                   </strong>
                   <div className="mt-3">
-                    Implemented form submission logic (e.g., in{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    Implemented form submission logic e.g in{" "}
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       NewsLetterModal
                     </span>
-                    ) and validated form inputs.
+                    and validated form inputs.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     State Management
                   </strong>
                   <div className="mt-3">
                     Used React hooks{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       useState
                     </span>{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       useEffect
                     </span>{" "}
                     and implemented custom hooks{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       useModal
                     </span>{" "}
                     for managing modals.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     API Integration
                   </strong>
                   <div className="mt-3">
                     Set up Axios instance for making API requests and created
                     utility functions for{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       GET
                     </span>
                     ,{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       POST
                     </span>
                     ,{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       PUT
                     </span>
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
+                      UPDATE
+                    </span>
                     , and{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       DELETE
                     </span>{" "}
                     requests.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     TypeScript Integration
                   </strong>
                   <div className="mt-3">
@@ -514,122 +578,179 @@ export default function Skills() {
                     quality. Created type definitions for API responses and
                     component props.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     User Experience
                   </strong>
                   <div className="mt-3">
                     Implemented loading states and feedback (e.g., in the{" "}
-                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 rounded-md text-xs font-medium border border-gray-200 dark:border-gray-600">
+                    <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                       ActiveListingsGrid
                     </span>{" "}
                     component) and created interactive elements like modals and
                     confirmation dialogs.
                   </div>
-                </li>
-              </ul>
+                </motion.li>
+              </motion.ul>
             </div>
           </div>
 
-          <h4 className="text-[#B8860B] text-sm md:text-lg lg:text-xl uppercase leading-1 tracking-[1px] font-hubballi pt-28 pb-10">
+          <motion.h4
+            initial={{ opacity: 0, y: 10, scale: 0.8 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="text-[#B8860B] text-sm md:text-lg lg:text-xl uppercase leading-1 tracking-[1px] font-hubballi pt-28 pb-4"
+          >
             Tech Stack, Libraries and Frameworks
-          </h4>
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-2 justify-evenly items-start py-4 px-1 md:px-10 mb-20 bg-transparent">
+          </motion.h4>
+          <motion.div
+            initial={{ opacity: 0, y: 50, scale: 0.8 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="flex flex-col lg:flex-row gap-8 lg:gap-2 justify-evenly items-start py-4 px-1 md:px-10 mb-20 bg-transparent"
+          >
             <div className="flex flex-col justify-start items-start">
               <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-md text-gray-600 dark:text-white font-hubballi">
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Lucide React
                   </strong>
                   <div className="mt-3">Used for icons</div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Sonner
                   </strong>
                   <div className="mt-3">Used for toast notifications</div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     React Hook Form
                   </strong>
                   <div className="mt-3">Used for form handling</div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Next.js
                   </strong>
                   <div className="mt-3">
                     Used as the React framework for server-side rendering,
                     routing, and API routes
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     TypeScript
                   </strong>
                   <div className="mt-3">
                     Used for type checking, improving code quality and error
                     prevention
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     React
                   </strong>
                   <div className="mt-3">
                     Used for building user interface and reusable components
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Tailwind CSS
                   </strong>
                   <div className="mt-3">
                     Used for styling and layout mobile first design.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Axios
                   </strong>
                   <div className="mt-3">
                     Used for making HTTP requests to the backend, API requests.
                   </div>
-                </li>
+                </motion.li>
 
-                <li className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm">
-                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 rounded-md whitespace-nowrap">
+                <motion.li
+                  initial={{ opacity: 0, y: 30, scale: 0.5 }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 1, delay: 0.2 }}
+                  className="relative pt-4 pb-4 px-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-sm"
+                >
+                  <strong className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gray-200 dark:bg-gray-600 py-1 px-3 whitespace-nowrap">
                     Cloudinary
                   </strong>
                   <div className="mt-3">
                     Used for image uploads, cloud-based image
                   </div>
-                </li>
+                </motion.li>
               </ul>
             </div>
 
             {/* Replace the Image Grid with AnimatedImageSlider */}
             <AnimatedImageSlider />
-          </div>
+          </motion.div>
         </motion.div>
       </div>
       <div className=" py-10 blur-sm opacity-5">
         <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
         <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
         <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-      </div>
-      <div className="flex justify-center items-center pb-20 pt-10">
-        <h1 className="text-4xl text-center">SOME OTHER PROJECTS</h1>
       </div>
     </div>
   );

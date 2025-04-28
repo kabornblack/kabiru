@@ -3,10 +3,8 @@
 import { Hero } from "@/components/Hero";
 import About from "@/components/About";
 import Skills from "@/components/Skills";
-
+import { ImagesSliderDemo } from "@/components/Projects";
 import Contact from "@/components/Contact";
-import { Projects } from "@/components/Projects";
-// import Projects from "@/components/Projects";
 
 export default function Home() {
   return (
@@ -33,7 +31,7 @@ export default function Home() {
           <Skills />
         </section>
         <section>
-          <Projects />
+          <ImagesSliderDemo />
         </section>
         <section id="contact">
           <Contact />

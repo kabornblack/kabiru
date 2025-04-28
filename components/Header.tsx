@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import React, { useState } from "react";
+import { usePathname } from "next/navigation";
 import {
   motion,
   useMotionValue,
@@ -85,6 +86,7 @@ interface NavItemProps {
   icon: React.ElementType;
   dropdownItems?: DropdownItem[];
   href?: string;
+  baseUrl: string;
 }
 
 // NavItemWithDropdown Component
@@ -92,6 +94,7 @@ const NavItemWithDropdown: React.FC<NavItemProps> = ({
   icon: Icon,
   dropdownItems = [],
   href = "/",
+  baseUrl,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -102,10 +105,10 @@ const NavItemWithDropdown: React.FC<NavItemProps> = ({
       onMouseLeave={() => setIsOpen(false)}
     >
       <Link
-        href={href}
+        href={baseUrl + href}
         className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white"
       >
-        <div className="h-32 w-32 flex items-center justify-center hover:text-[#B8860B] border-r border-gray-50 dark:border-gray-950">
+        <div className="h-32 w-32 flex items-center justify-center hover:text-[#B8860B] border-b border-b-black">
           <ParallaxIcon Icon={Icon} className="w-7 h-7" />
         </div>
       </Link>
@@ -118,11 +121,11 @@ const NavItemWithDropdown: React.FC<NavItemProps> = ({
         >
           {dropdownItems.map((item, index) => (
             <Link
-              href={item.href || "#"}
+              href={baseUrl + (item.href || "#")}
               key={index}
               onClick={() => setIsOpen(false)}
             >
-              <div className="h-32 w-32 bg-gray-200 dark:bg-[#171717] flex flex-col items-center justify-center border-t group border-gray-100 dark:border-gray-950 shadow-lg gap-1 pt-5">
+              <div className="h-32 w-32 bg-gray-950 flex flex-col items-center justify-center group border-gray-100 dark:border-gray-950 shadow-lg gap-1 pt-5">
                 <ParallaxIcon
                   Icon={item.icon}
                   className="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#B8860B] dark:group-hover:text-[#B8860B]"
@@ -142,6 +145,10 @@ const NavItemWithDropdown: React.FC<NavItemProps> = ({
 // Main Header Component
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+
+  // Determine if we're on the home page or not
+  const baseUrl = pathname?.startsWith("/portfolio") ? "/" : "";
 
   const homeDropdownItems = [
     {
@@ -158,15 +165,15 @@ function Header() {
 
   return (
     <>
-      <header className="fixed top-0 w-screen h-32 bg-gray-200 dark:bg-[#171717] z-50">
+      <header className="fixed top-0 w-screen h-32 bg-gray-950 z-50">
         <div className="relative flex justify-between items-center">
           {/* Home link - always visible */}
           <div className="flex">
             <Link
-              href="#home"
+              href={baseUrl + "#home"}
               className="text-gray-600 dark:text-gray-400 hover:text-[#B8860B]"
             >
-              <div className="h-32 w-32 flex items-center justify-center hover:text-[#B8860B] border-r border-gray-50 dark:border-gray-950">
+              <div className="h-32 w-32 flex items-center justify-center hover:text-[#B8860B] ">
                 <ParallaxIcon Icon={FaHome} className="w-7 h-7" />
               </div>
             </Link>
@@ -175,20 +182,20 @@ function Header() {
             <div className="hidden lg:flex items-center justify-center">
               <NavItemWithDropdown
                 icon={FaUser}
-                // icon={ImageIcon}
                 dropdownItems={homeDropdownItems}
+                baseUrl={baseUrl}
               />
 
               <Link
-                href="#skills"
-                className="text-gray-600 dark:text-gray-400 hover:text-[#B8860B]  group"
+                href={baseUrl + "#skills"}
+                className="text-gray-600 dark:text-gray-400 hover:text-[#B8860B] group"
               >
-                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B]  border-r border-gray-50 dark:border-gray-950 gap-2">
+                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B]  gap-2">
                   <ParallaxIcon
                     Icon={FaTools}
                     className="w-7 h-7 -mb-6 group-hover:text-[#B8860B]"
                   />
-                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B]  text-xs uppercase tracking-[2px] leading-2 pb-8">
+                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B] text-xs uppercase tracking-[2px] leading-2 pb-8">
                     Skills
                   </p>
                 </div>
@@ -198,7 +205,7 @@ function Header() {
                 href="/portfolio"
                 className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white group"
               >
-                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B] border-r border-gray-50 dark:border-gray-950 gap-2">
+                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B]  gap-2">
                   <ParallaxIcon
                     Icon={FaBriefcase}
                     className="w-7 h-7 -mb-6 group-hover:text-[#B8860B]"
@@ -234,14 +241,14 @@ function Header() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute top-32 left-0 w-full bg-white dark:bg-[#171717] border-t border-gray-200 dark:border-gray-950 shadow-xl lg:hidden"
+                className="absolute top-28 left-0 w-full bg-gray-950  shadow-xl lg:hidden"
               >
                 {/* Mobile Navigation Links */}
-                <div className="py-4 px-4 space-y-4">
+                <div className="py-2 px-4 space-y-4">
                   {homeDropdownItems.map((item, index) => (
                     <Link
                       key={index}
-                      href={item.href || "#"}
+                      href={baseUrl + (item.href || "#")}
                       onClick={() => setIsMenuOpen(false)}
                     >
                       <motion.div
@@ -258,7 +265,10 @@ function Header() {
                     </Link>
                   ))}
                   {/* Skills */}
-                  <Link href="#skills" onClick={() => setIsMenuOpen(false)}>
+                  <Link
+                    href={baseUrl + "#skills"}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
@@ -278,7 +288,7 @@ function Header() {
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: 0.2 }}
-                      className="flex items-center space-x-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg group"
+                      className="flex items-center space-x-4 p-4 mb-8 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg group"
                     >
                       <FaBriefcase className="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#B8860B]" />
                       <span className="text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white">
@@ -292,7 +302,7 @@ function Header() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.5 }}
-                    className="flex justify-center items-center gap-8 p-4 border-t border-gray-200 dark:border-gray-800"
+                    className="flex justify-center items-center gap-8 p-4 border-t border-gray-900"
                   >
                     <Socials />
                     <div className="mt-4"></div>

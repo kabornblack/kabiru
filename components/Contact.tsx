@@ -2,48 +2,26 @@
 
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import { motion } from "framer-motion";
 import ContactForm from "./ContactForm";
-// import ContactForm from "./ContactForm";
-// import AnimatedCircles from "./AnimatedCircles";
 
 function Contact() {
-  const [isVisible, setIsVisible] = useState(false);
-  // const ref = useRef(null);
-
-  useEffect(() => {
-    // Trigger the animation after the component mounts
-    setIsVisible(true);
-  }, []);
-
   return (
-    <div
-      // ref={ref}
-      // className="flex flex-col relative text-center px-10 justify-evenly max-w-3xl mx-auto items-center pt-20 pb-10"
-      className={`relative top-0 left-0 w-full min-h-screen transform transition-all duration-700 ${
-        isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
-      }`}
-      style={{
-        background: `linear-gradient(
-          to bottom, 
-          var(--bg-start), 
-          var(--bg-end)
-        )`,
-      }}
-    >
+    <div className="flex flex-col justify-center w-full min-h-auto transform transition-all duration-700">
       {/* <AnimatedCircles /> */}
-      <div className="flex flex-col px-8 md:px-32 max-w-6xl  2xl:mx-auto justify-start 2xl:justify-center items-start min-h-3 py-48">
+      <div className="flex flex-col px-8 md:px-32 max-w-6xl mx-auto justify-center items-start text-center min-h-3 pt-24">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
           className=" py-4"
         >
-          <h2 className="font-hubballi font-bold text-2xl md:text-3xl tracking-3xl leading-6 text-gray-500 dark:text-white uppercase">
-            contact
-          </h2>
+          <h1 className="font-['Playfair_Display'] text-[#B8860B] font-bold text-2xl md:text-4xl tracking-[5px] leading-6 uppercase relative inline-block opacity-80 pb-1">
+            Contact
+            <div className="absolute left-0 -bottom-1 w-full h-[1px] bg-gradient-to-r from-transparent via-[#B8860B] to-transparent"></div>
+          </h1>
         </motion.div>
 
         <motion.div
@@ -75,6 +53,11 @@ function Contact() {
         </motion.div>
 
         <ContactForm />
+      </div>
+      <div className=" pb-10 blur-sm opacity-5">
+        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
+        <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
+        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
       </div>
     </div>
   );

@@ -41,7 +41,7 @@ function ContactForm() {
         viewport={{ once: true }}
         // ref={form}
         onSubmit={sendEmail}
-        className="flex flex-col space-y-2 w-full max-w-4xl mx-auto text-gray-200 dark:text-gray-200 font-serif text-sm pt-2"
+        className="flex flex-col space-y-2 w-full max-w-4xl mx-auto text-gray-200 dark:text-gray-200 font-serif text-center text-sm pt-2"
       >
         <motion.div
           className="flex space-x-2"
@@ -50,14 +50,14 @@ function ContactForm() {
           transition={{ duration: 0.5, delay: 1 }}
         >
           <input
-            className="w-full p-2 border border-gray-400 dark:border-gray-500  outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+            className="w-full p-2 border border-gray-400 dark:border-gray-500  outline-none text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
             name="name"
             type="text"
             placeholder="Name"
             required
           />
           <input
-            className="w-full p-2 border border-gray-400 dark:border-gray-500 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+            className="w-full p-2 border border-gray-400 dark:border-gray-500 outline-none text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
             name="email"
             type="email"
             placeholder="Email"
@@ -72,7 +72,7 @@ function ContactForm() {
           transition={{ duration: 0.5, delay: 1.2 }}
         >
           <input
-            className="w-full p-2 border border-gray-400 dark:border-gray-500 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+            className="w-full p-2 border border-gray-400 dark:border-gray-500 outline-none text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
             name="subject"
             type="text"
             placeholder="Subject"
@@ -87,7 +87,7 @@ function ContactForm() {
           transition={{ duration: 0.5, delay: 1.4 }}
         >
           <textarea
-            className="w-full p-2 h-28 border border-gray-400 dark:border-gray-500 outline-none text-gray-700 dark:text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
+            className="w-full p-2 h-28 border border-gray-400 dark:border-gray-500 outline-none text-gray-200 placeholder-gray-400 dark:placeholder-gray-500"
             name="message"
             placeholder="Message here.."
             required
