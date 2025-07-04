@@ -18,6 +18,7 @@ import {
   SiRedux,
   SiGraphql,
 } from "react-icons/si";
+import { ColourfulText } from "./ui/colourful-text";
 
 // Tech stack array with icons and names
 const techStack = [
@@ -42,8 +43,8 @@ const TechMarquee = () => {
   return (
     <div className="absolute bottom-16 w-full overflow-hidden bg-transparent px-8">
       <div className="flex flex-col space-y-4">
-        <p className="text-center text-gray-300 text-lg font-mono mb-2">
-          Passionate software developer specializing in web applications.
+        <p className="text-center text-gray-300 text-lg font-mono mb-4">
+          <ColourfulText text="Passionate software developer specializing in modern web applications." />
         </p>
         <div className="relative flex overflow-x-hidden">
           <motion.div

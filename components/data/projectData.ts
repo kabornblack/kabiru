@@ -8,6 +8,14 @@ export const projects = [
     image: "/global.png",
   },
   {
+    title: "Swapify",
+    description: "Barter and donation platform either exchange or donate.",
+
+    liveUrl: "https://www.swapify.ee",
+    tags: ["React", "JavaScript", "NextJs"],
+    image: "/swapify.png",
+  },
+  {
     title: "C-U school",
     description: "Educational website with language translation.",
     githubUrl: "https://github.com/kabornblack/C-U-Language-School",
@@ -16,12 +24,11 @@ export const projects = [
     image: "/cuschool.png",
   },
   {
-    title: "Swapify",
-    description: "Barter and donation platform either exchange or donate.",
-    githubUrl: "https://github.com/swapify-ou",
-    liveUrl: "https://www.swapify.ee",
-    tags: ["React", "JavaScript", "NextJs", "Dart"],
-    image: "/swapify.png",
+    title: "Wholesale Whale",
+    description: "We take care of the searching & connecting for you",
+    liveUrl: "https://wholesalewhale.com/",
+    tags: ["Svelte", "TypeScript"],
+    image: "/wholesale.png",
   },
   {
     title: "Upto-date",

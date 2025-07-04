@@ -167,7 +167,7 @@ export const ImagesSlider = ({
             animate="visible"
             exit={direction === "up" ? "upExit" : "downExit"}
             variants={slideVariants}
-            className="image h-full w-full absolute inset-0 object-cover object-center"
+            className="image h-full w-full absolute inset-0 object-fill object-center"
           />
         </AnimatePresence>
       )}
@@ -182,18 +182,20 @@ export const ImagesSliderDemo = () => {
     "/cuschool.png",
     "/global.png",
     "/disneyclone.png",
-    "/next.png",
-    "/ts.png",
+    "/walmart.png",
+    "/booking.png",
     "/axios.PNG",
-    "/react.png",
+    "/secret.jpeg",
+    "/dbank.png",
+    "/wholesale.png",
   ];
 
   return (
     <div>
-      <div className="flex flex-col max-w-7xl mx-auto pt-20 mb-44 px-10 md:px-20 lg:px-32">
+      <div className="flex flex-col max-w-7xl mx-auto pt-10 mb-44 px-10 md:px-20 lg:px-32">
         <div className="text-center pt-10 pb-20">
-          <h1 className="font-['Playfair_Display'] text-[#B8860B] font-bold text-2xl md:text-4xl tracking-[5px] leading-6 uppercase relative inline-block opacity-80 pb-1">
-            Some projects
+          <h1 className="font-['Playfair_Display'] text-[#B8860B] font-bold text-lg md:text-2xl tracking-[5px] leading-6 uppercase relative inline-block opacity-80 pb-1">
+            Other projects
             <div className="absolute left-0 -bottom-1 w-full h-[1px] bg-gradient-to-r from-transparent via-[#B8860B] to-transparent"></div>
           </h1>
         </div>
@@ -246,11 +248,6 @@ export const ImagesSliderDemo = () => {
             </div>
           ))}
         </div>
-      </div>
-      <div className=" pb-10 blur-sm opacity-5">
-        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-        <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1 " />
-        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
       </div>
     </div>
   );

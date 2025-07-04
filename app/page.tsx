@@ -5,10 +5,12 @@ import About from "@/components/About";
 import Skills from "@/components/Skills";
 import { ImagesSliderDemo } from "@/components/Projects";
 import Contact from "@/components/Contact";
+import Header from "@/components/Header";
 
 export default function Home() {
   return (
     <div className="h-screen scroll-smooth bg-gray-950">
+      {/* // <div className="h-screen scroll-smooth bg-gradient-to-tr from-white/20 to-gray-950 z-50 -mb-32"> */}
       <main
         className="h-full overflow-y-auto scroll-smooth"
         style={{
@@ -21,6 +23,10 @@ export default function Home() {
             display: none;
           }
         `}</style>
+
+        {/* Move Header here */}
+        <Header />
+
         <section id="home">
           <Hero />
         </section>

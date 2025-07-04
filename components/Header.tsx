@@ -108,7 +108,7 @@ const NavItemWithDropdown: React.FC<NavItemProps> = ({
         href={baseUrl + href}
         className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white"
       >
-        <div className="h-32 w-32 flex items-center justify-center hover:text-[#B8860B] border-b border-b-black">
+        <div className="relative h-32 w-32 flex items-center justify-center border-x border-x-black border-b border-b-black hover:text-[#B8860B] hover:shadow-[inset_0_0_10px_rgba(184,134,11,0.5)]">
           <ParallaxIcon Icon={Icon} className="w-7 h-7" />
         </div>
       </Link>
@@ -125,7 +125,7 @@ const NavItemWithDropdown: React.FC<NavItemProps> = ({
               key={index}
               onClick={() => setIsOpen(false)}
             >
-              <div className="h-32 w-32 bg-gray-950 flex flex-col items-center justify-center group border-gray-100 dark:border-gray-950 shadow-lg gap-1 pt-5">
+              <div className="h-32 w-32 flex flex-col items-center justify-center group border-t border-t-black shadow-lg gap-1 pt-5 bg-white/5">
                 <ParallaxIcon
                   Icon={item.icon}
                   className="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#B8860B] dark:group-hover:text-[#B8860B]"
@@ -165,7 +165,9 @@ function Header() {
 
   return (
     <>
-      <header className="fixed top-0 w-screen h-32 bg-gray-950 z-50">
+      {/* <header className="fixed top-0 w-screen h-32 bg-black z-50"> */}
+
+      <header className="relative w-full h-32 bg-gradient-to-br from-white/20 to-gray-950 z-50 -mb-32">
         <div className="relative flex justify-between items-center">
           {/* Home link - always visible */}
           <div className="flex">
@@ -188,7 +190,7 @@ function Header() {
 
               <Link
                 href={baseUrl + "#skills"}
-                className="text-gray-600 dark:text-gray-400 hover:text-[#B8860B] group"
+                className="text-gray-600 dark:text-gray-400 hover:text-[#B8860B] group border-b border-b-black/50"
               >
                 <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B]  gap-2">
                   <ParallaxIcon
@@ -203,14 +205,14 @@ function Header() {
 
               <Link
                 href="/portfolio"
-                className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white group"
+                className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white group border-x border-x-black/50 border-b border-b-black/50"
               >
                 <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B]  gap-2">
                   <ParallaxIcon
                     Icon={FaBriefcase}
                     className="w-7 h-7 -mb-6 group-hover:text-[#B8860B]"
                   />
-                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B] text-xs uppercase tracking-[2px] leading-2 pb-8">
+                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B] text-xs uppercase tracking-[2px] leading-2 pb-8 ">
                     Portfolio
                   </p>
                 </div>
@@ -241,7 +243,7 @@ function Header() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.2 }}
-                className="absolute top-28 left-0 w-full bg-gray-950  shadow-xl lg:hidden"
+                className="absolute top-28 left-0 w-full bg-black  shadow-xl lg:hidden"
               >
                 {/* Mobile Navigation Links */}
                 <div className="py-2 px-4 space-y-4">
