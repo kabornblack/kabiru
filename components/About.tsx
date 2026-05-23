@@ -1,10 +1,14 @@
 "use client";
 
-import { useState, ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, ReactNode } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaAngleDown } from "react-icons/fa";
 
-// Define interfaces for props
+const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
+
+const clamp = (value: number, min: number, max: number): number =>
+  Math.min(Math.max(value, min), max);
+
 interface ContentSectionProps {
   title: string;
   children: ReactNode;
@@ -15,19 +19,19 @@ interface ContentItem {
   content: string;
 }
 
-// Content section component with expandable functionality
 const ContentSection = ({ title, children }: ContentSectionProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="mb-8 w-full">
+    <div className="mb-8 w-full font-protest">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between bg-white/20 hover:bg-white/30  p-4 rounded-md hover:rounded-b-none border-l-4 border-[#B8860B] group transition-all duration-300"
+        className="w-full flex items-center justify-between bg-white/20 hover:bg-white/30 p-4 border-l-4 border-[#B8860B] group transition-all duration-300"
       >
-        <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[3px] font-hubballi text-left">
+        <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[3px] font-protest text-left">
           {title}
         </h3>
+
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.3 }}
@@ -46,8 +50,9 @@ const ContentSection = ({ title, children }: ContentSectionProps) => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="overflow-hidden"
           >
-            <div className="p-4 bg-gradient-to-b from-white/20 to-black/10 rounded-b-md mt-1 relative">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#B8860B]/40 to-[#B8860B]/1"></div>
+            <div className="p-4 bg-gradient-to-b from-white/20 to-black/10 mt-1 relative">
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#B8860B]/40 to-[#B8860B]/1" />
+
               <div className="text-lg text-gray-300 dark:text-white font-hubballi">
                 {children}
               </div>
@@ -59,14 +64,92 @@ const ContentSection = ({ title, children }: ContentSectionProps) => {
   );
 };
 
-export default function AboutPage() {
-  // Removed the animation that was causing the flash/movement on page load
+export default function About() {
+  const dividerRef = useRef<HTMLDivElement | null>(null);
+  const [globalProgress, setGlobalProgress] = useState(0);
+  const [screenWidth, setScreenWidth] = useState(1200);
+
+  useEffect(() => {
+    let frameId: number;
+
+    const updateProgress = () => {
+      if (!dividerRef.current) return;
+
+      setScreenWidth(window.innerWidth);
+
+      const rect = dividerRef.current.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+
+      const start = windowHeight;
+      const end = windowHeight * 0.35;
+
+      const raw = (start - rect.top) / (start - end);
+      setGlobalProgress(clamp(raw, 0, 1));
+    };
+
+    const handleScroll = () => {
+      if (frameId) cancelAnimationFrame(frameId);
+      frameId = requestAnimationFrame(updateProgress);
+    };
+
+    const scrollContainer = document.getElementById("page-scroll-container");
+
+    updateProgress();
+
+    window.addEventListener("resize", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
+    scrollContainer?.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    return () => {
+      if (frameId) cancelAnimationFrame(frameId);
+
+      window.removeEventListener("resize", handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+
+      scrollContainer?.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  const label = "About";
+  const letters = useMemo(() => label.split(""), []);
+  const letterCount = letters.length;
+
+  const letterGap = screenWidth < 640 ? 44 : screenWidth < 1024 ? 58 : 72;
+
+  const letterData = useMemo(() => {
+    return letters.map((letter, idx) => {
+      const finalX = (idx - (letterCount - 1) / 2) * letterGap;
+
+      let startX = finalX;
+
+      if (idx === 0) {
+        startX = -screenWidth / 2;
+      }
+
+      if (idx === letterCount - 1) {
+        startX = screenWidth / 2;
+      }
+
+      return {
+        letter,
+        startX,
+        finalX,
+        startScale: 0.3,
+        finalScale: 1,
+      };
+    });
+  }, [letters, letterCount, letterGap, screenWidth]);
+
+  const progress = easeOutCubic(globalProgress);
 
   const content: ContentItem[] = [
     {
       title: "Who am I?",
       content:
-        "My name is <span class='text-[#B8860B] font-semibold'>Kabiru Shaibu </span> and I am a passionate software developer from Nigeria. I thrive on solving complex problems and turning ideas into functional and elegant digital solutions.",
+        "My name is <span class='text-[#B8860B] font-semibold'>Kabiru Shaibu</span> and I am a passionate software developer from Nigeria. I thrive on solving complex problems and turning ideas into functional and elegant digital solutions.",
     },
     {
       title: "What I do?",
@@ -76,46 +159,53 @@ export default function AboutPage() {
     {
       title: "How it started?",
       content:
-        "It all started in 2020 during the covid lockdown when we had no where to go but to sit at home and watch movies and then i started thinking what i could posible do with my life and then i discovered a 100 days of code tutorial by <span class='text-[#B8860B] font-semibold'> Angela Yu</span> A simple bit chonk python coding lectures and task and then i develope to love and passion i have today as a software developer. From my first \"Hello, World!\" to working on full-scale applications, the journey has been exciting and rewarding.",
+        "It all started in 2020 during the covid lockdown when we had nowhere to go but to sit at home and watch movies. Then I started thinking about what I could possibly do with my life, and I discovered a 100 Days of Code tutorial by <span class='text-[#B8860B] font-semibold'>Angela Yu</span>. From my first \"Hello, World!\" to working on full-scale applications, the journey has been exciting and rewarding.",
     },
     {
       title: "My philosophy?",
       content:
         "I believe in writing clean, maintainable code and prioritizing user experience above all else. For me, development is not just about functionality but also about creating seamless interactions that add value to users' lives.",
     },
-    {
-      title: "My core skills?",
-      content:
-        "Even though my journey started with Python but as at today my core skills include modern JavaScript frameworks (React, Next.js and Typescript), backend technologies (Node.js, Express), and database management (MongoDB, PostgreSQL). I am also proficient in tools like Docker, Git, and CI/CD pipelines, ensuring efficient workflows and deployments.",
-    },
-    {
-      title: "What drives me?",
-      content:
-        "Curiosity and a desire to learn drive my work. I am always exploring new technologies, contributing to open-source projects, and collaborating with peers to stay at the forefront of the tech industry.",
-    },
-    {
-      title: "My future goals?",
-      content:
-        "First, is to learn something new everyday, even if its just a simple line of code and i aim to lead impactful projects that not only solve problems but also inspire innovation. I'm constantly evolving, learning, and aspiring to contribute meaningfully to the ever-changing world of technology.",
-    },
   ];
 
-  // Split content into left and right columns
   const leftColumnContent = content.filter((_, index) => index % 2 === 0);
   const rightColumnContent = content.filter((_, index) => index % 2 === 1);
 
   return (
-    <div className="w-full h-auto bg-gray-950">
-      <div className="max-w-7xl mx-auto  py-20">
-        <div className="flex flex-col py-20 text-center">
-          <h1 className="font-['Playfair_Display'] text-[#B8860B] font-bold text-2xl md:text-4xl tracking-[5px] leading-6 uppercase relative inline-block opacity-80 pb-1">
-            About
-            <div className="absolute left-0 -bottom-1 w-full h-[1px] bg-gradient-to-r from-transparent via-[#B8860B] to-transparent"></div>
-          </h1>
+    <div className="w-full h-auto bg-gray-950 font-protest">
+      <div className="max-w-7xl mx-auto py-6">
+        <div
+          ref={dividerRef}
+          className="relative mx-auto flex max-w-7xl items-center justify-center overflow-hidden px-6 py-20"
+        >
+          <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[#B8860B]/30 to-transparent" />
+
+          <div className="relative h-20 w-full">
+            {letterData.map(
+              ({ letter, startX, finalX, startScale, finalScale }, idx) => {
+                const currentX = startX + (finalX - startX) * progress;
+                const scale = startScale + (finalScale - startScale) * progress;
+
+                return (
+                  <span
+                    key={`${letter}-${idx}`}
+                    style={{
+                      left: "50%",
+                      transform: `translateX(${currentX}px) translateY(-50%) scale(${scale})`,
+                      opacity: progress,
+                      willChange: "transform, opacity",
+                    }}
+                    className="absolute top-1/2 -translate-x-1/2 text-3xl font-protest font-black uppercase text-[#B8860B] md:text-5xl"
+                  >
+                    {letter}
+                  </span>
+                );
+              },
+            )}
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 sm:px-10 lg:px-32">
-          {/* Left Column */}
           <div className="space-y-2">
             {leftColumnContent.map((section, index) => (
               <ContentSection key={index} title={section.title}>
@@ -124,7 +214,6 @@ export default function AboutPage() {
             ))}
           </div>
 
-          {/* Right Column */}
           <div className="space-y-2">
             {rightColumnContent.map((section, index) => (
               <ContentSection key={index} title={section.title}>

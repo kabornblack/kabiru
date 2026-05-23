@@ -35,9 +35,9 @@ declare global {
           resize?: boolean;
           useWorker?: boolean;
           disableForReducedMotion?: boolean;
-        }
+        },
       ): (
-        options?: Parameters<typeof window.confetti>[0]
+        options?: Parameters<typeof window.confetti>[0],
       ) => Promise<void> | null;
       reset(): void;
     };
@@ -103,7 +103,7 @@ function ContactForm() {
         process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
         process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
         e.currentTarget,
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC!
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC!,
       )
       .then(
         (result) => {
@@ -122,14 +122,14 @@ function ContactForm() {
           setLoading(false);
           alert("Oops! Something went wrong. Please try again.");
           console.log("FAILED...", error.text);
-        }
+        },
       );
 
     e.currentTarget.reset();
   };
 
   return (
-    <div ref={containerRef} className="relative w-full">
+    <div ref={containerRef} className="relative w-full font-protest">
       {/* Load the confetti script from CDN */}
       <Script
         src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
@@ -148,7 +148,7 @@ function ContactForm() {
         viewport={{ once: true }}
         ref={form}
         onSubmit={sendEmail}
-        className="flex flex-col space-y-2 w-full max-w-4xl mx-auto text-gray-200 dark:text-gray-200 font-serif text-center text-sm pt-2"
+        className="flex flex-col space-y-2 w-full max-w-4xl mx-auto font-protest text-gray-200 dark:text-gray-200 font-serif text-center text-sm pt-2"
       >
         <motion.div
           className="flex space-x-2"
@@ -208,7 +208,7 @@ function ContactForm() {
           transition={{ duration: 0.5, delay: 1.6 }}
         >
           <button
-            className={`px-6 py-3 top-3 border border-gray-400 dark:border-gray-500 uppercase text-xs tracking-widest text-slate-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all hover:border hover:bg-gray-800 hover:text-gray-300 mb-20 ${
+            className={`px-6 py-3 top-3 border border-border-[#B8860B] dark:border-border-[#B8860B] uppercase text-xs tracking-widest text-slate-500 placeholder-gray-400 dark:placeholder-gray-500 transition-all hover:border hover:bg-gray-800 hover:text-gray-300 mb-20 ${
               loading ? "opacity-50 cursor-not-allowed" : "active:cursor-wait"
             }`}
             type="submit"

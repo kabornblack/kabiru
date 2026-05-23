@@ -1,17 +1,16 @@
 "use client";
 
 import { Hero } from "@/components/Hero";
-import About from "@/components/About";
 import Skills from "@/components/Skills";
-import { ImagesSliderDemo } from "@/components/Projects";
 import Contact from "@/components/Contact";
 import Header from "@/components/Header";
+import AboutPage from "@/components/About";
 
 export default function Home() {
   return (
-    <div className="h-screen scroll-smooth bg-gray-950">
-      {/* // <div className="h-screen scroll-smooth bg-gradient-to-tr from-white/20 to-gray-950 z-50 -mb-32"> */}
+    <div className="h-screen scroll-smooth bg-gray-950 font-protest">
       <main
+        id="page-scroll-container"
         className="h-full overflow-y-auto scroll-smooth"
         style={{
           msOverflowStyle: "none",
@@ -23,25 +22,25 @@ export default function Home() {
             display: none;
           }
         `}</style>
-
-        {/* Move Header here */}
         <Header />
 
         <section id="home">
           <Hero />
         </section>
         <section id="about">
-          <About />
+          <AboutPage />
         </section>
         <section id="skills">
           <Skills />
         </section>
-        <section>
-          <ImagesSliderDemo />
-        </section>
         <section id="contact">
           <Contact />
         </section>
+        <footer className="w-full flex justify-center items-center py-10">
+          <div className="text-[#B8860B]/20 font-protest text-xs md:text-sm tracking-[6px] uppercase">
+            Designed & Built by Kabiru — © {new Date().getFullYear()}
+          </div>
+        </footer>
       </main>
     </div>
   );

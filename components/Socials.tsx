@@ -56,7 +56,7 @@ function Socials() {
   ];
 
   return (
-    <div className="flex gap-10 mr-3 z-50">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 mr-3 z-50">
       {socialLinks.map((social, index) => (
         <SocialIcon
           key={index}

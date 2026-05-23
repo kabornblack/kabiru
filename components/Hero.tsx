@@ -43,9 +43,9 @@ const TechMarquee = () => {
   return (
     <div className="absolute bottom-16 w-full overflow-hidden bg-transparent px-8">
       <div className="flex flex-col space-y-4">
-        <p className="text-center text-gray-300 text-lg font-mono mb-4">
+        {/* <p className="text-center text-gray-300 text-lg font-mono mb-4">
           <ColourfulText text="Passionate software developer specializing in modern web applications." />
-        </p>
+        </p> */}
         <div className="relative flex overflow-x-hidden">
           <motion.div
             className="flex space-x-8 py-2"

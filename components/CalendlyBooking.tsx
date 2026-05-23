@@ -14,7 +14,10 @@ const CalendlyBooking: React.FC<CalendlyBookingProps> = ({
   className = "",
 }) => {
   return (
-    <div className={`calendly-container w-full ${className}`}>
+    // <div className={`calendly-container font-protest w-full ${className}`}>
+    <div
+      className={`calendly-container font-protest w-full bg-gray-950 ${className}`}
+    >
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
