@@ -406,7 +406,7 @@ function Header() {
                     transition={{
                       delay: 0.5,
                     }}
-                    className="group -ml-8 pt-1"
+                    className="group -ml-8 pt-3"
                   >
                     <div className="h-20 w-32 flex items-center justify-center gap-2 hover:text-[#B8860B] transition-all duration-300">
                       <Socials />

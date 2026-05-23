@@ -12,7 +12,7 @@ export const projectCategories = [
 
 export const projects = [
   {
-    category: "AI & Productivity",
+    category: "Social & Community",
     title: "Global Update",
     description: "Stay up to date with global information.",
     githubUrl: "https://github.com/kabornblack/hello-world",
@@ -30,8 +30,8 @@ export const projects = [
     image: "/ai.png",
   },
   {
-    category: "E-commerce",
-    title: "Grey Geese",
+    category: "Social & Community",
+    title: "Social Community",
     description: "Small business website built from design to production.",
     liveUrl: "https://grey-geese.vercel.app/",
     tags: ["React", "Next.js", "TypeScript"],
@@ -55,7 +55,7 @@ export const projects = [
     image: "/swapify.png",
   },
   {
-    category: "AI & Productivity",
+    category: "Social & Community",
     title: "C-U School",
     description: "Educational website with language translation.",
     githubUrl: "https://github.com/kabornblack/C-U-Language-School",

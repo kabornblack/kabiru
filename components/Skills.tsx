@@ -43,8 +43,6 @@ import {
   SiWeb3Dotjs,
 } from "react-icons/si";
 import { TbBrandAngular, TbBrandSvelte } from "react-icons/tb";
-import RecentProject from "./RecentProject";
-import TechStack from "./TechStack";
 
 const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
 

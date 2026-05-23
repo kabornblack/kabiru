@@ -18,7 +18,6 @@ import {
   SiRedux,
   SiGraphql,
 } from "react-icons/si";
-import { ColourfulText } from "./ui/colourful-text";
 
 // Tech stack array with icons and names
 const techStack = [
