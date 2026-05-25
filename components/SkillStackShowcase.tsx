@@ -90,6 +90,19 @@ export default function SkillStackShowcase({
           transition={{ duration: 0.35, ease: "easeInOut" }}
           className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.4fr]"
         >
+          {/* <motion.div
+        className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.4fr]"
+        layout
+      >
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedCategory.key}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -16 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="contents"
+          > */}
           <div className="flex flex-col justify-center border border-white/10 bg-white/[0.03] p-6 text-left shadow-sm md:p-8">
             <p className="mb-3 text-xs uppercase tracking-[4px] text-[#B8860B]/70">
               Current capability
@@ -143,6 +156,7 @@ export default function SkillStackShowcase({
           </div>
         </motion.div>
       </AnimatePresence>
+      {/* </motion.div> */}
     </div>
   );
 }

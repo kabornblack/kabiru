@@ -14,7 +14,8 @@ export const projects = [
   {
     category: "Social & Community",
     title: "Global Update",
-    description: "Stay up to date with global information.",
+    description:
+      "Stay up to date with global information. To see how the world works",
     githubUrl: "https://github.com/kabornblack/hello-world",
     liveUrl: "https://global-update-nine.vercel.app/",
     tags: ["React", "Next.js", "TypeScript"],
@@ -31,7 +32,7 @@ export const projects = [
   },
   {
     category: "Social & Community",
-    title: "Social Community",
+    title: "Grey Geese",
     description: "Small business website built from design to production.",
     liveUrl: "https://grey-geese.vercel.app/",
     tags: ["React", "Next.js", "TypeScript"],
@@ -51,7 +52,7 @@ export const projects = [
     description:
       "Barter and donation platform for exchanging or donating items.",
     liveUrl: "https://www.swapify.ee",
-    tags: ["React", "JavaScript", "Next.js"],
+    tags: ["FrontEnd", "React", "Next.js"],
     image: "/swapify.png",
   },
   {
@@ -60,7 +61,7 @@ export const projects = [
     description: "Educational website with language translation.",
     githubUrl: "https://github.com/kabornblack/C-U-Language-School",
     liveUrl: "https://www.cuilschool.ee/",
-    tags: ["React", "Next.js", "TypeScript"],
+    tags: ["FrontEnd", "React", "Next.js", "TypeScript"],
     image: "/cuschool.png",
   },
   {
@@ -69,7 +70,7 @@ export const projects = [
     description:
       "A platform that helps users search and connect with suppliers.",
     liveUrl: "https://wholesalewhale.com/",
-    tags: ["Svelte", "TypeScript"],
+    tags: ["FrontEnd", "Svelte", "TypeScript"],
     image: "/wholesale.png",
   },
   {
@@ -88,7 +89,16 @@ export const projects = [
       "PolyMarket styled prediction where users place YES/NO bets using TOKEN or NAIRA to win rewards",
     // githubUrl: "https://github.com/kabornblack/Upto-date",
     liveUrl: "https://predmakit.com",
-    tags: ["Vite", "NodeJS", "Fastify", "Supabase"],
+    tags: ["FullStack", "Vite", "NodeJS", "Fastify", "Supabase"],
     image: "/predmakit.png",
   },
+  // {
+  //   category: "Web3",
+  //   title: "Solana Token",
+  //   description: "Create your solana token, deploy and build your community",
+  //   // githubUrl: "https://github.com/kabornblack/Upto-date",
+  //   liveUrl: "https://predmakit.com",
+  //   tags: ["FrontEnd", "React", "NodeJS", "Solana", "web3.js"],
+  //   image: "/solanatoken.png",
+  // },
 ];

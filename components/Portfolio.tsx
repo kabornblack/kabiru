@@ -174,7 +174,7 @@ export default function Portfolio() {
                         />
                       </div>
 
-                      <div className="p-3">
+                      <div className="p-3 bg-[#111111] md:bg-[#141414]">
                         <h3 className="text-sm font-bold text-[#B8860B]">
                           {project.title}
                         </h3>
@@ -216,9 +216,19 @@ export default function Portfolio() {
           ))}
         </motion.div>
       </div>
+
       <footer className="w-full flex justify-center items-center py-10">
-        <div className="text-[#B8860B]/20 font-protest text-xs md:text-sm tracking-[6px] uppercase">
-          Designed & Built by Kabiru — © {new Date().getFullYear()}
+        <div className="text-[#B8860B]/20 font-protest text-xs md:text-sm tracking-[6px] uppercase text-center">
+          {/* LG SCREEN */}
+          <div className="hidden lg:block">
+            Designed & Built by Kabiru — © {new Date().getFullYear()}
+          </div>
+
+          {/* SM + MD SCREEN */}
+          <div className="flex flex-col items-center gap-2 lg:hidden">
+            <span>Designed & Built by Kabiru</span>
+            <span>© {new Date().getFullYear()}</span>
+          </div>
         </div>
       </footer>
     </div>
