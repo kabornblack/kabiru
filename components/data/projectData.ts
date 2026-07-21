@@ -40,6 +40,7 @@ export const projects: Project[] = [
     title: "PredMakit",
     description:
       "A prediction-market product where users place YES/NO positions using TOKEN or NAIRA. Built with a Vite frontend, Fastify/Node.js API layer, and Supabase for application data and authentication.",
+    githubUrl: "https://github.com/kabornblack/predmakit",
     liveUrl: "https://predmakit.com",
     tags: ["Fastify", "Node.js", "Vite", "Supabase", "TypeScript"],
     image: "/predmakit.png",
