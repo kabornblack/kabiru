@@ -3,11 +3,7 @@
 import Link from "next/link";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
-import {
-  getFeaturedProjects,
-  projectCategories,
-  projects,
-} from "./data/projectData";
+import { getFeaturedProjects } from "./data/projectData";
 import ProjectCard from "./ProjectCard";
 
 const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
@@ -61,13 +57,6 @@ export default function HomePortfolioShowcase() {
       scrollContainer?.removeEventListener("scroll", handleScroll);
     };
   }, [reducedMotion]);
-
-  const categoryStats = projectCategories
-    .map((category) => ({
-      title: category,
-      value: projects.filter((project) => project.category === category).length,
-    }))
-    .filter((item) => item.value > 0);
 
   const letters = useMemo(() => "Portfolio".split(""), []);
   const letterCount = letters.length;
@@ -143,25 +132,6 @@ export default function HomePortfolioShowcase() {
             View Full Portfolio
           </Link>
         </div>
-
-        {/* <div className="mt-8 grid grid-cols-2 gap-2.5 md:grid-cols-3 lg:grid-cols-6">
-          {categoryStats.map((item) => (
-            <div
-              key={item.title}
-              className="rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-[var(--surface)] p-3 text-left transition-colors duration-200 hover:border-[var(--border-gold)]"
-            >
-              <p className="text-[10px] tracking-[0.12em] text-[var(--text-muted)] uppercase">
-                {item.title}
-              </p>
-              <p className="mt-1.5 text-xl font-semibold text-[var(--text-primary)]">
-                {item.value}
-              </p>
-              <p className="mt-0.5 text-[10px] tracking-[0.1em] text-[var(--text-muted)] uppercase">
-                {item.value === 1 ? "project" : "projects"}
-              </p>
-            </div>
-          ))}
-        </div> */}
       </div>
     </section>
   );

@@ -137,29 +137,6 @@ export function Hero() {
           </a>
         </div>
       </div>
-
-      {/* <div className="relative mt-8 h-20 w-full max-w-lg md:mt-10 md:h-28 md:max-w-xl">
-        <div className="absolute inset-x-[15%] top-0 h-[2px] w-3/4 bg-gradient-to-r from-transparent via-yellow-400 to-transparent blur-sm" />
-        <div className="absolute inset-x-[15%] top-0 h-px w-3/4 bg-gradient-to-r from-transparent via-yellow-400 to-transparent" />
-        <div className="absolute inset-x-[35%] top-0 h-[5px] w-1/4 bg-gradient-to-r from-transparent via-white to-transparent blur-sm" />
-        <div className="absolute inset-x-[35%] top-0 h-px w-1/4 bg-gradient-to-r from-transparent via-gray-100 to-transparent" />
-
-        {mounted && !reducedMotion ? (
-          <SparklesCore
-            background="transparent"
-            minSize={0.4}
-            maxSize={1}
-            particleDensity={320}
-            className="h-full w-full"
-            particleColor="#B8860B"
-          />
-        ) : (
-          <div className="h-full w-full" aria-hidden="true" />
-        )}
-
-        <div className="absolute inset-0 h-full w-full bg-[var(--page-bg)] [mask-image:radial-gradient(260px_140px_at_top,transparent_20%,white)]" />
-      </div> */}
-
       <TechMarquee reducedMotion={reducedMotion} />
     </div>
   );

@@ -1,9 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import SkillStackShowcase, {
-  type SkillCategory,
-} from "./SkillStackShowcase";
+import SkillStackShowcase, { type SkillCategory } from "./SkillStackShowcase";
 import {
   FaHtml5,
   FaCss3Alt,
@@ -114,18 +112,22 @@ const skillCategories: SkillCategory[] = [
       {
         name: "HTML5",
         icon: <FaHtml5 className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "CSS3",
         icon: <FaCss3Alt className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
-      { name: "SASS", icon: <FaSass className={iconClass} />, tier: "additional" },
+      {
+        name: "SASS",
+        icon: <FaSass className={iconClass} />,
+        tier: "core",
+      },
       {
         name: "Bootstrap",
         icon: <FaBootstrap className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Redux Toolkit",
@@ -135,12 +137,12 @@ const skillCategories: SkillCategory[] = [
       {
         name: "Framer Motion",
         icon: <SiFramer className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Mobile-first UI",
         icon: <FaMobileAlt className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Angular",
@@ -190,47 +192,47 @@ const skillCategories: SkillCategory[] = [
       {
         name: "Python",
         icon: <FaPython className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "FastAPI",
         icon: <SiFastapi className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "JWT Auth",
         icon: <FaKey className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Clerk Auth",
         icon: <SiClerk className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "MongoDB",
         icon: <SiMongodb className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "PostgreSQL",
         icon: <SiPostgresql className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Docker",
         icon: <SiDocker className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "File uploads",
         icon: <FaCloudUploadAlt className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Webhooks",
         icon: <FaLink className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
     ],
   },
@@ -280,17 +282,17 @@ const skillCategories: SkillCategory[] = [
       {
         name: "Google Cloud",
         icon: <SiGooglecloud className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Cloudflare",
         icon: <SiCloudflare className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Docker",
         icon: <SiDocker className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
     ],
   },
@@ -329,7 +331,7 @@ const skillCategories: SkillCategory[] = [
       {
         name: "Claude AI",
         icon: <FaRobot className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Node.js",
@@ -448,7 +450,7 @@ const skillCategories: SkillCategory[] = [
       {
         name: "Clerk",
         icon: <SiClerk className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Sanity",
@@ -463,12 +465,12 @@ const skillCategories: SkillCategory[] = [
       {
         name: "Figma",
         icon: <SiFigma className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Stripe",
         icon: <SiStripe className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Google Analytics",
@@ -478,7 +480,7 @@ const skillCategories: SkillCategory[] = [
       {
         name: "Render",
         icon: <SiRender className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
     ],
   },
