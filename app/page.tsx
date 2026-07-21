@@ -9,10 +9,10 @@ import HomePortfolioShowcase from "@/components/PortfolioShowcase";
 
 export default function Home() {
   return (
-    <div className="h-screen scroll-smooth bg-gray-950 font-protest">
+    <div className="h-screen scroll-smooth bg-[var(--page-bg)]">
       <main
         id="page-scroll-container"
-        className="h-full overflow-y-auto scroll-smooth"
+        className="h-full overflow-y-auto overflow-x-hidden scroll-smooth"
         style={{
           msOverflowStyle: "none",
           scrollbarWidth: "none",
@@ -25,31 +25,28 @@ export default function Home() {
         `}</style>
         <Header />
 
-        <section id="home">
+        <section id="home" aria-label="Home">
           <Hero />
         </section>
-        <section id="about">
+        <section id="about" aria-label="About">
           <AboutPage />
         </section>
-        <section id="skills">
+        <section id="skills" aria-label="Skills">
           <Skills />
         </section>
         <HomePortfolioShowcase />
-        <section id="contact">
+        <section id="contact" aria-label="Contact">
           <Contact />
         </section>
-        <footer className="w-full flex justify-center items-center py-10">
-          <div className="text-[#B8860B]/20 font-protest text-xs md:text-sm tracking-[6px] uppercase text-center">
-            {/* LG SCREEN */}
-            <div className="hidden lg:block">
+        <footer className="flex w-full items-center justify-center border-t border-[var(--border-subtle)] px-5 py-10">
+          <div className="max-w-xl text-center">
+            <p className="text-sm leading-relaxed text-[var(--text-muted)] md:text-base">
+              Building products with scalability, usability and long-term
+              maintainability in mind.
+            </p>
+            <p className="mt-4 text-xs tracking-[0.16em] text-[var(--text-muted)] uppercase md:text-sm">
               Designed & Built by Kabiru — © {new Date().getFullYear()}
-            </div>
-
-            {/* SM + MD SCREEN */}
-            <div className="flex flex-col items-center gap-2 lg:hidden">
-              <span>Designed & Built by Kabiru</span>
-              <span>© {new Date().getFullYear()}</span>
-            </div>
+            </p>
           </div>
         </footer>
       </main>

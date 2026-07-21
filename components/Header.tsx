@@ -1,169 +1,73 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  motion,
-  useMotionValue,
-  useSpring,
-  AnimatePresence,
-} from "framer-motion";
-import {
+  FaBars,
   FaBriefcase,
+  FaEnvelope,
   FaHome,
+  FaTimes,
   FaTools,
   FaUser,
-  FaInfoCircle,
-  FaUserTie,
-  FaBars,
-  FaTimes,
 } from "react-icons/fa";
 import Socials from "./Socials";
+import { scrollToHash } from "@/lib/scroll";
 
-// =========================
-// Parallax Icon
-// =========================
-const ParallaxIcon = ({
-  Icon,
-  className,
-}: {
-  Icon: React.ElementType;
-  className: string;
-}) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const springConfig = {
-    damping: 25,
-    stiffness: 300,
-  };
-
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    x.set((e.clientX - centerX) * 0.08);
-    y.set((e.clientY - centerY) * 0.08);
-  };
-
-  return (
-    <div
-      className="relative w-full h-full flex items-center justify-center"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
-    >
-      <motion.div
-        style={{
-          x: springX,
-          y: springY,
-        }}
-      >
-        <Icon className={className} />
-      </motion.div>
-    </div>
-  );
+type NavLink = {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  match?: "home" | "portfolio" | "hash";
+  hash?: string;
 };
 
-// =========================
-// Types
-// =========================
-interface DropdownItem {
-  icon: React.ElementType;
-  href?: string;
-  title?: string;
-}
+const navLinks: NavLink[] = [
+  { label: "Home", href: "/#home", icon: FaHome, match: "home", hash: "home" },
+  {
+    label: "About",
+    href: "/#about",
+    icon: FaUser,
+    match: "hash",
+    hash: "about",
+  },
+  {
+    label: "Skills",
+    href: "/#skills",
+    icon: FaTools,
+    match: "hash",
+    hash: "skills",
+  },
+  {
+    label: "Projects",
+    href: "/portfolio",
+    icon: FaBriefcase,
+    match: "portfolio",
+  },
+  {
+    label: "Contact",
+    href: "/#contact",
+    icon: FaEnvelope,
+    match: "hash",
+    hash: "contact",
+  },
+];
 
-interface NavItemProps {
-  icon: React.ElementType;
-  dropdownItems?: DropdownItem[];
-  href?: string;
-  baseUrl: string;
-}
-
-// =========================
-// Desktop Dropdown Item
-// =========================
-const NavItemWithDropdown: React.FC<NavItemProps> = ({
-  icon: Icon,
-  dropdownItems = [],
-  href = "/",
-  baseUrl,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div
-      className="relative"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-    >
-      <Link href={baseUrl + href} className="text-gray-600 dark:text-gray-400">
-        <div className="relative h-20 w-20 flex items-center justify-center border-x border-x-black/40 border-b border-b-black/40 hover:text-[#B8860B] hover:shadow-[inset_0_0_12px_rgba(184,134,11,0.35)] transition-all duration-300">
-          <ParallaxIcon Icon={Icon} className="w-6 h-6" />
-        </div>
-      </Link>
-
-      {dropdownItems.length > 0 && (
-        <div
-          className={`absolute left-0 top-20 w-28 transition-all duration-300 ease-in-out ${
-            isOpen
-              ? "opacity-100 visible translate-y-0"
-              : "opacity-0 invisible -translate-y-2"
-          }`}
-        >
-          {dropdownItems.map((item, index) => (
-            <Link
-              href={baseUrl + (item.href || "#")}
-              key={index}
-              onClick={() => setIsOpen(false)}
-            >
-              <div className="h-16 w-20 flex flex-col items-center justify-center group border border-black/10 bg-black/90 backdrop-blur-xl gap-2">
-                <ParallaxIcon
-                  Icon={item.icon}
-                  className="w-5 h-5 text-gray-400 group-hover:text-[#B8860B]"
-                />
-
-                <span className="text-gray-400 font-thin font-serif group-hover:text-[#B8860B] text-xs uppercase tracking-[2px]">
-                  {item.title}
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
-
-// =========================
-// Main Header
-// =========================
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
   const [scrolled, setScrolled] = useState(false);
-
+  const [activeHash, setActiveHash] = useState("home");
+  const menuId = useId();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
-
-  const baseUrl = pathname?.startsWith("/portfolio") ? "/" : "";
-
-  // =========================
-  // Scroll Hide / Show
-  // =========================
+  const isPortfolio = pathname?.startsWith("/portfolio") ?? false;
 
   useEffect(() => {
     const scrollContainer = document.getElementById("page-scroll-container");
-
-    const target = scrollContainer || window;
+    const target: HTMLElement | Window = scrollContainer || window;
 
     let lastScrollY =
       scrollContainer?.scrollTop ||
@@ -171,13 +75,28 @@ function Header() {
       document.documentElement.scrollTop ||
       0;
 
-    const getCurrentScrollY = () => {
-      return scrollContainer?.scrollTop || window.scrollY || 0;
+    const getCurrentScrollY = () =>
+      scrollContainer?.scrollTop || window.scrollY || 0;
+
+    const updateActiveSection = () => {
+      if (isPortfolio) return;
+
+      const sections = ["home", "about", "skills", "projects", "contact"];
+      const scrollY = getCurrentScrollY();
+      let current = "home";
+
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.offsetTop - 120;
+        if (scrollY >= top) current = id;
+      }
+
+      setActiveHash(current);
     };
 
     const handleScroll = () => {
       const currentScrollY = getCurrentScrollY();
-
       setScrolled(currentScrollY > 20);
 
       if (currentScrollY < 80) {
@@ -190,235 +109,182 @@ function Header() {
       }
 
       lastScrollY = currentScrollY;
+      updateActiveSection();
     };
 
+    updateActiveSection();
     target.addEventListener("scroll", handleScroll, { passive: true });
 
     return () => {
       target.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [isPortfolio]);
 
-  const homeDropdownItems = [
-    {
-      icon: FaInfoCircle,
-      href: "#about",
-      // title: "about",
-    },
-    {
-      icon: FaUserTie,
-      href: "#contact",
-      // title: "contact",
-    },
-  ];
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isMenuOpen]);
+
+  const isActive = (link: NavLink) => {
+    if (link.match === "portfolio") return isPortfolio;
+    if (isPortfolio) return false;
+    if (link.match === "home") return activeHash === "home";
+    return activeHash === link.hash;
+  };
+
+  const handleNavClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    link: NavLink,
+  ) => {
+    if (link.match === "portfolio") {
+      setIsMenuOpen(false);
+      return;
+    }
+
+    if (!isPortfolio && link.hash) {
+      event.preventDefault();
+      scrollToHash(link.hash);
+      setActiveHash(link.hash);
+      setIsMenuOpen(false);
+      window.history.replaceState(null, "", `/#${link.hash}`);
+    }
+  };
 
   return (
-    <>
-      <motion.header
-        initial={false}
-        animate={{
-          y: showHeader ? 0 : "-100%",
-        }}
-        transition={{
-          duration: 0.3,
-          ease: "easeInOut",
-        }}
-        className={[
-          "fixed top-0 left-0 w-full h-20 z-50 border-b transition-colors duration-300",
-          scrolled
-            ? "bg-black/70 backdrop-blur-xl border-white/10 shadow-lg"
-            : "bg-gradient-to-br from-white/20 to-gray-950 border-white/5",
-        ].join(" ")}
-      >
-        <div className="relative flex justify-between items-center h-20">
-          {/* ========================= */}
-          {/* LEFT SIDE */}
-          {/* ========================= */}
-          <div className="flex h-20">
-            {/* HOME */}
-            <Link
-              href={baseUrl + "#home"}
-              className="text-gray-600 dark:text-gray-400"
-            >
-              <div className="h-20 w-20 flex items-center justify-center hover:text-[#B8860B] transition-all duration-300">
-                <ParallaxIcon Icon={FaHome} className="w-6 h-6" />
-              </div>
-            </Link>
+    <motion.header
+      initial={false}
+      animate={{ y: showHeader ? 0 : "-100%" }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className={[
+        "fixed top-0 left-0 z-50 h-20 w-full border-b transition-colors duration-300",
+        scrolled
+          ? "border-[var(--border-subtle)] bg-black/70 backdrop-blur-xl shadow-lg"
+          : "border-white/5 bg-gradient-to-br from-white/10 to-[var(--page-bg)]",
+      ].join(" ")}
+    >
+      <div className="relative mx-auto flex h-20 max-w-7xl items-center justify-between px-2 sm:px-4">
+        <nav aria-label="Primary" className="hidden h-20 items-center lg:flex">
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const active = isActive(link);
 
-            {/* DESKTOP NAV */}
-            <div className="hidden lg:flex items-center justify-center h-20">
-              {/* ABOUT / CONTACT */}
-              <NavItemWithDropdown
-                icon={FaUser}
-                dropdownItems={homeDropdownItems}
-                baseUrl={baseUrl}
-              />
-
-              {/* SKILLS */}
+            return (
               <Link
-                href={baseUrl + "#skills"}
-                className="group border-b border-b-black/40"
+                key={link.label}
+                href={link.href}
+                aria-label={link.label}
+                aria-current={active ? "page" : undefined}
+                title={link.label}
+                onClick={(event) => handleNavClick(event, link)}
+                className={[
+                  "focus-ring group relative flex h-20 min-w-[5.5rem] flex-col items-center justify-center gap-1 px-3 transition-all duration-200",
+                  active
+                    ? "text-[var(--gold)]"
+                    : "text-[var(--text-muted)] hover:text-[var(--gold)]",
+                ].join(" ")}
               >
-                <div className="h-20 w-20 flex flex-col items-center justify-center gap-1 hover:text-[#B8860B] transition-all duration-300">
-                  <ParallaxIcon
-                    Icon={FaTools}
-                    className="w-6 h-6 text-gray-400 group-hover:text-[#B8860B]"
-                  />
-                </div>
+                <Icon
+                  className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5"
+                  aria-hidden="true"
+                />
+                <span className="text-[10px] tracking-[0.12em] uppercase">
+                  {link.label}
+                </span>
+                <span
+                  className={[
+                    "absolute right-3 bottom-0 left-3 h-0.5 origin-center bg-[var(--gold)] transition-transform duration-300",
+                    active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-50",
+                  ].join(" ")}
+                  aria-hidden="true"
+                />
               </Link>
+            );
+          })}
+        </nav>
 
-              {/* PORTFOLIO */}
-              <Link
-                href="/portfolio"
-                className="group border-x border-x-black/40 border-b border-b-black/40"
-              >
-                <div className="h-20 w-20 flex flex-col items-center justify-center gap-1 hover:text-[#B8860B] transition-all duration-300">
-                  <ParallaxIcon
-                    Icon={FaBriefcase}
-                    className="w-6 h-6 text-gray-400 group-hover:text-[#B8860B]"
-                  />
-                </div>
-              </Link>
-            </div>
-          </div>
+        <Link
+          href="/#home"
+          className="focus-ring flex h-20 items-center px-3 text-[var(--gold)] lg:hidden"
+          aria-label="Home"
+        >
+          <FaHome className="h-5 w-5" aria-hidden="true" />
+          <span className="ml-2 text-sm tracking-[0.12em] uppercase">
+            Home
+          </span>
+        </Link>
 
-          {/* ========================= */}
-          {/* SOCIALS */}
-          {/* ========================= */}
-          <div className="hidden lg:flex space-x-4 px-10 justify-center items-center h-20">
-            <Socials />
-          </div>
-
-          {/* ========================= */}
-          {/* MOBILE MENU BUTTON */}
-          {/* ========================= */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden px-6 h-20 flex items-center justify-center text-gray-400"
-          >
-            <ParallaxIcon
-              Icon={isMenuOpen ? FaTimes : FaBars}
-              className="w-6 h-6"
-            />
-          </button>
-
-          {/* ========================= */}
-          {/* MOBILE MENU */}
-          {/* ========================= */}
-          <AnimatePresence>
-            {isMenuOpen && (
-              <motion.div
-                initial={{
-                  opacity: 0,
-                  y: 0,
-                  scaleY: 0,
-                }}
-                animate={{
-                  opacity: 1,
-                  y: 0,
-                  scaleY: 1,
-                }}
-                exit={{
-                  opacity: 0,
-                  y: 0,
-                  scaleY: 0,
-                }}
-                transition={{
-                  duration: 0.25,
-                  ease: "easeInOut",
-                }}
-                className="absolute top-20 left-0 pb-2 w-20 bg-black backdrop-blur-2xl shadow-2xl lg:hidden z-50"
-              >
-                <div className="py-2 px-4 space-y-1">
-                  {/* ABOUT + CONTACT */}
-                  {homeDropdownItems.map((item, index) => (
-                    <Link
-                      key={index}
-                      href={baseUrl + (item.href || "#")}
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <motion.div
-                        initial={{
-                          opacity: 0,
-                        }}
-                        animate={{
-                          opacity: 1,
-                        }}
-                        transition={
-                          {
-                            // delay: 2,
-                          }
-                        }
-                        className="flex items-center space-x-2 p-4 hover:bg-white/5 rounded-xl group transition-all duration-300"
-                      >
-                        <item.icon className="w-5 h-5 text-gray-400 group-hover:text-[#B8860B]" />
-                      </motion.div>
-                    </Link>
-                  ))}
-
-                  {/* SKILLS */}
-                  <Link
-                    href={baseUrl + "#skills"}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <motion.div
-                      initial={{
-                        opacity: 0,
-                      }}
-                      animate={{
-                        opacity: 1,
-                      }}
-                      transition={{
-                        delay: 0.3,
-                      }}
-                      className="flex items-center space-x-4 p-4 hover:bg-white/5 rounded-xl group transition-all duration-300"
-                    >
-                      <FaTools className="w-5 h-5 text-gray-400 group-hover:text-[#B8860B]" />
-                    </motion.div>
-                  </Link>
-
-                  {/* PORTFOLIO */}
-                  <Link href="/portfolio" onClick={() => setIsMenuOpen(false)}>
-                    <motion.div
-                      initial={{
-                        opacity: 0,
-                      }}
-                      animate={{
-                        opacity: 1,
-                      }}
-                      transition={{
-                        delay: 0.4,
-                      }}
-                      className="flex items-center space-x-4 p-4 hover:bg-white/5 rounded-xl group transition-all duration-300"
-                    >
-                      <FaBriefcase className="w-5 h-5 text-gray-400 group-hover:text-[#B8860B]" />
-                    </motion.div>
-                  </Link>
-
-                  {/* SOCIAL ICONS INSIDE NAVBAR */}
-                  <motion.div
-                    initial={{
-                      opacity: 0,
-                    }}
-                    animate={{
-                      opacity: 1,
-                    }}
-                    transition={{
-                      delay: 0.5,
-                    }}
-                    className="group -ml-8 pt-3"
-                  >
-                    <div className="h-20 w-32 flex items-center justify-center gap-2 hover:text-[#B8860B] transition-all duration-300">
-                      <Socials />
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <div className="hidden items-center px-4 lg:flex">
+          <Socials />
         </div>
-      </motion.header>
-    </>
+
+        <button
+          ref={menuButtonRef}
+          type="button"
+          onClick={() => setIsMenuOpen((open) => !open)}
+          className="focus-ring flex h-20 min-w-11 items-center justify-center px-4 text-[var(--text-muted)] lg:hidden"
+          aria-expanded={isMenuOpen}
+          aria-controls={menuId}
+          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+        >
+          {isMenuOpen ? (
+            <FaTimes className="h-6 w-6" aria-hidden="true" />
+          ) : (
+            <FaBars className="h-6 w-6" aria-hidden="true" />
+          )}
+        </button>
+
+        <AnimatePresence>
+          {isMenuOpen ? (
+            <motion.div
+              id={menuId}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-20 left-0 z-50 w-full border-b border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-4 shadow-2xl lg:hidden"
+            >
+              <nav aria-label="Mobile primary" className="flex flex-col gap-1">
+                {navLinks.map((link) => {
+                  const Icon = link.icon;
+                  const active = isActive(link);
+
+                  return (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      onClick={(event) => handleNavClick(event, link)}
+                      aria-current={active ? "page" : undefined}
+                      className={[
+                        "focus-ring flex min-h-12 items-center gap-3 rounded-md px-3 py-3 text-sm tracking-[0.12em] uppercase transition-colors",
+                        active
+                          ? "bg-[rgba(184,134,11,0.12)] text-[var(--gold)]"
+                          : "text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--gold)]",
+                      ].join(" ")}
+                    >
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                      <span>{link.label}</span>
+                    </Link>
+                  );
+                })}
+              </nav>
+
+              <div className="mt-4 border-t border-[var(--border-subtle)] pt-4">
+                <Socials />
+              </div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </div>
+    </motion.header>
   );
 }
 

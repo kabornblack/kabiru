@@ -1,7 +1,10 @@
 "use client";
+
 import React from "react";
-import { SparklesCore } from "./ui/sparkles";
-import { motion } from "framer-motion";
+import Link from "next/link";
+import { motion, useReducedMotion } from "framer-motion";
+import { scrollToHash } from "@/lib/scroll";
+import { CV_FILENAME, CV_URL } from "@/lib/contact";
 import {
   SiReact,
   SiNextdotjs,
@@ -19,7 +22,6 @@ import {
   SiGraphql,
 } from "react-icons/si";
 
-// Tech stack array with icons and names
 const techStack = [
   { icon: SiReact, name: "React" },
   { icon: SiNextdotjs, name: "Next.js" },
@@ -37,17 +39,33 @@ const techStack = [
   { icon: SiGraphql, name: "GraphQL" },
 ];
 
-// Tech stack marquee component
-const TechMarquee = () => {
+const TechMarquee = ({ reducedMotion }: { reducedMotion: boolean }) => {
+  if (reducedMotion) {
+    return (
+      <div className="absolute inset-x-0 bottom-5 w-full px-5 sm:bottom-7 sm:px-8">
+        <ul className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-[var(--border-subtle)] pt-4">
+          {techStack.map((tech) => (
+            <li
+              key={tech.name}
+              className="flex items-center gap-2 text-[var(--text-muted)]"
+            >
+              <tech.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+              <span className="text-sm font-medium">{tech.name}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  const loopItems = [...techStack, ...techStack];
+
   return (
-    <div className="absolute bottom-16 w-full overflow-hidden bg-transparent px-8">
-      <div className="flex flex-col space-y-4">
-        {/* <p className="text-center text-gray-300 text-lg font-mono mb-4">
-          <ColourfulText text="Passionate software developer specializing in modern web applications." />
-        </p> */}
-        <div className="relative flex overflow-x-hidden">
+    <div className="absolute inset-x-0 bottom-5 w-full px-3 sm:bottom-7 sm:px-6">
+      <div className="mx-auto max-w-5xl border-t border-[var(--border-subtle)] pt-4">
+        <div className="marquee-fade relative overflow-hidden">
           <motion.div
-            className="flex space-x-8 py-2"
+            className="flex w-max gap-8 py-1 pr-8"
             animate={{ x: ["0%", "-50%"] }}
             transition={{
               repeat: Infinity,
@@ -56,23 +74,13 @@ const TechMarquee = () => {
               ease: "linear",
             }}
           >
-            {techStack.map((tech, index) => (
+            {loopItems.map((tech, index) => (
               <div
-                key={index}
-                className="flex items-center space-x-2 text-gray-400 hover:text-[#B8860B] transition-colors whitespace-nowrap"
+                key={`${tech.name}-${index}`}
+                className="flex shrink-0 items-center gap-2 whitespace-nowrap text-[var(--text-muted)] transition-colors duration-200 hover:text-[var(--gold)]"
               >
-                <tech.icon className="w-5 h-5" />
-                <span className="text-sm font-semibold">{tech.name}</span>
-              </div>
-            ))}
-            {/* Duplicate items to create seamless loop */}
-            {techStack.map((tech, index) => (
-              <div
-                key={`duplicate-${index}`}
-                className="flex items-center space-x-2 text-gray-400 hover:text-[#B8860B] transition-colors whitespace-nowrap"
-              >
-                <tech.icon className="w-5 h-5" />
-                <span className="text-sm font-semibold">{tech.name}</span>
+                <tech.icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                <span className="text-sm font-medium">{tech.name}</span>
               </div>
             ))}
           </motion.div>
@@ -83,39 +91,76 @@ const TechMarquee = () => {
 };
 
 export function Hero() {
+  const prefersReducedMotion = useReducedMotion();
+
+  const reducedMotion = Boolean(prefersReducedMotion);
+
   return (
-    <div className="h-screen max-w-7xl mx-auto bg-gray-950 flex flex-col items-center justify-center overflow-hidden relative">
-      <h1 className="md:text-6xl text-4xl lg:text-7xl font-bold text-center text-[#B8860B] relative mt-48 pb-8 z-20">
-        Kabiru Shaibu
-      </h1>
-      <div className="w-[40rem] h-40 relative pt-8">
-        {/* Gradients */}
-        <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-indigo-500 to-transparent h-[2px] w-3/4 blur-sm" />
-        <div className="absolute inset-x-20 top-0 bg-gradient-to-r from-transparent via-yellow-400 to-transparent h-px w-3/4" />
-        <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-white to-transparent h-[5px] w-1/4 blur-sm" />
-        <div className="absolute inset-x-60 top-0 bg-gradient-to-r from-transparent via-gray-100 to-transparent h-px w-1/4" />
+    <div className="relative mx-auto flex min-h-[88svh] max-w-7xl flex-col items-center justify-center overflow-hidden bg-[var(--page-bg)] px-5 pb-24 pt-24 md:min-h-[90svh] md:pt-28">
+      <div className="relative z-20 mx-auto max-w-3xl text-center">
+        <h1 className="font-display text-4xl font-bold leading-none text-[var(--gold)] md:text-6xl lg:text-7xl">
+          Kabiru Shaibu
+        </h1>
 
-        {/* Core component */}
-        <SparklesCore
-          background="transparent"
-          minSize={0.4}
-          maxSize={1}
-          particleDensity={1200}
-          className="w-full h-full"
-          particleColor="#B8860B"
-        />
+        <p className="mx-auto mt-5 max-w-2xl text-base leading-snug font-medium text-[var(--text-primary)] md:mt-6 md:text-xl md:leading-snug">
+          Frontend-focused Full-Stack Product Engineer. I design and ship
+          accessible SaaS and Web3 products with production quality and scale in
+          mind.
+        </p>
 
-        {/* Radial Gradient to prevent sharp edges */}
-        <div className="absolute inset-0 w-full h-full bg-gray-950 [mask-image:radial-gradient(350px_200px_at_top,transparent_20%,white)]"></div>
+        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
+          Specializing in TypeScript, React, Next.js, Node.js, Python, Supabase
+          and Solana — owning the path from product idea to reliable release.
+        </p>
+
+        <div className="mt-7 flex flex-wrap items-center justify-center gap-3 md:mt-8 md:gap-4">
+          <Link href="/portfolio" className="focus-ring btn-primary">
+            View Projects
+          </Link>
+          <Link
+            href="#contact"
+            onClick={(event) => {
+              event.preventDefault();
+              scrollToHash("contact");
+            }}
+            className="focus-ring btn-secondary"
+          >
+            Contact Me
+          </Link>
+          <a
+            href={CV_URL}
+            download={CV_FILENAME}
+            aria-label="Download Kabiru Shaibu CV PDF"
+            className="focus-ring btn-secondary"
+          >
+            Download CV
+          </a>
+        </div>
       </div>
 
-      {/* Technology Marquee */}
-      <TechMarquee />
-      <div className="py-10 blur-sm opacity-5">
-        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-        <div className="bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B] h-1" />
-        <div className="bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950 h-1" />
-      </div>
+      {/* <div className="relative mt-8 h-20 w-full max-w-lg md:mt-10 md:h-28 md:max-w-xl">
+        <div className="absolute inset-x-[15%] top-0 h-[2px] w-3/4 bg-gradient-to-r from-transparent via-yellow-400 to-transparent blur-sm" />
+        <div className="absolute inset-x-[15%] top-0 h-px w-3/4 bg-gradient-to-r from-transparent via-yellow-400 to-transparent" />
+        <div className="absolute inset-x-[35%] top-0 h-[5px] w-1/4 bg-gradient-to-r from-transparent via-white to-transparent blur-sm" />
+        <div className="absolute inset-x-[35%] top-0 h-px w-1/4 bg-gradient-to-r from-transparent via-gray-100 to-transparent" />
+
+        {mounted && !reducedMotion ? (
+          <SparklesCore
+            background="transparent"
+            minSize={0.4}
+            maxSize={1}
+            particleDensity={320}
+            className="h-full w-full"
+            particleColor="#B8860B"
+          />
+        ) : (
+          <div className="h-full w-full" aria-hidden="true" />
+        )}
+
+        <div className="absolute inset-0 h-full w-full bg-[var(--page-bg)] [mask-image:radial-gradient(260px_140px_at_top,transparent_20%,white)]" />
+      </div> */}
+
+      <TechMarquee reducedMotion={reducedMotion} />
     </div>
   );
 }

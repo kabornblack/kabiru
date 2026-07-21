@@ -1,70 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { IconType } from "react-icons";
 
 function SocialIcon({
   icon: Icon,
   href,
-  delay = 0,
+  label,
 }: {
   icon: IconType;
   href: string;
-  delay?: number;
+  label: string;
 }) {
   return (
-    <motion.div
-      initial={{ scale: 0.5, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 1, delay }}
-      className="relative z-50"
+    <Link
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="focus-ring inline-flex min-h-11 min-w-11 items-center justify-center text-[var(--text-muted)] transition-colors hover:text-[var(--gold)]"
     >
-      <Link
-        href={href}
-        target="_blank"
-        className="text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-600 
-                   transition-all duration-300 relative z-50"
-      >
-        <motion.div
-          whileHover={{
-            scale: 1.3,
-            rotate: 360,
-            transition: { duration: 0.3 },
-          }}
-        >
-          <Icon className="w-8 h-8" />
-        </motion.div>
-      </Link>
-    </motion.div>
+      <Icon className="h-6 w-6" aria-hidden="true" />
+    </Link>
   );
 }
 
-function Socials() {
-  const socialLinks = [
-    {
-      icon: FaLinkedin,
-      href: "https://www.linkedin.com/in/kabiru-shaibu-a81082164/",
-      delay: 0,
-    },
-    {
-      icon: FaGithub,
-      href: "https://github.com/kabornblack",
-      delay: 0.2,
-    },
-  ];
-
+function Socials({ compact = false }: { compact?: boolean }) {
   return (
-    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 mr-3 z-50">
-      {socialLinks.map((social, index) => (
-        <SocialIcon
-          key={index}
-          icon={social.icon}
-          href={social.href}
-          delay={social.delay}
-        />
-      ))}
+    <div
+      className={[
+        "z-50 flex items-center",
+        compact ? "gap-2" : "gap-3 lg:gap-4",
+      ].join(" ")}
+    >
+      <SocialIcon
+        icon={FaLinkedin}
+        href="https://www.linkedin.com/in/kabiru-shaibu-a81082164/"
+        label="Kabiru Shaibu on LinkedIn"
+      />
+      <SocialIcon
+        icon={FaGithub}
+        href="https://github.com/kabornblack"
+        label="Kabiru Shaibu on GitHub"
+      />
     </div>
   );
 }

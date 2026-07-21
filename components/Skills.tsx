@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import SkillStackShowcase from "./SkillStackShowcase";
+import SkillStackShowcase, {
+  type SkillCategory,
+} from "./SkillStackShowcase";
 import {
   FaHtml5,
   FaCss3Alt,
@@ -12,6 +14,14 @@ import {
   FaNode,
   FaDatabase,
   FaPython,
+  FaUniversalAccess,
+  FaCubes,
+  FaMobileAlt,
+  FaCloudUploadAlt,
+  FaKey,
+  FaLink,
+  FaRobot,
+  FaWallet,
 } from "react-icons/fa";
 import {
   SiTailwindcss,
@@ -41,153 +51,187 @@ import {
   SiSolana,
   SiEthereum,
   SiWeb3Dotjs,
+  SiPrisma,
+  SiFigma,
+  SiStripe,
+  SiFramer,
+  SiGoogleanalytics,
+  SiAlchemy,
 } from "react-icons/si";
 import { TbBrandAngular, TbBrandSvelte } from "react-icons/tb";
+import { useReducedMotion } from "framer-motion";
 
 const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
-
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
 
-type SkillCategoryKey =
-  | "frontend"
-  | "backend"
-  | "database"
-  | "ai"
-  | "web3"
-  | "tools";
-
-type SkillItem = {
-  name: string;
-  icon: React.ReactNode;
-};
-
-type SkillCategory = {
-  key: SkillCategoryKey;
-  title: string;
-  subtitle: string;
-  description: string;
-  points: string[];
-  items: SkillItem[];
-};
+const iconClass = "text-xl";
 
 const skillCategories: SkillCategory[] = [
   {
     key: "frontend",
     title: "Frontend",
-    subtitle: "Interfaces, animations and user experience",
+    subtitle: "Accessible interfaces and product-quality UX",
     description:
-      "I build responsive, clean and interactive user interfaces with modern frontend tools. My focus is on layout, accessibility, animations, performance and making the user experience feel smooth.",
+      "I ship production UIs with React and TypeScript — clear component architecture, accessibility, and performance that holds up beyond demos.",
     points: [
       "Responsive layouts for desktop, tablet and mobile",
-      "Reusable UI components",
-      "Modern animations and clean visual systems",
+      "Reusable, typed UI components",
+      "Accessibility and interaction polish",
     ],
     items: [
-      // Core Web Technologies
-      { name: "html5", icon: <FaHtml5 className="text-xl mb-1" /> },
-      { name: "css3", icon: <FaCss3Alt className="text-xl mb-1" /> },
-      { name: "sass", icon: <FaSass className="text-xl mb-1" /> },
-
-      // UI Frameworks & Styling
-      { name: "bootstrap", icon: <FaBootstrap className="text-xl mb-1" /> },
+      { name: "React", icon: <FaReact className={iconClass} />, tier: "core" },
       {
-        name: "tailwind css",
-        icon: <SiTailwindcss className="text-xl mb-1" />,
+        name: "TypeScript",
+        icon: <SiTypescript className={iconClass} />,
+        tier: "core",
       },
-      { name: "shadcn ui", icon: <FaReact className="text-xl mb-1" /> },
-
-      // Programming Languages
-      { name: "javascript", icon: <SiJavascript className="text-xl mb-1" /> },
-      { name: "typescript", icon: <SiTypescript className="text-xl mb-1" /> },
-
-      // Frontend Libraries & Frameworks
-      { name: "react", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "next.js", icon: <SiNextdotjs className="text-xl mb-1" /> },
-      { name: "redux toolkit", icon: <SiRedux className="text-xl mb-1" /> },
       {
-        name: "framer motion",
-        icon: <FaReact className="text-xl mb-1" />,
+        name: "Next.js",
+        icon: <SiNextdotjs className={iconClass} />,
+        tier: "core",
       },
-
-      // Alternative Frontend Frameworks
-      { name: "angular", icon: <TbBrandAngular className="text-xl mb-1" /> },
-      { name: "svelte", icon: <TbBrandSvelte className="text-xl mb-1" /> },
-
-      // Responsive Design & UX
-      { name: "responsive design", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "mobile first ui", icon: <FaReact className="text-xl mb-1" /> },
       {
-        name: "component architecture",
-        icon: <FaReact className="text-xl mb-1" />,
+        name: "JavaScript",
+        icon: <SiJavascript className={iconClass} />,
+        tier: "core",
       },
-
-      // Frontend Performance
-      { name: "seo optimization", icon: <FaReact className="text-xl mb-1" /> },
       {
-        name: "frontend performance",
-        icon: <FaReact className="text-xl mb-1" />,
+        name: "Tailwind CSS",
+        icon: <SiTailwindcss className={iconClass} />,
+        tier: "core",
       },
-      { name: "axios", icon: <FaReact className="text-xl mb-1" /> },
+      {
+        name: "Accessibility",
+        icon: <FaUniversalAccess className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Component architecture",
+        icon: <FaCubes className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "HTML5",
+        icon: <FaHtml5 className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "CSS3",
+        icon: <FaCss3Alt className={iconClass} />,
+        tier: "additional",
+      },
+      { name: "SASS", icon: <FaSass className={iconClass} />, tier: "additional" },
+      {
+        name: "Bootstrap",
+        icon: <FaBootstrap className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Redux Toolkit",
+        icon: <SiRedux className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Framer Motion",
+        icon: <SiFramer className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Mobile-first UI",
+        icon: <FaMobileAlt className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Angular",
+        icon: <TbBrandAngular className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Svelte",
+        icon: <TbBrandSvelte className={iconClass} />,
+        tier: "additional",
+      },
     ],
   },
   {
     key: "backend",
     title: "Backend",
-    subtitle: "APIs, server logic and application services",
+    subtitle: "APIs, auth and application services",
     description:
-      "I work with backend tools to build APIs, connect applications to databases, handle business logic and support full-stack application development.",
+      "I build Node and Fastify services that connect frontends to data securely — typed APIs, authentication, and business logic that support real product flows.",
     points: [
-      "REST API structure",
-      "Server-side application logic",
-      "Frontend-to-backend data flow",
+      "REST API design and integration",
+      "Authentication and server-side logic",
+      "Reliable frontend-to-backend data flow",
     ],
-
     items: [
-      // Backend Runtime & Languages
-      { name: "node.js", icon: <FaNode className="text-xl mb-1" /> },
-      { name: "python", icon: <FaPython className="text-xl mb-1" /> },
-      { name: "typescript", icon: <SiTypescript className="text-xl mb-1" /> },
-      // { name: "javascript", icon: <SiJavascript className="text-xl mb-1" /> },
-
-      // Backend Frameworks
-      { name: "express.js", icon: <SiExpress className="text-xl mb-1" /> },
-      { name: "fastapi", icon: <SiFastapi className="text-xl mb-1" /> },
-
-      // API Development
+      { name: "Node.js", icon: <FaNode className={iconClass} />, tier: "core" },
       {
-        name: "rest api",
-        icon: <SiOpenapiinitiative className="text-xl mb-1" />,
+        name: "TypeScript",
+        icon: <SiTypescript className={iconClass} />,
+        tier: "core",
       },
-
       {
-        name: "jwt authentication",
-        icon: <FaReact className="text-xl mb-1" />,
+        name: "Express.js",
+        icon: <SiExpress className={iconClass} />,
+        tier: "core",
       },
-      { name: "clerk auth", icon: <SiClerk className="text-xl mb-1" /> },
-
-      // Databases & Backend Services
-      { name: "postgresql", icon: <SiPostgresql className="text-xl mb-1" /> },
-      { name: "mongodb", icon: <SiMongodb className="text-xl mb-1" /> },
-      { name: "supabase", icon: <SiSupabase className="text-xl mb-1" /> },
-      { name: "firebase", icon: <SiFirebase className="text-xl mb-1" /> },
-
-      // Cloud & Deployment
-      { name: "docker", icon: <SiDocker className="text-xl mb-1" /> },
-      { name: "render", icon: <SiRender className="text-xl mb-1" /> },
-
-      // Backend Features
-      { name: "server-side logic", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "api integration", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "file uploads", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "webhooks", icon: <FaReact className="text-xl mb-1" /> },
-
-      // Performance & Architecture
       {
-        name: "backend architecture",
-        icon: <FaReact className="text-xl mb-1" />,
+        name: "REST API",
+        icon: <SiOpenapiinitiative className={iconClass} />,
+        tier: "core",
       },
-      { name: "scalable apis", icon: <FaReact className="text-xl mb-1" /> },
+      {
+        name: "Supabase",
+        icon: <SiSupabase className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Python",
+        icon: <FaPython className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "FastAPI",
+        icon: <SiFastapi className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "JWT Auth",
+        icon: <FaKey className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Clerk Auth",
+        icon: <SiClerk className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "MongoDB",
+        icon: <SiMongodb className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "PostgreSQL",
+        icon: <SiPostgresql className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Docker",
+        icon: <SiDocker className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "File uploads",
+        icon: <FaCloudUploadAlt className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Webhooks",
+        icon: <FaLink className={iconClass} />,
+        tier: "additional",
+      },
     ],
   },
   {
@@ -201,50 +245,53 @@ const skillCategories: SkillCategory[] = [
       "Cloud-hosted app services",
       "Authentication, storage and deployment support",
     ],
-
     items: [
-      // Relational Databases
-      { name: "sql", icon: <FaDatabase className="text-xl mb-1" /> },
-      { name: "mysql", icon: <SiMysql className="text-xl mb-1" /> },
-      { name: "postgresql", icon: <SiPostgresql className="text-xl mb-1" /> },
-
-      // NoSQL Databases
-      { name: "mongodb", icon: <SiMongodb className="text-xl mb-1" /> },
-
-      // Backend as a Service (BaaS)
-      { name: "supabase", icon: <SiSupabase className="text-xl mb-1" /> },
-      { name: "firebase", icon: <SiFirebase className="text-xl mb-1" /> },
-
-      // Cloud Platforms
       {
-        name: "google cloud",
-        icon: <SiGooglecloud className="text-xl mb-1" />,
+        name: "PostgreSQL",
+        icon: <SiPostgresql className={iconClass} />,
+        tier: "core",
       },
-      { name: "cloudflare", icon: <SiCloudflare className="text-xl mb-1" /> },
-
-      // Authentication & Storage
-      { name: "authentication", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "cloud storage", icon: <FaReact className="text-xl mb-1" /> },
-
-      // ORM & Database Tools
-      { name: "prisma", icon: <FaReact className="text-xl mb-1" /> },
-
-      // API & Backend Integration
-      { name: "rest api", icon: <FaReact className="text-xl mb-1" /> },
       {
-        name: "database schema design",
-        icon: <FaReact className="text-xl mb-1" />,
+        name: "Supabase",
+        icon: <SiSupabase className={iconClass} />,
+        tier: "core",
       },
-
-      // Scalability & Performance
-      { name: "realtime database", icon: <FaReact className="text-xl mb-1" /> },
       {
-        name: "database optimization",
-        icon: <FaReact className="text-xl mb-1" />,
+        name: "MongoDB",
+        icon: <SiMongodb className={iconClass} />,
+        tier: "core",
       },
-
-      // DevOps & Containers
-      { name: "docker", icon: <SiDocker className="text-xl mb-1" /> },
+      { name: "SQL", icon: <FaDatabase className={iconClass} />, tier: "core" },
+      {
+        name: "MySQL",
+        icon: <SiMysql className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Firebase",
+        icon: <SiFirebase className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Prisma",
+        icon: <SiPrisma className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Google Cloud",
+        icon: <SiGooglecloud className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Cloudflare",
+        icon: <SiCloudflare className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Docker",
+        icon: <SiDocker className={iconClass} />,
+        tier: "additional",
+      },
     ],
   },
   {
@@ -258,110 +305,110 @@ const skillCategories: SkillCategory[] = [
       "Workflow automation",
       "Prompting and API integration",
     ],
-
     items: [
-      // AI Models & APIs
-      { name: "openai", icon: <SiOpenai className="text-xl mb-1" /> },
-      { name: "claude ai", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "gemini ai", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "deepseek", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "llama", icon: <FaReact className="text-xl mb-1" /> },
-
-      // Programming Languages
-      { name: "python", icon: <FaPython className="text-xl mb-1" /> },
-      { name: "typescript", icon: <SiTypescript className="text-xl mb-1" /> },
-
-      // AI Backend & APIs
-      { name: "fastapi", icon: <SiFastapi className="text-xl mb-1" /> },
-      { name: "node.js", icon: <FaNode className="text-xl mb-1" /> },
-      { name: "express.js", icon: <SiExpress className="text-xl mb-1" /> },
-
-      // AI Features
-      { name: "chatbots", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "speech to text", icon: <FaReact className="text-xl mb-1" /> },
-      { name: "text to speech", icon: <FaReact className="text-xl mb-1" /> },
-
-      // Deployment & Infrastructure
-      { name: "docker", icon: <SiDocker className="text-xl mb-1" /> },
-      { name: "render", icon: <SiRender className="text-xl mb-1" /> },
-      { name: "vercel", icon: <SiVercel className="text-xl mb-1" /> },
+      {
+        name: "OpenAI",
+        icon: <SiOpenai className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Python",
+        icon: <FaPython className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "FastAPI",
+        icon: <SiFastapi className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Gemini AI",
+        icon: <FaRobot className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Claude AI",
+        icon: <FaRobot className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Node.js",
+        icon: <FaNode className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Vercel",
+        icon: <SiVercel className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Render",
+        icon: <SiRender className={iconClass} />,
+        tier: "additional",
+      },
     ],
   },
   {
     key: "web3",
     title: "Web3",
-    subtitle: "Blockchain applications and decentralized systems",
+    subtitle: "Solana products and wallet-secured experiences",
     description:
-      "I explore and build modern Web3 applications using blockchain technologies, wallet integrations and decentralized application architecture.",
+      "I build Web3 product surfaces around wallet auth, on-chain loyalty mechanics and scalable app architecture — especially on Solana.",
     points: [
-      "Wallet integrations and Web3 connections",
+      "Secure wallet authentication",
       "Frontend interaction with blockchain networks",
-      "Modern decentralized application architecture",
+      "Product architecture for decentralized apps",
     ],
     items: [
       {
-        name: "ethereum",
-        icon: <SiEthereum className="text-xl mb-1" />,
+        name: "Solana",
+        icon: <SiSolana className={iconClass} />,
+        tier: "core",
       },
       {
-        name: "solana",
-        icon: <SiSolana className="text-xl mb-1" />,
+        name: "React",
+        icon: <FaReact className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Next.js",
+        icon: <SiNextdotjs className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Web3 Auth",
+        icon: <FaWallet className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Ethereum",
+        icon: <SiEthereum className={iconClass} />,
+        tier: "additional",
       },
       {
         name: "web3.js",
-        icon: <SiWeb3Dotjs className="text-xl mb-1" />,
+        icon: <SiWeb3Dotjs className={iconClass} />,
+        tier: "additional",
       },
       {
-        name: "wallet connect",
-        icon: <FaReact className="text-xl mb-1" />,
+        name: "Solidity",
+        icon: <SiEthereum className={iconClass} />,
+        tier: "additional",
       },
       {
-        name: "metamask",
-        icon: <FaReact className="text-xl mb-1" />,
+        name: "Alchemy",
+        icon: <SiAlchemy className={iconClass} />,
+        tier: "additional",
       },
       {
-        name: "solidity",
-        icon: <SiEthereum className="text-xl mb-1" />,
+        name: "Hardhat",
+        icon: <FaCubes className={iconClass} />,
+        tier: "additional",
       },
       {
-        name: "react",
-        icon: <FaReact className="text-xl mb-1" />,
-      },
-      {
-        name: "next.js",
-        icon: <SiNextdotjs className="text-xl mb-1" />,
-      },
-      {
-        name: "alchemy",
-        icon: <FaReact className="text-xl mb-1" />,
-      },
-      {
-        name: "infura",
-        icon: <FaReact className="text-xl mb-1" />,
-      },
-      {
-        name: "ipfs",
-        icon: <FaReact className="text-xl mb-1" />,
-      },
-      {
-        name: "web3 authentication",
-        icon: <FaReact className="text-xl mb-1" />,
-      },
-      {
-        name: "erc-20",
-        icon: <SiEthereum className="text-xl mb-1" />,
-      },
-      {
-        name: "erc-721",
-        icon: <SiEthereum className="text-xl mb-1" />,
-      },
-      {
-        name: "hardhat",
-        icon: <FaReact className="text-xl mb-1" />,
-      },
-      {
-        name: "node.js",
-        icon: <FaNode className="text-xl mb-1" />,
+        name: "IPFS",
+        icon: <FaDatabase className={iconClass} />,
+        tier: "additional",
       },
     ],
   },
@@ -377,45 +424,62 @@ const skillCategories: SkillCategory[] = [
       "Content and project workflow management",
     ],
     items: [
-      // Version Control & Collaboration
-      { name: "git", icon: <SiGit className="text-xl mb-1" /> },
-      { name: "github", icon: <FaGithub className="text-xl mb-1" /> },
+      { name: "Git", icon: <SiGit className={iconClass} />, tier: "core" },
       {
-        name: "github actions",
-        icon: <SiGithubactions className="text-xl mb-1" />,
+        name: "GitHub",
+        icon: <FaGithub className={iconClass} />,
+        tier: "core",
       },
-
-      // API Testing & Development
-      { name: "postman", icon: <SiPostman className="text-xl mb-1" /> },
-
-      // Deployment & Hosting
-      { name: "vercel", icon: <SiVercel className="text-xl mb-1" /> },
-      { name: "render", icon: <SiRender className="text-xl mb-1" /> },
-
-      // Authentication
-      { name: "clerk", icon: <SiClerk className="text-xl mb-1" /> },
-
-      // CMS & Content
-      { name: "sanity", icon: <SiSanity className="text-xl mb-1" /> },
-
-      // Containers & DevOps
-      { name: "docker", icon: <SiDocker className="text-xl mb-1" /> },
-
-      // Cloud & Infrastructure
-      { name: "cloudflare", icon: <SiCloudflare className="text-xl mb-1" /> },
       {
-        name: "google cloud",
-        icon: <SiGooglecloud className="text-xl mb-1" />,
+        name: "Vercel",
+        icon: <SiVercel className={iconClass} />,
+        tier: "core",
       },
-
-      // Design & Productivity
-      { name: "figma", icon: <FaReact className="text-xl mb-1" /> },
-
-      // Monitoring & Analytics
-      { name: "google analytics", icon: <FaReact className="text-xl mb-1" /> },
-
-      // Payments
-      { name: "stripe", icon: <FaReact className="text-xl mb-1" /> },
+      {
+        name: "Postman",
+        icon: <SiPostman className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "GitHub Actions",
+        icon: <SiGithubactions className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Clerk",
+        icon: <SiClerk className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Sanity",
+        icon: <SiSanity className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Docker",
+        icon: <SiDocker className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Figma",
+        icon: <SiFigma className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Stripe",
+        icon: <SiStripe className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Google Analytics",
+        icon: <SiGoogleanalytics className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Render",
+        icon: <SiRender className={iconClass} />,
+        tier: "additional",
+      },
     ],
   },
 ];
@@ -424,21 +488,24 @@ export default function Skills() {
   const dividerRef = useRef<HTMLDivElement | null>(null);
   const [globalProgress, setGlobalProgress] = useState(0);
   const [screenWidth, setScreenWidth] = useState(1200);
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     let frameId: number;
 
     const updateProgress = () => {
       if (!dividerRef.current) return;
-
       setScreenWidth(window.innerWidth);
+
+      if (reducedMotion) {
+        setGlobalProgress(1);
+        return;
+      }
 
       const rect = dividerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-
       const start = windowHeight;
       const end = windowHeight * 0.35;
-
       const raw = (start - rect.top) / (start - end);
       setGlobalProgress(clamp(raw, 0, 1));
     };
@@ -449,25 +516,20 @@ export default function Skills() {
     };
 
     const scrollContainer = document.getElementById("page-scroll-container");
-
     updateProgress();
-
     window.addEventListener("resize", handleScroll);
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     scrollContainer?.addEventListener("scroll", handleScroll, {
       passive: true,
     });
 
     return () => {
       if (frameId) cancelAnimationFrame(frameId);
-
       window.removeEventListener("resize", handleScroll);
       window.removeEventListener("scroll", handleScroll);
-
       scrollContainer?.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [reducedMotion]);
 
   const letters = useMemo(() => "Skills".split(""), []);
   const letterCount = letters.length;
@@ -476,38 +538,25 @@ export default function Skills() {
   const letterData = useMemo(() => {
     return letters.map((letter, idx) => {
       const finalX = (idx - (letterCount - 1) / 2) * letterGap;
-
       let startX = finalX;
-
       if (idx === 0) startX = -screenWidth / 2;
       if (idx === letterCount - 1) startX = screenWidth / 2;
-
-      return {
-        letter,
-        startX,
-        finalX,
-        startScale: 0.3,
-        finalScale: 1,
-      };
+      return { letter, startX, finalX, startScale: 0.3, finalScale: 1 };
     });
   }, [letters, letterCount, letterGap, screenWidth]);
 
-  const progress = easeOutCubic(globalProgress);
+  const progress = reducedMotion ? 1 : easeOutCubic(globalProgress);
 
   return (
-    <div className="top-0 left-0 w-full min-h-screen transform transition-all duration-700 bg-gray-950 mt-6 text-center">
-      <div
-        ref={dividerRef}
-        className="relative mx-auto flex max-w-6xl items-center justify-center overflow-hidden px-6 py-20"
-      >
-        <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[#B8860B]/30 to-transparent" />
-
-        <div className="relative h-20 w-full">
+    <div className="w-full bg-[var(--page-bg)] text-center">
+      <div ref={dividerRef} className="section-title-wrap max-w-6xl">
+        <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
+        <div className="relative h-14 w-full md:h-16">
+          <h2 className="sr-only">Skills</h2>
           {letterData.map(
             ({ letter, startX, finalX, startScale, finalScale }, idx) => {
               const currentX = startX + (finalX - startX) * progress;
               const scale = startScale + (finalScale - startScale) * progress;
-
               return (
                 <span
                   key={`${letter}-${idx}`}
@@ -515,9 +564,8 @@ export default function Skills() {
                     left: "50%",
                     transform: `translateX(${currentX}px) translateY(-50%) scale(${scale})`,
                     opacity: progress,
-                    willChange: "transform, opacity",
                   }}
-                  className="absolute top-1/2 -translate-x-1/2 text-3xl font-protest font-black uppercase text-[#B8860B] md:text-5xl"
+                  className="font-display absolute top-1/2 -translate-x-1/2 text-3xl font-black uppercase text-[var(--gold)] md:text-4xl"
                 >
                   {letter}
                 </span>
@@ -528,15 +576,6 @@ export default function Skills() {
       </div>
 
       <SkillStackShowcase categories={skillCategories} />
-      {/* 
-      <div className="py-12 blur-sm opacity-5">
-        <div className="h-1 bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950" />
-        <div className="h-1 bg-gradient-to-r from-[#B8860B] via-gray-100 to-[#B8860B] dark:from-[#B8860B] dark:via-gray-950 dark:to-[#B8860B]" />
-        <div className="h-1 bg-gradient-to-r from-gray-100 via-[#B8860B] to-gray-100 dark:from-gray-950 dark:via-[#B8860B] dark:to-gray-950" />
-      </div>
-
-      <RecentProject />
-      <TechStack /> */}
     </div>
   );
 }

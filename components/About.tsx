@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, ReactNode } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useId, useMemo, useRef, useState, ReactNode } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { FaAngleDown } from "react-icons/fa";
 
 const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
@@ -12,53 +12,82 @@ const clamp = (value: number, min: number, max: number): number =>
 interface ContentSectionProps {
   title: string;
   children: ReactNode;
+  defaultOpen?: boolean;
+  panelId: string;
 }
 
 interface ContentItem {
   title: string;
-  content: string;
+  content: ReactNode;
 }
 
-const ContentSection = ({ title, children }: ContentSectionProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+const ContentSection = ({
+  title,
+  children,
+  defaultOpen = false,
+  panelId,
+}: ContentSectionProps) => {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+  const buttonId = `${panelId}-button`;
+  const reducedMotion = useReducedMotion();
 
   return (
-    <div className="mb-8 w-full font-protest">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between bg-white/20 hover:bg-white/30 p-4 border-l-4 border-[#B8860B] group transition-all duration-300"
-      >
-        <h3 className="text-[#B8860B] text-lg md:text-xl uppercase leading-6 tracking-[3px] font-protest text-left">
-          {title}
-        </h3>
-
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3 }}
-          className="text-[#B8860B] group-hover:text-[#D4A017]"
+    <div
+      className={[
+        "w-full overflow-hidden rounded-[var(--radius-md)] border transition-all duration-300",
+        isOpen
+          ? "border-[var(--border-gold)] bg-[var(--surface-elevated)] shadow-[var(--shadow-gold)]"
+          : "border-[var(--border-subtle)] bg-[var(--surface)] shadow-[var(--shadow-card)] hover:border-[rgba(184,134,11,0.45)] hover:bg-[var(--surface-elevated)]",
+      ].join(" ")}
+    >
+      <h3>
+        <button
+          id={buttonId}
+          type="button"
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          onClick={() => setIsOpen((open) => !open)}
+          className="focus-ring group flex w-full items-center justify-between border-l-4 border-[var(--gold)] px-4 py-3.5 text-left transition-colors duration-300"
         >
-          <FaAngleDown />
-        </motion.div>
-      </button>
+          <span className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
+            {title}
+          </span>
+          <motion.span
+            animate={{ rotate: isOpen ? 180 : 0 }}
+            transition={{
+              duration: reducedMotion ? 0 : 0.28,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+            className="text-[var(--gold)] transition-colors group-hover:text-[var(--gold-hover)]"
+            aria-hidden="true"
+          >
+            <FaAngleDown />
+          </motion.span>
+        </button>
+      </h3>
 
-      <AnimatePresence>
-        {isOpen && (
+      <AnimatePresence initial={false}>
+        {isOpen ? (
           <motion.div
+            id={panelId}
+            role="region"
+            aria-labelledby={buttonId}
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
+            transition={{
+              duration: reducedMotion ? 0 : 0.32,
+              ease: [0.22, 1, 0.36, 1],
+            }}
             className="overflow-hidden"
           >
-            <div className="p-4 bg-gradient-to-b from-white/20 to-black/10 mt-1 relative">
-              <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-[#B8860B]/40 to-[#B8860B]/1" />
-
-              <div className="text-lg text-gray-300 dark:text-white font-hubballi">
+            <div className="border-t border-[var(--border-subtle)] px-4 py-4 md:px-5">
+              <div className="text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
                 {children}
               </div>
             </div>
           </motion.div>
-        )}
+        ) : null}
       </AnimatePresence>
     </div>
   );
@@ -68,6 +97,8 @@ export default function About() {
   const dividerRef = useRef<HTMLDivElement | null>(null);
   const [globalProgress, setGlobalProgress] = useState(0);
   const [screenWidth, setScreenWidth] = useState(1200);
+  const baseId = useId();
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     let frameId: number;
@@ -77,12 +108,15 @@ export default function About() {
 
       setScreenWidth(window.innerWidth);
 
+      if (reducedMotion) {
+        setGlobalProgress(1);
+        return;
+      }
+
       const rect = dividerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-
       const start = windowHeight;
       const end = windowHeight * 0.35;
-
       const raw = (start - rect.top) / (start - end);
       setGlobalProgress(clamp(raw, 0, 1));
     };
@@ -95,43 +129,31 @@ export default function About() {
     const scrollContainer = document.getElementById("page-scroll-container");
 
     updateProgress();
-
     window.addEventListener("resize", handleScroll);
     window.addEventListener("scroll", handleScroll, { passive: true });
-
     scrollContainer?.addEventListener("scroll", handleScroll, {
       passive: true,
     });
 
     return () => {
       if (frameId) cancelAnimationFrame(frameId);
-
       window.removeEventListener("resize", handleScroll);
       window.removeEventListener("scroll", handleScroll);
-
       scrollContainer?.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [reducedMotion]);
 
   const label = "About";
   const letters = useMemo(() => label.split(""), []);
   const letterCount = letters.length;
-
   const letterGap = screenWidth < 640 ? 44 : screenWidth < 1024 ? 58 : 72;
 
   const letterData = useMemo(() => {
     return letters.map((letter, idx) => {
       const finalX = (idx - (letterCount - 1) / 2) * letterGap;
-
       let startX = finalX;
-
-      if (idx === 0) {
-        startX = -screenWidth / 2;
-      }
-
-      if (idx === letterCount - 1) {
-        startX = screenWidth / 2;
-      }
+      if (idx === 0) startX = -screenWidth / 2;
+      if (idx === letterCount - 1) startX = screenWidth / 2;
 
       return {
         letter,
@@ -143,28 +165,55 @@ export default function About() {
     });
   }, [letters, letterCount, letterGap, screenWidth]);
 
-  const progress = easeOutCubic(globalProgress);
+  const progress = reducedMotion ? 1 : easeOutCubic(globalProgress);
 
   const content: ContentItem[] = [
     {
-      title: "Who am I?",
-      content:
-        "My name is <span class='text-[#B8860B] font-semibold'>Kabiru Shaibu</span> and I am a passionate software developer from Nigeria. I thrive on solving complex problems and turning ideas into functional and elegant digital solutions.",
+      title: "Who I Am",
+      content: (
+        <p>
+          I&apos;m{" "}
+          <span className="font-semibold text-[var(--gold)]">
+            Kabiru Shaibu
+          </span>
+          , a frontend-focused full-stack product engineer. I care about
+          shipping interfaces and systems that feel clear, hold up under real
+          use, and stay maintainable as products grow.
+        </p>
+      ),
     },
     {
-      title: "What I do?",
-      content:
-        "I specialize in software development with over 5 years of experience building robust applications and scalable systems. My expertise spans frontend and backend development, with a strong focus on creating user-centered designs and efficient code.",
+      title: "What I Build",
+      content: (
+        <p>
+          I build SaaS and Web3 products end to end — responsive React and
+          TypeScript frontends, Node APIs, and data layers with Supabase and
+          PostgreSQL. Recent work includes Solana loyalty systems, prediction
+          markets, and marketplace platforms.
+        </p>
+      ),
     },
     {
-      title: "How it started?",
-      content:
-        "It all started in 2020 during the covid lockdown when we had nowhere to go but to sit at home and watch movies. Then I started thinking about what I could possibly do with my life, and I discovered a 100 Days of Code tutorial by <span class='text-[#B8860B] font-semibold'>Angela Yu</span>. From my first \"Hello, World!\" to working on full-scale applications, the journey has been exciting and rewarding.",
+      title: "How I Work",
+      content: (
+        <p>
+          I start from the user problem, then design interfaces and architecture
+          that can ship safely. I favor clear component boundaries, typed APIs,
+          thoughtful authentication, and performance choices that keep products
+          usable in production.
+        </p>
+      ),
     },
     {
-      title: "My philosophy?",
-      content:
-        "I believe in writing clean, maintainable code and prioritizing user experience above all else. For me, development is not just about functionality but also about creating seamless interactions that add value to users' lives.",
+      title: "Engineering Philosophy",
+      content: (
+        <p>
+          Clean code, accessibility, and long-term maintainability matter as
+          much as features. I build for scalability and security without
+          overcomplicating the first release — then improve through continuous
+          learning and iteration.
+        </p>
+      ),
     },
   ];
 
@@ -172,15 +221,16 @@ export default function About() {
   const rightColumnContent = content.filter((_, index) => index % 2 === 1);
 
   return (
-    <div className="w-full h-auto bg-gray-950 font-protest">
-      <div className="max-w-7xl mx-auto py-6">
-        <div
-          ref={dividerRef}
-          className="relative mx-auto flex max-w-7xl items-center justify-center overflow-hidden px-6 py-20"
-        >
-          <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[#B8860B]/30 to-transparent" />
+    <div className="h-auto w-full bg-[var(--page-bg)]">
+      <div className="mx-auto max-w-7xl py-2 md:py-4">
+        <div ref={dividerRef} className="section-title-wrap">
+          <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
 
-          <div className="relative h-20 w-full">
+          <div
+            className="relative h-14 w-full md:h-16"
+            aria-hidden={!reducedMotion}
+          >
+            <h2 className="sr-only">About</h2>
             {letterData.map(
               ({ letter, startX, finalX, startScale, finalScale }, idx) => {
                 const currentX = startX + (finalX - startX) * progress;
@@ -193,9 +243,8 @@ export default function About() {
                       left: "50%",
                       transform: `translateX(${currentX}px) translateY(-50%) scale(${scale})`,
                       opacity: progress,
-                      willChange: "transform, opacity",
                     }}
-                    className="absolute top-1/2 -translate-x-1/2 text-3xl font-protest font-black uppercase text-[#B8860B] md:text-5xl"
+                    className="font-display absolute top-1/2 -translate-x-1/2 text-3xl font-black uppercase text-[var(--gold)] md:text-4xl"
                   >
                     {letter}
                   </span>
@@ -205,19 +254,28 @@ export default function About() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 px-4 sm:px-10 lg:px-32">
-          <div className="space-y-2">
+        <div className="grid grid-cols-1 gap-3 px-4 pb-3 sm:px-10 md:grid-cols-2 md:gap-4 md:pb-4 lg:px-24">
+          <div className="space-y-3">
             {leftColumnContent.map((section, index) => (
-              <ContentSection key={index} title={section.title}>
-                <div dangerouslySetInnerHTML={{ __html: section.content }} />
+              <ContentSection
+                key={section.title}
+                title={section.title}
+                defaultOpen={index === 0}
+                panelId={`${baseId}-left-${index}`}
+              >
+                {section.content}
               </ContentSection>
             ))}
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-3">
             {rightColumnContent.map((section, index) => (
-              <ContentSection key={index} title={section.title}>
-                <div dangerouslySetInnerHTML={{ __html: section.content }} />
+              <ContentSection
+                key={section.title}
+                title={section.title}
+                panelId={`${baseId}-right-${index}`}
+              >
+                {section.content}
               </ContentSection>
             ))}
           </div>

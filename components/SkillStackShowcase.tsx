@@ -1,9 +1,17 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useId, useMemo, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
-type SkillCategoryKey =
+export type SkillTier = "core" | "additional";
+
+export type SkillItem = {
+  name: string;
+  icon: React.ReactNode;
+  tier: SkillTier;
+};
+
+export type SkillCategoryKey =
   | "frontend"
   | "backend"
   | "database"
@@ -11,12 +19,7 @@ type SkillCategoryKey =
   | "web3"
   | "tools";
 
-type SkillItem = {
-  name: string;
-  icon: React.ReactNode;
-};
-
-type SkillCategory = {
+export type SkillCategory = {
   key: SkillCategoryKey;
   title: string;
   subtitle: string;
@@ -32,47 +35,91 @@ export default function SkillStackShowcase({
 }) {
   const [activeCategory, setActiveCategory] =
     useState<SkillCategoryKey>("frontend");
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [isPaused, setIsPaused] = useState(false);
+  const tablistId = useId();
+  const reducedMotion = useReducedMotion();
 
   const activeIndex = useMemo(
     () => categories.findIndex((item) => item.key === activeCategory),
     [activeCategory, categories],
   );
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
   useEffect(() => {
-    if (!isAutoPlaying) return;
+    if (!isAutoPlaying || isPaused || reducedMotion) return;
 
     const interval = setInterval(() => {
       const nextIndex = (activeIndex + 1) % categories.length;
       setActiveCategory(categories[nextIndex].key);
-    }, 5000);
+    }, 15000);
 
     return () => clearInterval(interval);
-  }, [activeIndex, categories, isAutoPlaying]);
+  }, [activeIndex, categories, isAutoPlaying, isPaused, reducedMotion]);
 
   const selectedCategory =
     categories.find((category) => category.key === activeCategory) ||
     categories[0];
 
+  const coreItems = selectedCategory.items.filter(
+    (item) => item.tier === "core",
+  );
+  const additionalItems = selectedCategory.items.filter(
+    (item) => item.tier === "additional",
+  );
+
+  const selectCategory = (key: SkillCategoryKey) => {
+    setActiveCategory(key);
+    setIsAutoPlaying(false);
+  };
+
   return (
-    <div className="mx-auto -mt-20 flex max-w-6xl flex-col px-6 pt-16 pb-10 md:px-10 lg:px-20">
-      <div className="relative z-30 flex flex-wrap justify-center gap-3 pb-10">
+    <div
+      className="mx-auto flex max-w-6xl flex-col px-6 pt-1 pb-6 md:px-10 lg:px-16"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onFocusCapture={() => setIsPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node)) {
+          setIsPaused(false);
+        }
+      }}
+    >
+      <div
+        role="tablist"
+        aria-label="Skill categories"
+        id={tablistId}
+        className="relative z-30 -mx-2 flex gap-2 overflow-x-auto px-2 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {categories.map((category) => {
           const isActive = activeCategory === category.key;
+          const tabId = `${tablistId}-${category.key}`;
+          const panelId = `${tablistId}-panel-${category.key}`;
 
           return (
             <button
               key={category.key}
+              id={tabId}
               type="button"
-              onClick={() => {
-                setActiveCategory(category.key);
-                setIsAutoPlaying(false);
+              role="tab"
+              aria-selected={isActive}
+              aria-controls={panelId}
+              tabIndex={isActive ? 0 : -1}
+              onClick={() => selectCategory(category.key)}
+              onKeyDown={(event) => {
+                if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") {
+                  return;
+                }
+                event.preventDefault();
+                const delta = event.key === "ArrowRight" ? 1 : -1;
+                const next =
+                  (activeIndex + delta + categories.length) % categories.length;
+                selectCategory(categories[next].key);
               }}
               className={[
-                "relative z-30 cursor-pointer border px-4 py-3 text-xs uppercase tracking-[2px] transition-all duration-300 md:text-sm",
+                "focus-ring shrink-0 cursor-pointer rounded-[var(--radius-sm)] border px-3.5 py-2.5 text-xs tracking-[0.12em] uppercase transition-all duration-300 md:text-sm",
                 isActive
-                  ? "border-[#B8860B] bg-[#B8860B]/15 text-[#B8860B] shadow-[0_0_20px_rgba(184,134,11,0.15)]"
-                  : "border-white/10 bg-white/5 text-gray-400 hover:border-[#B8860B]/60 hover:text-[#B8860B]",
+                  ? "border-[var(--gold)] bg-[rgba(184,134,11,0.18)] text-[var(--gold)] shadow-[var(--shadow-gold)]"
+                  : "border-[var(--border-subtle)] bg-white/[0.03] text-[var(--text-muted)] hover:border-[rgba(184,134,11,0.5)] hover:text-[var(--gold)]",
               ].join(" ")}
             >
               {category.title}
@@ -84,79 +131,92 @@ export default function SkillStackShowcase({
       <AnimatePresence mode="wait">
         <motion.div
           key={selectedCategory.key}
-          initial={{ opacity: 0, y: 24 }}
+          id={`${tablistId}-panel-${selectedCategory.key}`}
+          role="tabpanel"
+          aria-labelledby={`${tablistId}-${selectedCategory.key}`}
+          initial={reducedMotion ? false : { opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -24 }}
-          transition={{ duration: 0.35, ease: "easeInOut" }}
-          className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.4fr]"
+          exit={reducedMotion ? undefined : { opacity: 0, y: -8 }}
+          transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          className="grid grid-cols-1 gap-5 lg:grid-cols-[0.75fr_1.45fr]"
         >
-          {/* <motion.div
-        className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.4fr]"
-        layout
-      >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedCategory.key}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="contents"
-          > */}
-          <div className="flex flex-col justify-center border border-white/10 bg-white/[0.03] p-6 text-left shadow-sm md:p-8">
-            <p className="mb-3 text-xs uppercase tracking-[4px] text-[#B8860B]/70">
+          <div className="surface-card flex flex-col justify-center p-5 text-left md:p-6">
+            <p className="mb-2 font-mono text-[10px] tracking-[0.18em] text-[rgba(184,134,11,0.85)] uppercase">
               Current capability
             </p>
 
-            <h3 className="text-xl font-black uppercase tracking-[4px] text-[#B8860B] md:text-2xl">
+            <h3 className="font-display text-lg tracking-[0.1em] text-[var(--gold)] uppercase md:text-xl">
               {selectedCategory.title}
             </h3>
 
-            <p className="mt-3 font-hubballi text-sm text-gray-300 md:text-lg">
+            <p className="mt-2 text-sm font-medium text-[var(--text-primary)]">
               {selectedCategory.subtitle}
             </p>
 
-            <p className="mt-6 font-hubballi text-md leading-8 text-gray-400">
+            <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)]">
               {selectedCategory.description}
             </p>
 
-            <ul className="mt-6 space-y-3">
+            <ul className="mt-4 space-y-2">
               {selectedCategory.points.map((point) => (
                 <li
                   key={point}
-                  className="flex gap-3 font-hubballi text-base text-gray-300 md:text-sm"
+                  className="flex gap-2.5 text-sm text-[var(--text-muted)]"
                 >
-                  <span className="mt-2 h-2 w-2 shrink-0 bg-[#B8860B]" />
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--gold)]" />
                   <span>{point}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="border border-white/10 bg-white/[0.03] p-6 md:p-8">
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
-              {selectedCategory.items.map((item, index) => (
-                <motion.div
-                  key={`${selectedCategory.key}-${item.name}-${index}`}
-                  initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{
-                    duration: 0.35,
-                    delay: index * 0.04,
-                  }}
-                  className="flex h-24 flex-col items-center justify-center bg-white/10 px-3 py-3 text-[#B8860B] transition-all duration-300 hover:bg-white/20"
-                >
-                  {item.icon}
-                  <span className="text-center text-xs font-medium uppercase tracking-[1px]">
-                    {item.name}
-                  </span>
-                </motion.div>
-              ))}
+          <div className="surface-card p-5 md:p-6">
+            <div>
+              <p className="mb-3 font-mono text-[10px] tracking-[0.16em] text-[var(--gold)] uppercase">
+                Core strengths
+              </p>
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4">
+                {coreItems.map((item) => (
+                  <div
+                    key={`${selectedCategory.key}-core-${item.name}`}
+                    className="flex h-[5.5rem] flex-col items-center justify-center rounded-[var(--radius-sm)] border border-[rgba(184,134,11,0.22)] bg-[rgba(184,134,11,0.08)] px-2.5 py-2.5 text-[var(--gold)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--border-gold)] hover:bg-[rgba(184,134,11,0.14)] hover:shadow-[var(--shadow-card)]"
+                  >
+                    <div className="mb-1.5 flex h-6 items-center justify-center [&_svg]:h-5 [&_svg]:w-5">
+                      {item.icon}
+                    </div>
+                    <span className="text-center text-[10px] font-medium tracking-[0.03em] text-[var(--text-primary)] uppercase">
+                      {item.name}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {additionalItems.length > 0 ? (
+              <div className="mt-5">
+                <p className="mb-3 font-mono text-[10px] tracking-[0.16em] text-[var(--text-muted)] uppercase">
+                  Working knowledge
+                </p>
+                <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:grid-cols-4">
+                  {additionalItems.map((item) => (
+                    <div
+                      key={`${selectedCategory.key}-extra-${item.name}`}
+                      className="flex h-[5.5rem] flex-col items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-white/[0.03] px-2.5 py-2.5 text-[var(--text-muted)] transition-all duration-200 hover:-translate-y-0.5 hover:border-[var(--border-gold)] hover:text-[var(--gold)]"
+                    >
+                      <div className="mb-1.5 flex h-6 items-center justify-center opacity-85 [&_svg]:h-5 [&_svg]:w-5">
+                        {item.icon}
+                      </div>
+                      <span className="text-center text-[10px] font-medium tracking-[0.03em] uppercase">
+                        {item.name}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : null}
           </div>
         </motion.div>
       </AnimatePresence>
-      {/* </motion.div> */}
     </div>
   );
 }
