@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import { getFeaturedProjects } from "./data/projectData";
 import ProjectCard from "./ProjectCard";
 
 const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
+
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
 
@@ -22,6 +23,7 @@ export default function HomePortfolioShowcase() {
 
     const updateProgress = () => {
       if (!dividerRef.current) return;
+
       setScreenWidth(window.innerWidth);
 
       if (reducedMotion) {
@@ -34,26 +36,37 @@ export default function HomePortfolioShowcase() {
       const start = windowHeight;
       const end = windowHeight * 0.35;
       const raw = (start - rect.top) / (start - end);
+
       setGlobalProgress(clamp(raw, 0, 1));
     };
 
     const handleScroll = () => {
-      if (frameId) cancelAnimationFrame(frameId);
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+
       frameId = requestAnimationFrame(updateProgress);
     };
 
     const scrollContainer = document.getElementById("page-scroll-container");
+
     updateProgress();
+
     window.addEventListener("resize", handleScroll);
     window.addEventListener("scroll", handleScroll, { passive: true });
+
     scrollContainer?.addEventListener("scroll", handleScroll, {
       passive: true,
     });
 
     return () => {
-      if (frameId) cancelAnimationFrame(frameId);
+      if (frameId) {
+        cancelAnimationFrame(frameId);
+      }
+
       window.removeEventListener("resize", handleScroll);
       window.removeEventListener("scroll", handleScroll);
+
       scrollContainer?.removeEventListener("scroll", handleScroll);
     };
   }, [reducedMotion]);
@@ -63,12 +76,26 @@ export default function HomePortfolioShowcase() {
   const letterGap = screenWidth < 640 ? 28 : screenWidth < 1024 ? 44 : 58;
 
   const letterData = useMemo(() => {
-    return letters.map((letter, idx) => {
-      const finalX = (idx - (letterCount - 1) / 2) * letterGap;
+    return letters.map((letter, index) => {
+      const finalX = (index - (letterCount - 1) / 2) * letterGap;
+
       let startX = finalX;
-      if (idx === 0) startX = -screenWidth / 2;
-      if (idx === letterCount - 1) startX = screenWidth / 2;
-      return { letter, startX, finalX, startScale: 0.3, finalScale: 1 };
+
+      if (index === 0) {
+        startX = -screenWidth / 2;
+      }
+
+      if (index === letterCount - 1) {
+        startX = screenWidth / 2;
+      }
+
+      return {
+        letter,
+        startX,
+        finalX,
+        startScale: 0.3,
+        finalScale: 1,
+      };
     });
   }, [letters, letterCount, letterGap, screenWidth]);
 
@@ -78,21 +105,25 @@ export default function HomePortfolioShowcase() {
     <section
       id="projects"
       aria-labelledby="portfolio-heading"
-      className="w-full bg-[var(--page-bg)] pt-6 text-center md:pt-8"
+      className="w-full bg-[var(--page-bg)] text-center"
     >
-      <div ref={dividerRef} className="section-title-wrap max-w-6xl">
+      <div ref={dividerRef} className="section-title-wrap max-w-6xl mt-0">
         <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
-        <div className="relative h-14 w-full md:h-16">
+
+        <div className="relative h-14 md:h-16">
           <h2 id="portfolio-heading" className="sr-only">
             Portfolio
           </h2>
+
           {letterData.map(
-            ({ letter, startX, finalX, startScale, finalScale }, idx) => {
+            ({ letter, startX, finalX, startScale, finalScale }, index) => {
               const currentX = startX + (finalX - startX) * progress;
+
               const scale = startScale + (finalScale - startScale) * progress;
+
               return (
                 <span
-                  key={`${letter}-${idx}`}
+                  key={`${letter}-${index}`}
                   aria-hidden="true"
                   style={{
                     left: "50%",
@@ -109,7 +140,7 @@ export default function HomePortfolioShowcase() {
         </div>
       </div>
 
-      <div className="mx-auto max-w-6xl px-6 pb-12 md:px-10 lg:px-14">
+      <div className="mx-auto w-full max-w-6xl px-6 pb-12 md:px-10 lg:px-14">
         <p className="mx-auto mb-6 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">
           Flagship work across Web3 loyalty systems, prediction markets and
           marketplace products — focused on real product problems and production

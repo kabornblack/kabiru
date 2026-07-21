@@ -186,7 +186,7 @@ function ContactForm() {
           ) : null}
         </div>
 
-        <div className="pt-1">
+        <div className="">
           <button
             className={[
               "focus-ring btn-primary w-full sm:w-auto",

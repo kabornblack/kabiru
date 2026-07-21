@@ -92,7 +92,7 @@ function Contact() {
         strategy="afterInteractive"
       />
 
-      <div className="mx-auto flex max-w-7xl flex-col justify-center pt-8 text-center md:pt-10">
+      <div className="mx-auto flex max-w-7xl flex-col justify-center pt-2 text-center md:pt-4">
         <div ref={dividerRef} className="section-title-wrap">
           <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
           <div className="relative h-14 w-full md:h-16">

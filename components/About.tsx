@@ -21,7 +21,7 @@ interface ContentItem {
 const ContentSection = ({ title, children }: ContentSectionProps) => {
   return (
     <article className="flex h-full w-full flex-col overflow-hidden rounded-[var(--radius-md)] border border-[var(--border-gold)] bg-[var(--surface-elevated)] shadow-[var(--shadow-gold)]">
-      <div className="px-4 py-3.5">
+      <div className="px-4 py-3.5 md:px-5">
         <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
           {title}
         </h3>
@@ -93,8 +93,7 @@ export default function About() {
     };
   }, [reducedMotion]);
 
-  const label = "About";
-  const letters = useMemo(() => label.split(""), []);
+  const letters = useMemo(() => "About".split(""), []);
   const letterCount = letters.length;
   const letterGap = screenWidth < 640 ? 44 : screenWidth < 1024 ? 58 : 72;
 
@@ -175,49 +174,45 @@ export default function About() {
   ];
 
   return (
-    <div className="h-auto w-full bg-[var(--page-bg)]">
-      <div className="mx-auto max-w-7xl py-2 md:py-4">
-        <div ref={dividerRef} className="section-title-wrap">
-          <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
+    <section className="w-full bg-[var(--page-bg)]">
+      <div ref={dividerRef} className="section-title-wrap max-w-6xl">
+        <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
 
-          <div
-            className="relative h-14 w-full md:h-16"
-            aria-hidden={!reducedMotion}
-          >
-            <h2 className="sr-only">About</h2>
+        <div className="relative h-14 w-full md:h-16">
+          <h2 className="sr-only">About</h2>
 
-            {letterData.map(
-              ({ letter, startX, finalX, startScale, finalScale }, index) => {
-                const currentX = startX + (finalX - startX) * progress;
+          {letterData.map(
+            ({ letter, startX, finalX, startScale, finalScale }, index) => {
+              const currentX = startX + (finalX - startX) * progress;
 
-                const scale = startScale + (finalScale - startScale) * progress;
+              const scale = startScale + (finalScale - startScale) * progress;
 
-                return (
-                  <span
-                    key={`${letter}-${index}`}
-                    style={{
-                      left: "50%",
-                      transform: `translateX(${currentX}px) translateY(-50%) scale(${scale})`,
-                      opacity: progress,
-                    }}
-                    className="font-display absolute top-1/2 -translate-x-1/2 text-3xl font-black uppercase text-[var(--gold)] md:text-4xl"
-                  >
-                    {letter}
-                  </span>
-                );
-              },
-            )}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 auto-rows-fr gap-3 px-4 pb-3 sm:px-10 md:grid-cols-2 md:gap-4 md:pb-4 lg:px-24">
-          {content.map((section) => (
-            <ContentSection key={section.title} title={section.title}>
-              {section.content}
-            </ContentSection>
-          ))}
+              return (
+                <span
+                  key={`${letter}-${index}`}
+                  aria-hidden="true"
+                  style={{
+                    left: "50%",
+                    transform: `translateX(${currentX}px) translateY(-50%) scale(${scale})`,
+                    opacity: progress,
+                  }}
+                  className="font-display absolute top-1/2 -translate-x-1/2 text-3xl font-black uppercase text-[var(--gold)] md:text-4xl"
+                >
+                  {letter}
+                </span>
+              );
+            },
+          )}
         </div>
       </div>
-    </div>
+
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 auto-rows-fr gap-3 px-6 pb-4 md:grid-cols-2 md:gap-4 md:px-10 lg:px-14">
+        {content.map((section) => (
+          <ContentSection key={section.title} title={section.title}>
+            {section.content}
+          </ContentSection>
+        ))}
+      </div>
+    </section>
   );
 }
