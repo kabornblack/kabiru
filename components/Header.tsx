@@ -1,321 +1,290 @@
 "use client";
 
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useId, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import {
-  motion,
-  useMotionValue,
-  useSpring,
-  AnimatePresence,
-} from "framer-motion";
-import {
+  FaBars,
   FaBriefcase,
+  FaEnvelope,
   FaHome,
+  FaTimes,
   FaTools,
   FaUser,
-  FaInfoCircle,
-  FaUserTie,
-  //   FaQuoteLeft,
-  FaBars,
-  FaTimes,
 } from "react-icons/fa";
 import Socials from "./Socials";
+import { scrollToHash } from "@/lib/scroll";
 
-// ParallaxIcon Component
-const ParallaxIcon = ({
-  Icon,
-  className,
-}: {
-  Icon: React.ElementType;
-  className: string;
-}) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
+type NavLink = {
+  label: string;
+  href: string;
+  icon: React.ElementType;
+  match?: "home" | "portfolio" | "hash";
+  hash?: string;
+};
 
-  const springConfig = { damping: 25, stiffness: 300 };
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
+const navLinks: NavLink[] = [
+  { label: "Home", href: "/#home", icon: FaHome, match: "home", hash: "home" },
+  {
+    label: "About",
+    href: "/#about",
+    icon: FaUser,
+    match: "hash",
+    hash: "about",
+  },
+  {
+    label: "Skills",
+    href: "/#skills",
+    icon: FaTools,
+    match: "hash",
+    hash: "skills",
+  },
+  {
+    label: "Projects",
+    href: "/portfolio",
+    icon: FaBriefcase,
+    match: "portfolio",
+  },
+  {
+    label: "Contact",
+    href: "/#contact",
+    icon: FaEnvelope,
+    match: "hash",
+    hash: "contact",
+  },
+];
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
+function Header() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeHash, setActiveHash] = useState("home");
+  const menuId = useId();
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const pathname = usePathname();
+  const isPortfolio = pathname?.startsWith("/portfolio") ?? false;
 
-    const moveX = (e.clientX - centerX) * 0.1;
-    const moveY = (e.clientY - centerY) * 0.1;
+  useEffect(() => {
+    const scrollContainer = document.getElementById("page-scroll-container");
+    const target: HTMLElement | Window = scrollContainer || window;
 
-    x.set(moveX);
-    y.set(moveY);
+    let lastScrollY =
+      scrollContainer?.scrollTop ||
+      window.scrollY ||
+      document.documentElement.scrollTop ||
+      0;
+
+    const getCurrentScrollY = () =>
+      scrollContainer?.scrollTop || window.scrollY || 0;
+
+    const updateActiveSection = () => {
+      if (isPortfolio) return;
+
+      const sections = ["home", "about", "skills", "projects", "contact"];
+      const scrollY = getCurrentScrollY();
+      let current = "home";
+
+      for (const id of sections) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.offsetTop - 120;
+        if (scrollY >= top) current = id;
+      }
+
+      setActiveHash(current);
+    };
+
+    const handleScroll = () => {
+      const currentScrollY = getCurrentScrollY();
+      setScrolled(currentScrollY > 20);
+
+      if (currentScrollY < 80) {
+        setShowHeader(true);
+      } else if (currentScrollY > lastScrollY) {
+        setShowHeader(false);
+        setIsMenuOpen(false);
+      } else {
+        setShowHeader(true);
+      }
+
+      lastScrollY = currentScrollY;
+      updateActiveSection();
+    };
+
+    updateActiveSection();
+    target.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      target.removeEventListener("scroll", handleScroll);
+    };
+  }, [isPortfolio]);
+
+  useEffect(() => {
+    if (!isMenuOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMenuOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isMenuOpen]);
+
+  const isActive = (link: NavLink) => {
+    if (link.match === "portfolio") return isPortfolio;
+    if (isPortfolio) return false;
+    if (link.match === "home") return activeHash === "home";
+    return activeHash === link.hash;
+  };
+
+  const handleNavClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    link: NavLink,
+  ) => {
+    if (link.match === "portfolio") {
+      setIsMenuOpen(false);
+      return;
+    }
+
+    if (!isPortfolio && link.hash) {
+      event.preventDefault();
+      scrollToHash(link.hash);
+      setActiveHash(link.hash);
+      setIsMenuOpen(false);
+      window.history.replaceState(null, "", `/#${link.hash}`);
+    }
   };
 
   return (
-    <div
-      className="relative w-full h-full flex items-center justify-center"
-      onMouseMove={handleMouseMove}
-      onMouseLeave={() => {
-        x.set(0);
-        y.set(0);
-      }}
+    <motion.header
+      initial={false}
+      animate={{ y: showHeader ? 0 : "-100%" }}
+      transition={{ duration: 0.3, ease: "easeInOut" }}
+      className={[
+        "fixed top-0 left-0 z-50 h-20 w-full border-b transition-colors duration-300",
+        scrolled
+          ? "border-[var(--border-subtle)] bg-black/70 backdrop-blur-xl shadow-lg"
+          : "border-white/5 bg-gradient-to-br from-white/10 to-[var(--page-bg)]",
+      ].join(" ")}
     >
-      <motion.div
-        style={{
-          x: springX,
-          y: springY,
-        }}
-        transition={{
-          type: "spring",
-          damping: 25,
-          stiffness: 300,
-        }}
-      >
-        <Icon className={className} />
-      </motion.div>
-    </div>
-  );
-};
+      <div className="relative mx-auto flex h-20 max-w-7xl items-center justify-between px-2 sm:px-4">
+        <nav aria-label="Primary" className="hidden h-20 items-center lg:flex">
+          {navLinks.map((link) => {
+            const Icon = link.icon;
+            const active = isActive(link);
 
-// Type definitions
-interface DropdownItem {
-  icon: React.ElementType;
-  href?: string;
-  title: string;
-}
-
-interface NavItemProps {
-  icon: React.ElementType;
-  dropdownItems?: DropdownItem[];
-  href?: string;
-  baseUrl: string;
-}
-
-// NavItemWithDropdown Component
-const NavItemWithDropdown: React.FC<NavItemProps> = ({
-  icon: Icon,
-  dropdownItems = [],
-  href = "/",
-  baseUrl,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  return (
-    <div
-      className="relative"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
-    >
-      <Link
-        href={baseUrl + href}
-        className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white"
-      >
-        <div className="relative h-32 w-32 flex items-center justify-center border-x border-x-black border-b border-b-black hover:text-[#B8860B] hover:shadow-[inset_0_0_10px_rgba(184,134,11,0.5)]">
-          <ParallaxIcon Icon={Icon} className="w-7 h-7" />
-        </div>
-      </Link>
-
-      {dropdownItems.length > 0 && (
-        <div
-          className={`absolute left-0 w-32 transition-all duration-300 ease-in-out ${
-            isOpen ? "opacity-100 visible" : "opacity-0 invisible"
-          }`}
-        >
-          {dropdownItems.map((item, index) => (
-            <Link
-              href={baseUrl + (item.href || "#")}
-              key={index}
-              onClick={() => setIsOpen(false)}
-            >
-              <div className="h-32 w-32 flex flex-col items-center justify-center group border-t border-t-black shadow-lg gap-1 pt-5 bg-white/5">
-                <ParallaxIcon
-                  Icon={item.icon}
-                  className="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#B8860B] dark:group-hover:text-[#B8860B]"
+            return (
+              <Link
+                key={link.label}
+                href={link.href}
+                aria-label={link.label}
+                aria-current={active ? "page" : undefined}
+                title={link.label}
+                onClick={(event) => handleNavClick(event, link)}
+                className={[
+                  "focus-ring group relative flex h-20 min-w-[5.5rem] flex-col items-center justify-center gap-1 px-3 transition-all duration-200",
+                  active
+                    ? "text-[var(--gold)]"
+                    : "text-[var(--text-muted)] hover:text-[var(--gold)]",
+                ].join(" ")}
+              >
+                <Icon
+                  className="h-5 w-5 transition-transform duration-200 group-hover:-translate-y-0.5"
+                  aria-hidden="true"
                 />
-                <span className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B] dark:group-hover:text-[#B8860B] text-xs uppercase tracking-[4px] leading-5 pb-8">
-                  {item.title}
+                <span className="text-[10px] tracking-[0.12em] uppercase">
+                  {link.label}
                 </span>
-              </div>
-            </Link>
-          ))}
+                <span
+                  className={[
+                    "absolute right-3 bottom-0 left-3 h-0.5 origin-center bg-[var(--gold)] transition-transform duration-300",
+                    active ? "scale-x-100" : "scale-x-0 group-hover:scale-x-50",
+                  ].join(" ")}
+                  aria-hidden="true"
+                />
+              </Link>
+            );
+          })}
+        </nav>
+
+        <Link
+          href="/#home"
+          className="focus-ring flex h-20 items-center px-3 text-[var(--gold)] lg:hidden"
+          aria-label="Home"
+        >
+          <FaHome className="h-5 w-5" aria-hidden="true" />
+          <span className="ml-2 text-sm tracking-[0.12em] uppercase">
+            Home
+          </span>
+        </Link>
+
+        <div className="hidden items-center px-4 lg:flex">
+          <Socials />
         </div>
-      )}
-    </div>
-  );
-};
 
-// Main Header Component
-function Header() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const pathname = usePathname();
+        <button
+          ref={menuButtonRef}
+          type="button"
+          onClick={() => setIsMenuOpen((open) => !open)}
+          className="focus-ring flex h-20 min-w-11 items-center justify-center px-4 text-[var(--text-muted)] lg:hidden"
+          aria-expanded={isMenuOpen}
+          aria-controls={menuId}
+          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+        >
+          {isMenuOpen ? (
+            <FaTimes className="h-6 w-6" aria-hidden="true" />
+          ) : (
+            <FaBars className="h-6 w-6" aria-hidden="true" />
+          )}
+        </button>
 
-  // Determine if we're on the home page or not
-  const baseUrl = pathname?.startsWith("/portfolio") ? "/" : "";
-
-  const homeDropdownItems = [
-    {
-      icon: FaInfoCircle,
-      href: "#about",
-      title: "about",
-    },
-    {
-      icon: FaUserTie,
-      href: "#contact",
-      title: "contact",
-    },
-  ];
-
-  return (
-    <>
-      {/* <header className="fixed top-0 w-screen h-32 bg-black z-50"> */}
-
-      <header className="relative w-full h-32 bg-gradient-to-br from-white/20 to-gray-950 z-50 -mb-32">
-        <div className="relative flex justify-between items-center">
-          {/* Home link - always visible */}
-          <div className="flex">
-            <Link
-              href={baseUrl + "#home"}
-              className="text-gray-600 dark:text-gray-400 hover:text-[#B8860B]"
+        <AnimatePresence>
+          {isMenuOpen ? (
+            <motion.div
+              id={menuId}
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              className="absolute top-20 left-0 z-50 w-full border-b border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-4 shadow-2xl lg:hidden"
             >
-              <div className="h-32 w-32 flex items-center justify-center hover:text-[#B8860B] ">
-                <ParallaxIcon Icon={FaHome} className="w-7 h-7" />
-              </div>
-            </Link>
+              <nav aria-label="Mobile primary" className="flex flex-col gap-1">
+                {navLinks.map((link) => {
+                  const Icon = link.icon;
+                  const active = isActive(link);
 
-            {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center justify-center">
-              <NavItemWithDropdown
-                icon={FaUser}
-                dropdownItems={homeDropdownItems}
-                baseUrl={baseUrl}
-              />
-
-              <Link
-                href={baseUrl + "#skills"}
-                className="text-gray-600 dark:text-gray-400 hover:text-[#B8860B] group border-b border-b-black/50"
-              >
-                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B]  gap-2">
-                  <ParallaxIcon
-                    Icon={FaTools}
-                    className="w-7 h-7 -mb-6 group-hover:text-[#B8860B]"
-                  />
-                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B] text-xs uppercase tracking-[2px] leading-2 pb-8">
-                    Skills
-                  </p>
-                </div>
-              </Link>
-
-              <Link
-                href="/portfolio"
-                className="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white group border-x border-x-black/50 border-b border-b-black/50"
-              >
-                <div className="h-32 w-32 flex flex-col items-center justify-center hover:text-[#B8860B]  gap-2">
-                  <ParallaxIcon
-                    Icon={FaBriefcase}
-                    className="w-7 h-7 -mb-6 group-hover:text-[#B8860B]"
-                  />
-                  <p className="text-gray-500 dark:text-gray-400 font-thin font-serif group-hover:text-[#B8860B] text-xs uppercase tracking-[2px] leading-2 pb-8 ">
-                    Portfolio
-                  </p>
-                </div>
-              </Link>
-            </div>
-          </div>
-          {/* Desktop Social Links */}
-          <div className="hidden lg:flex space-x-4 px-12 justify-center items-center h-32">
-            <Socials />
-          </div>
-
-          {/* Mobile Burger Menu */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="lg:hidden px-8 h-32 flex items-center justify-center text-gray-600 dark:text-gray-400"
-          >
-            <ParallaxIcon
-              Icon={isMenuOpen ? FaTimes : FaBars}
-              className="w-7 h-7"
-            />
-          </button>
-
-          {/* Mobile Menu Overlay */}
-          <AnimatePresence>
-            {isMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.2 }}
-                className="absolute top-28 left-0 w-full bg-black  shadow-xl lg:hidden"
-              >
-                {/* Mobile Navigation Links */}
-                <div className="py-2 px-4 space-y-4">
-                  {homeDropdownItems.map((item, index) => (
+                  return (
                     <Link
-                      key={index}
-                      href={baseUrl + (item.href || "#")}
-                      onClick={() => setIsMenuOpen(false)}
+                      key={link.label}
+                      href={link.href}
+                      onClick={(event) => handleNavClick(event, link)}
+                      aria-current={active ? "page" : undefined}
+                      className={[
+                        "focus-ring flex min-h-12 items-center gap-3 rounded-md px-3 py-3 text-sm tracking-[0.12em] uppercase transition-colors",
+                        active
+                          ? "bg-[rgba(184,134,11,0.12)] text-[var(--gold)]"
+                          : "text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--gold)]",
+                      ].join(" ")}
                     >
-                      <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.1 }}
-                        className="flex items-center space-x-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg group"
-                      >
-                        <item.icon className="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#B8860B]" />
-                        <span className="text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white">
-                          {item.title}
-                        </span>
-                      </motion.div>
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                      <span>{link.label}</span>
                     </Link>
-                  ))}
-                  {/* Skills */}
-                  <Link
-                    href={baseUrl + "#skills"}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.1 }}
-                      className="flex items-center space-x-4 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg group"
-                    >
-                      <FaTools className="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#B8860B]" />
-                      <span className="text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white">
-                        Skills
-                      </span>
-                    </motion.div>
-                  </Link>
+                  );
+                })}
+              </nav>
 
-                  {/* Portfolio */}
-                  <Link href="/portfolio" onClick={() => setIsMenuOpen(false)}>
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 }}
-                      className="flex items-center space-x-4 p-4 mb-8 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg group"
-                    >
-                      <FaBriefcase className="w-6 h-6 text-gray-500 dark:text-gray-400 group-hover:text-[#B8860B]" />
-                      <span className="text-gray-600 dark:text-gray-300 group-hover:text-black dark:group-hover:text-white">
-                        Portfolio
-                      </span>
-                    </motion.div>
-                  </Link>
-
-                  {/* Mobile Social Links */}
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                    className="flex justify-center items-center gap-8 p-4 border-t border-gray-900"
-                  >
-                    <Socials />
-                    <div className="mt-4"></div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </header>
-    </>
+              <div className="mt-4 border-t border-[var(--border-subtle)] pt-4">
+                <Socials />
+              </div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+      </div>
+    </motion.header>
   );
 }
 

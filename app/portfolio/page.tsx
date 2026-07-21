@@ -1,12 +1,16 @@
 import Portfolio from "@/components/Portfolio";
-import React from "react";
+import type { Metadata } from "next";
 
-function page() {
+export const metadata: Metadata = {
+  title: "Portfolio",
+  description:
+    "Selected projects by Kabiru Shaibu across Web3, marketplaces, full-stack applications and community platforms.",
+};
+
+export default function PortfolioPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-950">
+    <div className="min-h-screen bg-[var(--page-bg)]">
       <Portfolio />
     </div>
   );
 }
-
-export default page;

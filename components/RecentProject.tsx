@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaAngleDown } from "react-icons/fa";
 
-// ContentSection component for expandable sections with proper TypeScript types
+// ContentSection component for expandable sections
 interface ContentSectionProps {
   title: string;
   children: React.ReactNode;
@@ -24,13 +24,13 @@ const ContentSection: React.FC<ContentSectionProps> = ({
       : "border-l-4 border-[#B8860B]";
 
   return (
-    <div className="mb-8 w-full text-center">
+    <div className="mb-8 w-full max-w-5xl mx-auto px-6 text-center">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full flex items-center justify-between bg-white/20 dark:bg-white/5 hover:bg-white/30 dark:hover:bg-white/10 p-4 rounded-md ${borderClass} group transition-all duration-300 hover:rounded-b-none`}
+        className={`w-full flex items-center justify-between bg-white/20 dark:bg-white/5 hover:bg-white/30 dark:hover:bg-white/10 p-4 ${borderClass} group transition-all duration-300 hover:rounded-b-none`}
       >
         {/* Left Triple Arrow Stack */}
-        <div className="flex flex-col items-center">
+        {/* <div className="flex flex-col items-center">
           <motion.div
             animate={{ rotate: isOpen ? 180 : 0 }}
             transition={{ duration: 0.3 }}
@@ -52,6 +52,26 @@ const ContentSection: React.FC<ContentSectionProps> = ({
           >
             <FaAngleDown />
           </motion.div>
+        </div> */}
+        <div className="flex flex-col items-center pl-6">
+          {[20, 50, 90].map((opacity, index) => (
+            <motion.div
+              key={index}
+              animate={{
+                opacity: isOpen ? 0 : opacity / 100,
+                y: isOpen ? 4 : 0,
+              }}
+              transition={{
+                duration: 0.2,
+                delay: isOpen ? 0 : 0.3 + index * 0.05,
+              }}
+              className={`text-[#B8860B] group-hover:text-[#D4A017] ${
+                index < 2 ? "-mb-1" : ""
+              }`}
+            >
+              <FaAngleDown />
+            </motion.div>
+          ))}
         </div>
 
         {/* Title */}
@@ -60,28 +80,25 @@ const ContentSection: React.FC<ContentSectionProps> = ({
         </h3>
 
         {/* Right Triple Arrow Stack */}
-        <div className="flex flex-col items-center">
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.3 }}
-            className="text-[#B8860B]/20 group-hover:text-[#D4A017]20 -mb-1"
-          >
-            <FaAngleDown />
-          </motion.div>
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.3, delay: 0.05 }}
-            className="text-[#B8860B]/50 group-hover:text-[#D4A017]/50 -mb-1"
-          >
-            <FaAngleDown />
-          </motion.div>
-          <motion.div
-            animate={{ rotate: isOpen ? 180 : 0 }}
-            transition={{ duration: 0.3, delay: 0.1 }}
-            className="text-[#B8860B]/90 group-hover:text-[#D4A017]/90"
-          >
-            <FaAngleDown />
-          </motion.div>
+        <div className="flex flex-col items-center pr-12">
+          {[20, 50, 90].map((opacity, index) => (
+            <motion.div
+              key={index}
+              animate={{
+                opacity: isOpen ? 0 : opacity / 100,
+                y: isOpen ? 4 : 0,
+              }}
+              transition={{
+                duration: 0.2,
+                delay: isOpen ? 0 : 0.3 + index * 0.05,
+              }}
+              className={`text-[#B8860B] group-hover:text-[#D4A017] ${
+                index < 2 ? "-mb-1" : ""
+              }`}
+            >
+              <FaAngleDown />
+            </motion.div>
+          ))}
         </div>
       </button>
 
@@ -108,13 +125,14 @@ const ContentSection: React.FC<ContentSectionProps> = ({
 
 export default function RecentProject() {
   return (
-    <div className="flex flex-col justify-center gap-6 text-center">
+    // <div className="flex flex-col max-w-6xl mx-auto justify-center gap-6">
+    <div className="flex flex-col max-w-5xl mx-auto justify-center gap-6">
       {/* Project Details */}
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 0.2 }}
-        className="flex flex-col gap-3 w-auto text-center"
+        className="flex flex-col gap-3 w-full text-center"
       >
         <motion.div
           initial={{ opacity: 0, y: 50 }}
@@ -156,9 +174,8 @@ export default function RecentProject() {
         </a>
       </motion.div>
 
-      {/* Description and Role - Side by Side with ContentSection */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 py-8">
-        {/* Project Description */}
+      {/* Description and Role - Side by Side */}
+      <div className="grid grid-cols-1 md:grid-cols-2 py-2">
         <ContentSection title="Project Description" borderPosition="top">
           <p>
             A barter and donation platform where users can swap goods or donate
@@ -166,7 +183,6 @@ export default function RecentProject() {
           </p>
         </ContentSection>
 
-        {/* Role */}
         <ContentSection title="Role" borderPosition="top">
           <p>Front-end Developer</p>
         </ContentSection>
@@ -408,6 +424,7 @@ export default function RecentProject() {
                 <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                   PUT
                 </span>
+                ,{" "}
                 <span className="inline-flex items-center px-2 py-0.5 m-0.5 text-xs font-medium border border-gray-200 dark:border-gray-600">
                   UPDATE
                 </span>

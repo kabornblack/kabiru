@@ -1,46 +1,22 @@
 "use client";
 
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
+import { getFeaturedProjects } from "./data/projectData";
+import ProjectCard from "./ProjectCard";
 
 const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
 
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
 
-interface ContentSectionProps {
-  title: string;
-  children: ReactNode;
-}
-
-interface ContentItem {
-  title: string;
-  content: ReactNode;
-}
-
-const ContentSection = ({ title, children }: ContentSectionProps) => {
-  return (
-    <article className="flex h-full w-full flex-col overflow-hidden rounded-[var(--radius-md)] border border-[var(--border-gold)] bg-[var(--surface-elevated)] shadow-[var(--shadow-gold)]">
-      <div className="px-4 py-3.5 md:px-5">
-        <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
-          {title}
-        </h3>
-      </div>
-
-      <div className="flex flex-1 border-t border-[var(--border-subtle)] px-4 py-4 md:px-5">
-        <div className="text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
-          {children}
-        </div>
-      </div>
-    </article>
-  );
-};
-
-export default function About() {
+export default function HomePortfolioShowcase() {
   const dividerRef = useRef<HTMLDivElement | null>(null);
   const [globalProgress, setGlobalProgress] = useState(0);
   const [screenWidth, setScreenWidth] = useState(1200);
   const reducedMotion = useReducedMotion();
+  const featured = getFeaturedProjects();
 
   useEffect(() => {
     let frameId: number;
@@ -78,6 +54,7 @@ export default function About() {
 
     window.addEventListener("resize", handleScroll);
     window.addEventListener("scroll", handleScroll, { passive: true });
+
     scrollContainer?.addEventListener("scroll", handleScroll, {
       passive: true,
     });
@@ -89,13 +66,14 @@ export default function About() {
 
       window.removeEventListener("resize", handleScroll);
       window.removeEventListener("scroll", handleScroll);
+
       scrollContainer?.removeEventListener("scroll", handleScroll);
     };
   }, [reducedMotion]);
 
-  const letters = useMemo(() => "About".split(""), []);
+  const letters = useMemo(() => "Portfolio".split(""), []);
   const letterCount = letters.length;
-  const letterGap = screenWidth < 640 ? 44 : screenWidth < 1024 ? 58 : 72;
+  const letterGap = screenWidth < 640 ? 28 : screenWidth < 1024 ? 44 : 58;
 
   const letterData = useMemo(() => {
     return letters.map((letter, index) => {
@@ -123,63 +101,19 @@ export default function About() {
 
   const progress = reducedMotion ? 1 : easeOutCubic(globalProgress);
 
-  const content: ContentItem[] = [
-    {
-      title: "Who I Am",
-      content: (
-        <p>
-          I&apos;m{" "}
-          <span className="font-semibold text-[var(--gold)]">
-            Kabiru Shaibu
-          </span>
-          , a frontend-focused full-stack product engineer. I care about
-          shipping interfaces and systems that feel clear, hold up under real
-          use, and stay maintainable as products grow.
-        </p>
-      ),
-    },
-    {
-      title: "What I Build",
-      content: (
-        <p>
-          I build SaaS and Web3 products end to end — responsive React and
-          TypeScript frontends, Node APIs, and data layers with Supabase and
-          PostgreSQL. Recent work includes Solana loyalty systems, prediction
-          markets, and marketplace platforms.
-        </p>
-      ),
-    },
-    {
-      title: "How I Work",
-      content: (
-        <p>
-          I start from the user problem, then design interfaces and architecture
-          that can ship safely. I favor clear component boundaries, typed APIs,
-          thoughtful authentication, and performance choices that keep products
-          usable in production.
-        </p>
-      ),
-    },
-    {
-      title: "Engineering Philosophy",
-      content: (
-        <p>
-          Clean code, accessibility, and long-term maintainability matter as
-          much as features. I build for scalability and security without
-          overcomplicating the first release — then improve through continuous
-          learning and iteration.
-        </p>
-      ),
-    },
-  ];
-
   return (
-    <section className="w-full bg-[var(--page-bg)]">
-      <div ref={dividerRef} className="section-title-wrap max-w-6xl">
+    <section
+      id="projects"
+      aria-labelledby="portfolio-heading"
+      className="w-full bg-[var(--page-bg)] text-center"
+    >
+      <div ref={dividerRef} className="section-title-wrap max-w-6xl mt-0">
         <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
 
-        <div className="relative h-14 w-full md:h-16">
-          <h2 className="sr-only">About</h2>
+        <div className="relative h-14 md:h-16">
+          <h2 id="portfolio-heading" className="sr-only">
+            Portfolio
+          </h2>
 
           {letterData.map(
             ({ letter, startX, finalX, startScale, finalScale }, index) => {
@@ -206,12 +140,29 @@ export default function About() {
         </div>
       </div>
 
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 auto-rows-fr gap-3 px-6 pb-4 md:grid-cols-2 md:gap-4 md:px-10 lg:px-14">
-        {content.map((section) => (
-          <ContentSection key={section.title} title={section.title}>
-            {section.content}
-          </ContentSection>
-        ))}
+      <div className="mx-auto w-full max-w-6xl px-6 pb-12 md:px-10 lg:px-14">
+        <p className="mx-auto mb-6 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">
+          Flagship work across Web3 loyalty systems, prediction markets and
+          marketplace products — focused on real product problems and production
+          architecture.
+        </p>
+
+        <div className="space-y-4 text-left">
+          {featured.map((project, index) => (
+            <ProjectCard
+              key={project.title}
+              project={project}
+              featured
+              priority={index === 0}
+            />
+          ))}
+        </div>
+
+        <div className="mt-8 flex justify-center">
+          <Link href="/portfolio" className="focus-ring btn-primary">
+            View Full Portfolio
+          </Link>
+        </div>
       </div>
     </section>
   );

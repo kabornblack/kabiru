@@ -1,18 +1,18 @@
 "use client";
 
 import { Hero } from "@/components/Hero";
-import About from "@/components/About";
 import Skills from "@/components/Skills";
-import { ImagesSliderDemo } from "@/components/Projects";
 import Contact from "@/components/Contact";
 import Header from "@/components/Header";
+import AboutPage from "@/components/About";
+import HomePortfolioShowcase from "@/components/PortfolioShowcase";
 
 export default function Home() {
   return (
-    <div className="h-screen scroll-smooth bg-gray-950">
-      {/* // <div className="h-screen scroll-smooth bg-gradient-to-tr from-white/20 to-gray-950 z-50 -mb-32"> */}
+    <div className="h-screen scroll-smooth bg-[var(--page-bg)]">
       <main
-        className="h-full overflow-y-auto scroll-smooth"
+        id="page-scroll-container"
+        className="h-full overflow-y-auto overflow-x-hidden scroll-smooth"
         style={{
           msOverflowStyle: "none",
           scrollbarWidth: "none",
@@ -23,25 +23,32 @@ export default function Home() {
             display: none;
           }
         `}</style>
-
-        {/* Move Header here */}
         <Header />
 
-        <section id="home">
+        <section id="home" aria-label="Home">
           <Hero />
         </section>
-        <section id="about">
-          <About />
+        <section id="about" aria-label="About">
+          <AboutPage />
         </section>
-        <section id="skills">
+        <section id="skills" aria-label="Skills">
           <Skills />
         </section>
-        <section>
-          <ImagesSliderDemo />
-        </section>
-        <section id="contact">
+        <HomePortfolioShowcase />
+        <section id="contact" aria-label="Contact">
           <Contact />
         </section>
+        <footer className="flex w-full items-center justify-center border-t border-[var(--border-subtle)] px-5 py-10">
+          <div className="max-w-xl text-center">
+            <p className="text-sm leading-relaxed text-[var(--text-muted)] md:text-base">
+              Building products with scalability, usability and long-term
+              maintainability in mind.
+            </p>
+            <p className="mt-4 text-xs tracking-[0.16em] text-[var(--text-muted)] uppercase md:text-sm">
+              Designed & Built by Kabiru — © {new Date().getFullYear()}
+            </p>
+          </div>
+        </footer>
       </main>
     </div>
   );
