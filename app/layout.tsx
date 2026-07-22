@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Quicksand, Protest_Revolution } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 
 import "./globals.css";
 
@@ -70,6 +71,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-[var(--page-bg)] font-sans text-[var(--text-primary)] antialiased">
         {children}
+        <Analytics />
       </body>
     </html>
   );

@@ -132,9 +132,9 @@ export default function About() {
           <span className="font-semibold text-[var(--gold)]">
             Kabiru Shaibu
           </span>
-          , a frontend-focused full-stack product engineer. I care about
-          shipping interfaces and systems that feel clear, hold up under real
-          use, and stay maintainable as products grow.
+          , a full-stack product engineer focused on building reliable,
+          user-friendly software that solves real business problems and remains
+          maintainable as products grow.
         </p>
       ),
     },
@@ -142,10 +142,10 @@ export default function About() {
       title: "What I Build",
       content: (
         <p>
-          I build SaaS and Web3 products end to end — responsive React and
-          TypeScript frontends, Node APIs, and data layers with Supabase and
-          PostgreSQL. Recent work includes Solana loyalty systems, prediction
-          markets, and marketplace platforms.
+          I build customer-facing SaaS products and internal operational tools
+          using React, TypeScript, Node.js, PostgreSQL, and modern cloud
+          technologies. My recent work includes loyalty infrastructure,
+          prediction platforms, secure dashboards, and workflow automation.
         </p>
       ),
     },
@@ -153,10 +153,10 @@ export default function About() {
       title: "How I Work",
       content: (
         <p>
-          I start from the user problem, then design interfaces and architecture
-          that can ship safely. I favor clear component boundaries, typed APIs,
-          thoughtful authentication, and performance choices that keep products
-          usable in production.
+          I take ownership from product discovery and architecture through
+          implementation, testing, deployment, and continuous improvement. I
+          collaborate closely with stakeholders and engineering teams to turn
+          business requirements into practical, scalable solutions.
         </p>
       ),
     },
@@ -164,10 +164,10 @@ export default function About() {
       title: "Engineering Philosophy",
       content: (
         <p>
-          Clean code, accessibility, and long-term maintainability matter as
-          much as features. I build for scalability and security without
-          overcomplicating the first release — then improve through continuous
-          learning and iteration.
+          I balance delivery speed with security, usability, and long-term
+          maintainability. I use AI-assisted development to improve planning,
+          implementation, debugging, and documentation without replacing careful
+          engineering judgement.
         </p>
       ),
     },
