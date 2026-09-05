@@ -223,3 +223,166 @@ body {
     transform: translateX(-50%);
   }
 }
+
+/* Soft traveling border light for About cards */
+.about-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  padding: 1px;
+  background: rgba(184, 134, 11, 0.22);
+  box-shadow: var(--shadow-gold);
+}
+
+.about-card-glow {
+  position: absolute;
+  inset: -55%;
+  z-index: 0;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    transparent 68%,
+    rgba(184, 134, 11, 0.08) 78%,
+    rgba(212, 160, 23, 0.35) 88%,
+    rgba(245, 215, 120, 0.55) 92%,
+    rgba(212, 160, 23, 0.28) 96%,
+    transparent 100%
+  );
+  animation: about-border-glow var(--about-glow-duration, 14s) linear infinite;
+  animation-delay: var(--about-glow-delay, 0s);
+  will-change: transform;
+}
+
+.about-card-glow--reverse {
+  animation-direction: reverse;
+}
+
+.about-card-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: calc(var(--radius-md) - 1px);
+  background: var(--surface-elevated);
+}
+
+@keyframes about-border-glow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-card-glow {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Dual traveling border light for Mentor cards */
+.mentor-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  padding: 1.5px;
+  background: rgba(184, 134, 11, 0.28);
+  box-shadow:
+    0 0 0 1px rgba(184, 134, 11, 0.18),
+    0 12px 32px rgba(184, 134, 11, 0.1),
+    0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.mentor-card-glow {
+  position: absolute;
+  inset: -60%;
+  z-index: 0;
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    transparent 62%,
+    rgba(184, 134, 11, 0.1) 74%,
+    rgba(212, 160, 23, 0.42) 84%,
+    rgba(255, 224, 140, 0.72) 90%,
+    rgba(212, 160, 23, 0.4) 95%,
+    transparent 100%
+  );
+  animation: mentor-border-glow var(--mentor-glow-duration, 11s) linear infinite;
+  animation-delay: var(--mentor-glow-delay, 0s);
+  will-change: transform;
+}
+
+.mentor-card-glow--secondary {
+  opacity: 0.45;
+  background: conic-gradient(
+    from 180deg,
+    transparent 0%,
+    transparent 70%,
+    rgba(184, 134, 11, 0.08) 80%,
+    rgba(212, 160, 23, 0.32) 88%,
+    rgba(245, 215, 120, 0.5) 93%,
+    transparent 100%
+  );
+  animation-duration: var(--mentor-glow-duration-alt, 15s);
+}
+
+.mentor-card-glow--reverse {
+  animation-direction: reverse;
+}
+
+.mentor-card-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: calc(var(--radius-md) - 1px);
+  background:
+    linear-gradient(165deg, rgba(184, 134, 11, 0.06) 0%, transparent 42%),
+    var(--surface-elevated);
+}
+
+@keyframes mentor-border-glow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.mentor-marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 1rem;
+  padding-block: 0.25rem;
+  animation: mentor-marquee-ltr 55s linear infinite;
+}
+
+.mentor-marquee:hover .mentor-marquee-track,
+.mentor-marquee:focus-within .mentor-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes mentor-marquee-ltr {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mentor-card-glow {
+    animation: none;
+    opacity: 0;
+  }
+
+  .mentor-marquee-track {
+    animation: none;
+  }
+}

@@ -20,6 +20,14 @@ import {
   FaLink,
   FaRobot,
   FaWallet,
+  FaLightbulb,
+  FaCogs,
+  FaCheckCircle,
+  FaSyncAlt,
+  FaBook,
+  FaTasks,
+  FaUsers,
+  FaProjectDiagram,
 } from "react-icons/fa";
 import {
   SiTailwindcss,
@@ -127,12 +135,12 @@ const skillCategories: SkillCategory[] = [
       {
         name: "Bootstrap",
         icon: <FaBootstrap className={iconClass} />,
-        tier: "core",
+        tier: "additional",
       },
       {
         name: "Redux Toolkit",
         icon: <SiRedux className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Framer Motion",
@@ -159,13 +167,13 @@ const skillCategories: SkillCategory[] = [
   {
     key: "backend",
     title: "Backend",
-    subtitle: "APIs, auth and application services",
+    subtitle: "Secure APIs and product business logic",
     description:
-      "I build Node and Fastify services that connect frontends to data securely — typed APIs, authentication, and business logic that support real product flows.",
+      "I design backend services, authentication systems, APIs, and business workflows that support secure, production-ready products.",
     points: [
-      "REST API design and integration",
-      "Authentication and server-side logic",
-      "Reliable frontend-to-backend data flow",
+      "REST API and backend service design",
+      "Authentication, authorization and access control",
+      "Business logic and workflow automation",
     ],
     items: [
       { name: "Node.js", icon: <FaNode className={iconClass} />, tier: "core" },
@@ -190,6 +198,26 @@ const skillCategories: SkillCategory[] = [
         tier: "core",
       },
       {
+        name: "JWT Auth",
+        icon: <FaKey className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "MongoDB",
+        icon: <SiMongodb className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "PostgreSQL",
+        icon: <SiPostgresql className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Docker",
+        icon: <SiDocker className={iconClass} />,
+        tier: "core",
+      },
+      {
         name: "Python",
         icon: <FaPython className={iconClass} />,
         tier: "core",
@@ -197,11 +225,6 @@ const skillCategories: SkillCategory[] = [
       {
         name: "FastAPI",
         icon: <SiFastapi className={iconClass} />,
-        tier: "core",
-      },
-      {
-        name: "JWT Auth",
-        icon: <FaKey className={iconClass} />,
         tier: "core",
       },
       {
@@ -210,42 +233,27 @@ const skillCategories: SkillCategory[] = [
         tier: "core",
       },
       {
-        name: "MongoDB",
-        icon: <SiMongodb className={iconClass} />,
-        tier: "core",
-      },
-      {
-        name: "PostgreSQL",
-        icon: <SiPostgresql className={iconClass} />,
-        tier: "core",
-      },
-      {
-        name: "Docker",
-        icon: <SiDocker className={iconClass} />,
-        tier: "core",
-      },
-      {
         name: "File uploads",
         icon: <FaCloudUploadAlt className={iconClass} />,
-        tier: "core",
+        tier: "additional",
       },
       {
         name: "Webhooks",
         icon: <FaLink className={iconClass} />,
-        tier: "core",
+        tier: "additional",
       },
     ],
   },
   {
     key: "database",
     title: "Database & Cloud",
-    subtitle: "Storage, hosting and scalable data systems",
+    subtitle: "Data modelling, deployment and cloud services",
     description:
-      "I use databases and cloud services to store, manage and retrieve application data. This includes relational databases, NoSQL tools, backend-as-a-service platforms and cloud infrastructure.",
+      "I work with relational and NoSQL databases, managed backend platforms, containerized deployments, and cloud services that support reliable application delivery.",
     points: [
-      "Relational and NoSQL databases",
-      "Cloud-hosted app services",
-      "Authentication, storage and deployment support",
+      "PostgreSQL data modelling and SQL",
+      "Managed backend and storage services",
+      "Containerized application deployment",
     ],
     items: [
       {
@@ -253,35 +261,10 @@ const skillCategories: SkillCategory[] = [
         icon: <SiPostgresql className={iconClass} />,
         tier: "core",
       },
-      {
-        name: "Supabase",
-        icon: <SiSupabase className={iconClass} />,
-        tier: "core",
-      },
-      {
-        name: "MongoDB",
-        icon: <SiMongodb className={iconClass} />,
-        tier: "core",
-      },
       { name: "SQL", icon: <FaDatabase className={iconClass} />, tier: "core" },
       {
-        name: "MySQL",
-        icon: <SiMysql className={iconClass} />,
-        tier: "additional",
-      },
-      {
-        name: "Firebase",
-        icon: <SiFirebase className={iconClass} />,
-        tier: "additional",
-      },
-      {
-        name: "Prisma",
-        icon: <SiPrisma className={iconClass} />,
-        tier: "additional",
-      },
-      {
-        name: "Google Cloud",
-        icon: <SiGooglecloud className={iconClass} />,
+        name: "Docker",
+        icon: <SiDocker className={iconClass} />,
         tier: "core",
       },
       {
@@ -290,22 +273,42 @@ const skillCategories: SkillCategory[] = [
         tier: "core",
       },
       {
-        name: "Docker",
-        icon: <SiDocker className={iconClass} />,
+        name: "Firebase",
+        icon: <SiFirebase className={iconClass} />,
         tier: "core",
+      },
+      {
+        name: "Prisma",
+        icon: <SiPrisma className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "MySQL",
+        icon: <SiMysql className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "MongoDB",
+        icon: <SiMongodb className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Google Cloud",
+        icon: <SiGooglecloud className={iconClass} />,
+        tier: "additional",
       },
     ],
   },
   {
     key: "ai",
     title: "AI & Automation",
-    subtitle: "Smarter workflows and AI-powered features",
+    subtitle: "AI-assisted engineering and workflow automation",
     description:
-      "I use AI tools and APIs to build intelligent features, automate repetitive workflows and create more useful digital products.",
+      "I use AI throughout product planning, implementation, debugging, documentation, and technical review while keeping architecture and engineering decisions human-led.",
     points: [
-      "AI-assisted product features",
-      "Workflow automation",
-      "Prompting and API integration",
+      "AI-assisted planning and implementation",
+      "Structured multi-agent development workflows",
+      "Automation, debugging and documentation",
     ],
     items: [
       {
@@ -314,38 +317,38 @@ const skillCategories: SkillCategory[] = [
         tier: "core",
       },
       {
-        name: "Python",
-        icon: <FaPython className={iconClass} />,
-        tier: "core",
-      },
-      {
-        name: "FastAPI",
-        icon: <SiFastapi className={iconClass} />,
-        tier: "core",
-      },
-      {
-        name: "Gemini AI",
-        icon: <FaRobot className={iconClass} />,
-        tier: "additional",
-      },
-      {
         name: "Claude AI",
         icon: <FaRobot className={iconClass} />,
         tier: "core",
       },
       {
-        name: "Node.js",
-        icon: <FaNode className={iconClass} />,
-        tier: "additional",
+        name: "AI-assisted development",
+        icon: <FaLightbulb className={iconClass} />,
+        tier: "core",
       },
       {
-        name: "Vercel",
-        icon: <SiVercel className={iconClass} />,
-        tier: "additional",
+        name: "Agentic workflows",
+        icon: <FaProjectDiagram className={iconClass} />,
+        tier: "core",
       },
       {
-        name: "Render",
-        icon: <SiRender className={iconClass} />,
+        name: "Prompt engineering",
+        icon: <FaCogs className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Workflow automation",
+        icon: <FaSyncAlt className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Python",
+        icon: <FaPython className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Gemini AI",
+        icon: <FaRobot className={iconClass} />,
         tier: "additional",
       },
     ],
@@ -417,24 +420,19 @@ const skillCategories: SkillCategory[] = [
   {
     key: "tools",
     title: "Tools & Workflow",
-    subtitle: "Development, collaboration and product setup",
+    subtitle: "Delivery, collaboration and engineering quality",
     description:
-      "I use modern developer tools to manage projects, authentication, content, version control and production-ready workflows.",
+      "I use modern engineering tools and collaborative practices to take features from planning through implementation, review, deployment, and continuous improvement.",
     points: [
-      "Version control and collaboration",
-      "Authentication setup",
-      "Content and project workflow management",
+      "Git-based collaboration and code reviews",
+      "CI/CD and deployment workflows",
+      "Documentation and cross-functional delivery",
     ],
     items: [
       { name: "Git", icon: <SiGit className={iconClass} />, tier: "core" },
       {
         name: "GitHub",
         icon: <FaGithub className={iconClass} />,
-        tier: "core",
-      },
-      {
-        name: "Vercel",
-        icon: <SiVercel className={iconClass} />,
         tier: "core",
       },
       {
@@ -445,22 +443,12 @@ const skillCategories: SkillCategory[] = [
       {
         name: "GitHub Actions",
         icon: <SiGithubactions className={iconClass} />,
-        tier: "additional",
-      },
-      {
-        name: "Clerk",
-        icon: <SiClerk className={iconClass} />,
         tier: "core",
-      },
-      {
-        name: "Sanity",
-        icon: <SiSanity className={iconClass} />,
-        tier: "additional",
       },
       {
         name: "Docker",
         icon: <SiDocker className={iconClass} />,
-        tier: "additional",
+        tier: "core",
       },
       {
         name: "Figma",
@@ -468,19 +456,54 @@ const skillCategories: SkillCategory[] = [
         tier: "core",
       },
       {
-        name: "Stripe",
-        icon: <SiStripe className={iconClass} />,
+        name: "Vercel",
+        icon: <SiVercel className={iconClass} />,
         tier: "core",
-      },
-      {
-        name: "Google Analytics",
-        icon: <SiGoogleanalytics className={iconClass} />,
-        tier: "additional",
       },
       {
         name: "Render",
         icon: <SiRender className={iconClass} />,
         tier: "core",
+      },
+      {
+        name: "Code Reviews",
+        icon: <FaCheckCircle className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "CI/CD",
+        icon: <FaSyncAlt className={iconClass} />,
+        tier: "core",
+      },
+      {
+        name: "Technical Documentation",
+        icon: <FaBook className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Agile Delivery",
+        icon: <FaTasks className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Product Collaboration",
+        icon: <FaUsers className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Sanity",
+        icon: <SiSanity className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Stripe",
+        icon: <SiStripe className={iconClass} />,
+        tier: "additional",
+      },
+      {
+        name: "Google Analytics",
+        icon: <SiGoogleanalytics className={iconClass} />,
+        tier: "additional",
       },
     ],
   },

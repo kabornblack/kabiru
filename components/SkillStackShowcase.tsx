@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useId, useMemo, useState } from "react";
+import React, { useId, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 export type SkillTier = "core" | "additional";
@@ -35,8 +35,6 @@ export default function SkillStackShowcase({
 }) {
   const [activeCategory, setActiveCategory] =
     useState<SkillCategoryKey>("frontend");
-  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [isPaused, setIsPaused] = useState(false);
   const tablistId = useId();
   const reducedMotion = useReducedMotion();
 
@@ -44,17 +42,6 @@ export default function SkillStackShowcase({
     () => categories.findIndex((item) => item.key === activeCategory),
     [activeCategory, categories],
   );
-
-  useEffect(() => {
-    if (!isAutoPlaying || isPaused || reducedMotion) return;
-
-    const interval = setInterval(() => {
-      const nextIndex = (activeIndex + 1) % categories.length;
-      setActiveCategory(categories[nextIndex].key);
-    }, 15000);
-
-    return () => clearInterval(interval);
-  }, [activeIndex, categories, isAutoPlaying, isPaused, reducedMotion]);
 
   const selectedCategory =
     categories.find((category) => category.key === activeCategory) ||
@@ -69,21 +56,10 @@ export default function SkillStackShowcase({
 
   const selectCategory = (key: SkillCategoryKey) => {
     setActiveCategory(key);
-    setIsAutoPlaying(false);
   };
 
   return (
-    <div
-      className="mx-auto flex max-w-6xl flex-col px-6 pt-1 pb-6 md:px-10 lg:px-16"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocusCapture={() => setIsPaused(true)}
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node)) {
-          setIsPaused(false);
-        }
-      }}
-    >
+    <div className="mx-auto flex max-w-6xl flex-col px-6 pt-1 pb-6 md:px-10 lg:px-16">
       <div
         role="tablist"
         aria-label="Skill categories"

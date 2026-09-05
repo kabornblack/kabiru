@@ -105,7 +105,7 @@ export default function HomePortfolioShowcase() {
     <section
       id="projects"
       aria-labelledby="portfolio-heading"
-      className="w-full bg-[var(--page-bg)] text-center"
+      className="w-full bg-[var(--page-bg)] pb-8 text-center"
     >
       <div ref={dividerRef} className="section-title-wrap max-w-6xl mt-0">
         <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
