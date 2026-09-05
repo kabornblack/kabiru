@@ -1,6 +1,13 @@
 "use client";
 
-import { ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import {
+  CSSProperties,
+  ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useReducedMotion } from "framer-motion";
 
 const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
@@ -8,9 +15,23 @@ const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
 
+/** Deterministic per-card timing so glows never sync and stay calm. */
+const GLOW_TIMINGS = [
+  { duration: 14, delay: 0, reverse: false },
+  { duration: 9.5, delay: 2.8, reverse: true },
+  { duration: 17, delay: 1.2, reverse: false },
+  { duration: 11.5, delay: 4.6, reverse: true },
+  { duration: 15.5, delay: 0.7, reverse: false },
+  { duration: 12.5, delay: 3.4, reverse: true },
+] as const;
+
 interface ContentSectionProps {
   title: string;
   children: ReactNode;
+  glowDuration: number;
+  glowDelay: number;
+  glowReverse: boolean;
+  reducedMotion: boolean | null;
 }
 
 interface ContentItem {
@@ -18,18 +39,40 @@ interface ContentItem {
   content: ReactNode;
 }
 
-const ContentSection = ({ title, children }: ContentSectionProps) => {
-  return (
-    <article className="flex h-full w-full flex-col overflow-hidden rounded-[var(--radius-md)] border border-[var(--border-gold)] bg-[var(--surface-elevated)] shadow-[var(--shadow-gold)]">
-      <div className="px-4 py-3.5 md:px-5">
-        <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
-          {title}
-        </h3>
-      </div>
+const ContentSection = ({
+  title,
+  children,
+  glowDuration,
+  glowDelay,
+  glowReverse,
+  reducedMotion,
+}: ContentSectionProps) => {
+  const glowStyle = {
+    "--about-glow-duration": `${glowDuration}s`,
+    "--about-glow-delay": `${glowDelay}s`,
+  } as CSSProperties;
 
-      <div className="flex flex-1 border-t border-[var(--border-subtle)] px-4 py-4 md:px-5">
-        <div className="text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
-          {children}
+  return (
+    <article className="about-card h-full w-full">
+      {!reducedMotion && (
+        <span
+          className={`about-card-glow${glowReverse ? " about-card-glow--reverse" : ""}`}
+          style={glowStyle}
+          aria-hidden="true"
+        />
+      )}
+
+      <div className="about-card-inner">
+        <div className="px-4 py-3.5 md:px-5">
+          <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
+            {title}
+          </h3>
+        </div>
+
+        <div className="flex flex-1 border-t border-[var(--border-subtle)] px-4 py-4 md:px-5">
+          <div className="text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
+            {children}
+          </div>
         </div>
       </div>
     </article>
@@ -171,6 +214,28 @@ export default function About() {
         </p>
       ),
     },
+    {
+      title: "What I Value",
+      content: (
+        <p>
+          Clarity, ownership, and honest trade-offs. I prefer simple systems
+          that teams can reason about, feedback that improves the product, and
+          collaboration that keeps users and business outcomes at the centre of
+          every decision.
+        </p>
+      ),
+    },
+    {
+      title: "Where I Thrive",
+      content: (
+        <p>
+          I do my best work where product thinking meets engineering craft —
+          cross-functional teams, real users, and systems that need to stay
+          reliable as they grow. I enjoy turning ambiguity into shipped,
+          well-structured software.
+        </p>
+      ),
+    },
   ];
 
   return (
@@ -207,11 +272,22 @@ export default function About() {
       </div>
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 auto-rows-fr gap-3 px-6 pb-4 md:grid-cols-2 md:gap-4 md:px-10 lg:px-14">
-        {content.map((section) => (
-          <ContentSection key={section.title} title={section.title}>
-            {section.content}
-          </ContentSection>
-        ))}
+        {content.map((section, index) => {
+          const timing = GLOW_TIMINGS[index] ?? GLOW_TIMINGS[0];
+
+          return (
+            <ContentSection
+              key={section.title}
+              title={section.title}
+              glowDuration={timing.duration}
+              glowDelay={timing.delay}
+              glowReverse={timing.reverse}
+              reducedMotion={reducedMotion}
+            >
+              {section.content}
+            </ContentSection>
+          );
+        })}
       </div>
     </section>
   );

@@ -6,6 +6,9 @@ import Contact from "@/components/Contact";
 import Header from "@/components/Header";
 import AboutPage from "@/components/About";
 import HomePortfolioShowcase from "@/components/PortfolioShowcase";
+import Mentors from "@/components/Mentors";
+import Design from "@/components/Design";
+import AIEngineering from "@/components/AIEngineering";
 
 export default function Home() {
   return (
@@ -25,17 +28,20 @@ export default function Home() {
         `}</style>
         <Header />
 
-        <section id="home" aria-label="Home">
+        <section id="home" aria-label="Home" className="pb-8">
           <Hero />
         </section>
-        <section id="about" aria-label="About">
+        <section id="about" aria-label="About" className="pb-8">
           <AboutPage />
         </section>
-        <section id="skills" aria-label="Skills">
+        <section id="skills" aria-label="Skills" className="pb-8">
           <Skills />
         </section>
         <HomePortfolioShowcase />
-        <section id="contact" aria-label="Contact">
+        <Mentors />
+        <Design />
+        <AIEngineering />
+        <section id="contact" aria-label="Contact" className="pb-8">
           <Contact />
         </section>
         <footer className="flex w-full items-center justify-center border-t border-[var(--border-subtle)] px-5 py-10">

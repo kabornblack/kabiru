@@ -7,8 +7,11 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   FaBars,
   FaBriefcase,
+  FaChalkboardTeacher,
   FaEnvelope,
   FaHome,
+  FaPalette,
+  FaRobot,
   FaTimes,
   FaTools,
   FaUser,
@@ -47,6 +50,27 @@ const navLinks: NavLink[] = [
     match: "portfolio",
   },
   {
+    label: "Mentors",
+    href: "/#mentors",
+    icon: FaChalkboardTeacher,
+    match: "hash",
+    hash: "mentors",
+  },
+  {
+    label: "Design",
+    href: "/#design",
+    icon: FaPalette,
+    match: "hash",
+    hash: "design",
+  },
+  {
+    label: "AI Engineer",
+    href: "/#ai-engineering",
+    icon: FaRobot,
+    match: "hash",
+    hash: "ai-engineering",
+  },
+  {
     label: "Contact",
     href: "/#contact",
     icon: FaEnvelope,
@@ -81,7 +105,16 @@ function Header() {
     const updateActiveSection = () => {
       if (isPortfolio) return;
 
-      const sections = ["home", "about", "skills", "projects", "contact"];
+      const sections = [
+        "home",
+        "about",
+        "skills",
+        "projects",
+        "mentors",
+        "design",
+        "ai-engineering",
+        "contact",
+      ];
       const scrollY = getCurrentScrollY();
       let current = "home";
 
