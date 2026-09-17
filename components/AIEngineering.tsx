@@ -1,19 +1,15 @@
 "use client";
 
 import { CSSProperties, ElementType } from "react";
-import Link from "next/link";
 import { useReducedMotion } from "framer-motion";
 import {
   FaCode,
   FaDatabase,
-  FaExternalLinkAlt,
-  FaGithub,
   FaNetworkWired,
   FaRobot,
   FaShieldAlt,
 } from "react-icons/fa";
 import SectionTitle from "./SectionTitle";
-import { projects } from "./data/projectData";
 
 /** Deterministic per-card timing so glows never sync and stay calm — mirrors About/Design. */
 const GLOW_TIMINGS = [
@@ -256,9 +252,6 @@ function SkillCard({
 
 export default function AIEngineering() {
   const reducedMotion = useReducedMotion();
-  const flagshipProject = projects.find(
-    (project) => project.title === "AI Agent Builder",
-  );
 
   return (
     <section
@@ -276,8 +269,8 @@ export default function AIEngineering() {
 
       <div className="mx-auto w-full max-w-6xl px-6 pb-2 md:px-10 lg:px-14">
         <p className="mx-auto mb-7 max-w-2xl text-center text-sm leading-relaxed text-[var(--text-muted)]">
-          Five skills I treat as one discipline — how I use AI to design,
-          build and operate real systems, not just prompt a chatbot.
+          Skills I treat as one discipline — how I use AI to design, build and
+          operate real systems, not just prompt a chatbot.
         </p>
 
         <div className="space-y-3 md:space-y-4">
@@ -296,66 +289,6 @@ export default function AIEngineering() {
               />
             );
           })}
-        </div>
-
-        <div className="mentor-card relative mt-8">
-          <div className="mentor-card-inner p-5 md:p-8">
-            <p className="text-[10px] tracking-[0.18em] text-[var(--gold)] uppercase">
-              Building with AI
-            </p>
-            <h3 className="font-display mt-2 text-lg tracking-[0.04em] text-[var(--text-primary)] uppercase md:text-xl">
-              One project, five skills
-            </h3>
-
-            <div className="mt-4 space-y-3 text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
-              <p>
-                I build one project that puts all five of these to work
-                together — pulling the right context, calling a tool,
-                checking the output before anything ships.
-              </p>
-              <p>
-                I keep track of the calls I make along the way — model
-                choice, workflow versus agent, how much context to pull in —
-                and what breaks: a bad chunk boundary, a tool stuck in a
-                loop, a cost spike caught late.
-              </p>
-            </div>
-
-            {flagshipProject ? (
-              <div className="mt-6 flex flex-wrap items-center gap-2.5 border-t border-[var(--border-subtle)] pt-5">
-                <Link
-                  href={flagshipProject.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="focus-ring btn-primary !min-h-10 !px-4 !py-2 !text-[11px]"
-                >
-                  Check it out — {flagshipProject.title}
-                </Link>
-
-                {flagshipProject.githubUrl ? (
-                  <Link
-                    href={flagshipProject.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`${flagshipProject.title} GitHub repository`}
-                    className="focus-ring inline-flex min-h-10 min-w-10 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] text-[var(--gold)] transition-all duration-200 hover:border-[var(--border-gold)] hover:bg-[rgba(184,134,11,0.1)] hover:text-[var(--gold-hover)]"
-                  >
-                    <FaGithub className="h-4 w-4" aria-hidden="true" />
-                  </Link>
-                ) : null}
-
-                <Link
-                  href={flagshipProject.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${flagshipProject.title} live site`}
-                  className="focus-ring inline-flex min-h-10 min-w-10 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] text-[var(--gold)] transition-all duration-200 hover:border-[var(--border-gold)] hover:bg-[rgba(184,134,11,0.1)] hover:text-[var(--gold-hover)]"
-                >
-                  <FaExternalLinkAlt className="h-3.5 w-3.5" aria-hidden="true" />
-                </Link>
-              </div>
-            ) : null}
-          </div>
         </div>
       </div>
     </section>
