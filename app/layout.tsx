@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Quicksand, Protest_Revolution } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 
+import VisitorPing from "@/components/VisitorPing";
+
 import "./globals.css";
 
 const protest = Protest_Revolution({
@@ -72,6 +74,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-[var(--page-bg)] font-sans text-[var(--text-primary)] antialiased">
         {children}
         <Analytics />
+        <VisitorPing />
       </body>
     </html>
   );
