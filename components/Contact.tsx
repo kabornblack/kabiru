@@ -4,9 +4,9 @@ import React, { useEffect, useId, useMemo, useRef, useState } from "react";
 import { MapPinIcon } from "@heroicons/react/24/solid";
 import { motion, useReducedMotion } from "framer-motion";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 import { FaEnvelope, FaFileDownload } from "react-icons/fa";
 import ContactForm from "./ContactForm";
-import CalendlyBooking from "./CalendlyBooking";
 import Socials from "./Socials";
 import {
   CV_FILENAME,
@@ -18,6 +18,20 @@ import {
 const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
 const clamp = (value: number, min: number, max: number): number =>
   Math.min(Math.max(value, min), max);
+
+// react-calendly only ships to visitors who actually open this tab, instead
+// of shipping on every home-page load for a feature most people won't use.
+const CalendlyBooking = dynamic(() => import("./CalendlyBooking"), {
+  ssr: false,
+  loading: () => (
+    <div
+      className="flex min-h-[320px] items-center justify-center text-sm text-[var(--text-muted)]"
+      role="status"
+    >
+      Loading scheduling calendar…
+    </div>
+  ),
+});
 
 function Contact() {
   const [activeTab, setActiveTab] = useState<"message" | "meeting">("message");

@@ -3,6 +3,8 @@ import { Quicksand, Protest_Revolution } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 
 import VisitorPing from "@/components/VisitorPing";
+import FloatingCTA from "@/components/FloatingCTA";
+import ExitIntentPopup from "@/components/ExitIntentPopup";
 
 import "./globals.css";
 
@@ -75,6 +77,8 @@ export default function RootLayout({
         {children}
         <Analytics />
         <VisitorPing />
+        <FloatingCTA />
+        <ExitIntentPopup />
       </body>
     </html>
   );

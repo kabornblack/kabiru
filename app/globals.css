@@ -386,3 +386,47 @@ body {
     animation: none;
   }
 }
+
+/* Soft expanding ring on the floating "open to opportunities" badge */
+.cta-badge-pulse {
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  border: 1.5px solid var(--gold);
+  opacity: 0;
+  pointer-events: none;
+  animation: cta-badge-pulse 3.2s ease-out infinite;
+}
+
+@keyframes cta-badge-pulse {
+  0% {
+    transform: scale(0.94);
+    opacity: 0.55;
+  }
+  70%,
+  100% {
+    transform: scale(1.22);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta-badge-pulse {
+    animation: none;
+    opacity: 0;
+  }
+}
+
+/* Trailing-edge fade hint on the Skills category tablist — only relevant
+   below md, where the tabs actually overflow and need to scroll. */
+.tablist-fade {
+  -webkit-mask-image: linear-gradient(to right, #000 0%, #000 88%, transparent 100%);
+  mask-image: linear-gradient(to right, #000 0%, #000 88%, transparent 100%);
+}
+
+@media (min-width: 768px) {
+  .tablist-fade {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

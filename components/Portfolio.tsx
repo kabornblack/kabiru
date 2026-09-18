@@ -8,6 +8,7 @@ import {
 } from "./data/projectData";
 import Header from "@/components/Header";
 import ProjectCard from "@/components/ProjectCard";
+import SectionTitle from "@/components/SectionTitle";
 
 export default function Portfolio() {
   const featured = getFeaturedProjects();
@@ -29,10 +30,12 @@ export default function Portfolio() {
 
       <main className="mx-auto w-full max-w-6xl px-5 pt-24 pb-16 md:px-8 md:pt-28">
         <header className="text-center">
-          <h1 className="font-display inline-block text-3xl tracking-[0.16em] text-[var(--gold)] uppercase md:text-4xl">
-            Portfolio
-          </h1>
-          <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">
+          <SectionTitle
+            text="Portfolio"
+            headingId="portfolio-page-heading"
+            headingLevel="h1"
+          />
+          <p className="mx-auto mt-1 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)]">
             Production products across Web3, marketplaces and full-stack
             applications — built with React, TypeScript and systems designed for
             real users.

@@ -17,6 +17,13 @@ type SectionTitleProps = {
   gapSm?: number;
   gapMd?: number;
   gapLg?: number;
+  /**
+   * Heading level for the visually-hidden text node. Defaults to "h2" for
+   * sections within the single-page home route (which owns the page's one
+   * <h1>). Pass "h1" when this is a standalone route's primary heading
+   * (e.g. /portfolio) so the page still has exactly one <h1>.
+   */
+  headingLevel?: "h1" | "h2";
 };
 
 /**
@@ -31,7 +38,9 @@ export default function SectionTitle({
   gapSm = 44,
   gapMd = 58,
   gapLg = 72,
+  headingLevel = "h2",
 }: SectionTitleProps) {
+  const HeadingTag = headingLevel;
   const dividerRef = useRef<HTMLDivElement | null>(null);
   const [globalProgress, setGlobalProgress] = useState(0);
   const [screenWidth, setScreenWidth] = useState(1200);
@@ -124,9 +133,9 @@ export default function SectionTitle({
       <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
 
       <div className="relative h-14 w-full md:h-16">
-        <h2 id={headingId} className="sr-only">
+        <HeadingTag id={headingId} className="sr-only">
           {text}
-        </h2>
+        </HeadingTag>
 
         {letterData.map(
           ({ letter, startX, finalX, startScale, finalScale }, index) => {
