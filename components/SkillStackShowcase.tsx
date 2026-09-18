@@ -64,7 +64,7 @@ export default function SkillStackShowcase({
         role="tablist"
         aria-label="Skill categories"
         id={tablistId}
-        className="relative z-30 -mx-2 flex gap-2 overflow-x-auto px-2 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="tablist-fade relative z-30 -mx-2 flex gap-2 overflow-x-auto px-2 pb-6 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {categories.map((category) => {
           const isActive = activeCategory === category.key;
