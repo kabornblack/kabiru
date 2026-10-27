@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function PortfolioPage() {
   return (
-    <div className="min-h-screen bg-[var(--page-bg)]">
+    <div className="min-h-screen">
       <Portfolio />
     </div>
   );

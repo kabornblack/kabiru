@@ -43,7 +43,7 @@ const TechMarquee = ({ reducedMotion }: { reducedMotion: boolean }) => {
   if (reducedMotion) {
     return (
       <div className="absolute inset-x-0 bottom-5 w-full px-5 sm:bottom-7 sm:px-8">
-        <ul className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-[var(--border-subtle)] pt-4">
+        <ul className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-4">
           {techStack.map((tech) => (
             <li
               key={tech.name}
@@ -62,7 +62,7 @@ const TechMarquee = ({ reducedMotion }: { reducedMotion: boolean }) => {
 
   return (
     <div className="absolute inset-x-0 bottom-5 w-full px-3 sm:bottom-7 sm:px-6">
-      <div className="mx-auto max-w-5xl border-t border-[var(--border-subtle)] pt-4">
+      <div className="mx-auto max-w-5xl pt-4">
         <div className="marquee-fade relative overflow-hidden">
           <motion.div
             className="flex w-max gap-8 py-1 pr-8"
@@ -96,7 +96,7 @@ export function Hero() {
   const reducedMotion = Boolean(prefersReducedMotion);
 
   return (
-    <div className="relative mx-auto flex min-h-[88svh] max-w-7xl flex-col items-center justify-center overflow-hidden bg-[var(--page-bg)] px-5 pb-24 pt-24 md:min-h-[90svh] md:pt-28">
+    <div className="relative mx-auto flex min-h-[88svh] max-w-7xl flex-col items-center justify-center overflow-hidden px-5 pb-24 pt-24 md:min-h-[90svh] md:pt-28">
       <div className="relative z-20 mx-auto max-w-3xl text-center">
         <h1 className="font-display text-4xl font-bold leading-none text-[var(--gold)] md:text-6xl lg:text-7xl">
           Kabiru Shaibu

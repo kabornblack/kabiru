@@ -26,6 +26,11 @@ function SocialIcon({
   );
 }
 
+export const SOCIAL_LINKS = {
+  linkedin: "https://www.linkedin.com/in/kabiru-shaibu-a81082164/",
+  github: "https://github.com/kabornblack",
+} as const;
+
 function Socials({ compact = false }: { compact?: boolean }) {
   return (
     <div
@@ -36,12 +41,12 @@ function Socials({ compact = false }: { compact?: boolean }) {
     >
       <SocialIcon
         icon={FaLinkedin}
-        href="https://www.linkedin.com/in/kabiru-shaibu-a81082164/"
+        href={SOCIAL_LINKS.linkedin}
         label="Kabiru Shaibu on LinkedIn"
       />
       <SocialIcon
         icon={FaGithub}
-        href="https://github.com/kabornblack"
+        href={SOCIAL_LINKS.github}
         label="Kabiru Shaibu on GitHub"
       />
     </div>
