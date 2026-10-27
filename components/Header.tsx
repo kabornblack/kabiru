@@ -7,8 +7,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import {
   FaBars,
   FaBriefcase,
-  FaChalkboardTeacher,
-  FaEnvelope,
+  // FaChalkboardTeacher,
+  // FaEnvelope,
   FaHome,
   FaPalette,
   FaRobot,
@@ -49,13 +49,13 @@ const navLinks: NavLink[] = [
     icon: FaBriefcase,
     match: "portfolio",
   },
-  {
-    label: "Mentors",
-    href: "/#mentors",
-    icon: FaChalkboardTeacher,
-    match: "hash",
-    hash: "mentors",
-  },
+  // {
+  //   label: "Mentors",
+  //   href: "/#mentors",
+  //   icon: FaChalkboardTeacher,
+  //   match: "hash",
+  //   hash: "mentors",
+  // },
   {
     label: "Design",
     href: "/#design",
@@ -70,13 +70,13 @@ const navLinks: NavLink[] = [
     match: "hash",
     hash: "ai-engineering",
   },
-  {
-    label: "Contact",
-    href: "/#contact",
-    icon: FaEnvelope,
-    match: "hash",
-    hash: "contact",
-  },
+  // {
+  //   label: "Contact",
+  //   href: "/#contact",
+  //   icon: FaEnvelope,
+  //   match: "hash",
+  //   hash: "contact",
+  // },
 ];
 
 function Header() {
@@ -250,9 +250,7 @@ function Header() {
           aria-label="Home"
         >
           <FaHome className="h-5 w-5" aria-hidden="true" />
-          <span className="ml-2 text-sm tracking-[0.12em] uppercase">
-            Home
-          </span>
+          <span className="ml-2 text-sm tracking-[0.12em] uppercase">Home</span>
         </Link>
 
         <div className="hidden items-center px-4 lg:flex">
@@ -266,7 +264,9 @@ function Header() {
           className="focus-ring flex h-20 min-w-11 items-center justify-center px-4 text-[var(--text-muted)] lg:hidden"
           aria-expanded={isMenuOpen}
           aria-controls={menuId}
-          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-label={
+            isMenuOpen ? "Close navigation menu" : "Open navigation menu"
+          }
         >
           {isMenuOpen ? (
             <FaTimes className="h-6 w-6" aria-hidden="true" />

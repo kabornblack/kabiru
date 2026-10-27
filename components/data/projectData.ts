@@ -57,16 +57,16 @@ export const projects: Project[] = [
     image: "/swapify.png",
     featured: true,
   },
-  {
-    category: "Social & Community",
-    title: "Global Update",
-    description:
-      "A Next.js and TypeScript interface for browsing global information in a clean, structured layout focused on readability and fast navigation.",
-    githubUrl: "https://github.com/kabornblack/hello-world",
-    liveUrl: "https://global-update-nine.vercel.app/",
-    tags: ["Next.js", "React", "TypeScript"],
-    image: "/global.png",
-  },
+  // {
+  //   category: "Social & Community",
+  //   title: "Global Update",
+  //   description:
+  //     "A Next.js and TypeScript interface for browsing global information in a clean, structured layout focused on readability and fast navigation.",
+  //   githubUrl: "https://github.com/kabornblack/hello-world",
+  //   liveUrl: "https://global-update-nine.vercel.app/",
+  //   tags: ["Next.js", "React", "TypeScript"],
+  //   image: "/global.png",
+  // },
   {
     category: "AI & Productivity",
     title: "AI Agent Builder",
