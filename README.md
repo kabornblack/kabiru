@@ -20,7 +20,7 @@ The site showcases:
 - Frontend craftsmanship and full-stack capability
 - Web3 and SaaS-oriented work
 - Skills organised by depth of experience
-- Contact options, scheduling and CV download
+- Contact options and CV download
 
 The implementation itself is part of the portfolio: dark editorial UI, typed React architecture, accessible interactions and a production Next.js App Router setup.
 
@@ -52,7 +52,7 @@ My approach prioritises:
 | **Web3** | Solana-oriented product work, wallet authentication and on-chain loyalty systems |
 | **AI** | Agent workflows and model API integration in selected projects |
 | **Architecture** | Reusable components, shared design tokens, project data abstraction and responsive layouts |
-| **Contact** | Email, LinkedIn, GitHub, Calendly booking and contact form |
+| **Contact** | Email, LinkedIn, GitHub and contact form |
 | **Resume** | Downloadable CV available from the live site |
 
 ---
@@ -104,7 +104,7 @@ Barter and donation marketplace focused on clear information architecture, respo
 | Framework | Next.js 15 (App Router), React 19, TypeScript |
 | Styling | Tailwind CSS 4, CSS design tokens |
 | Motion | Framer Motion, tsparticles (hero accents) |
-| Forms & booking | EmailJS, react-calendly |
+| Forms | EmailJS |
 | UI utilities | clsx, tailwind-merge, react-icons, Heroicons |
 
 ### Frontend
@@ -197,7 +197,7 @@ Implementation details that reflect how I build product software:
 - **Accessibility** — Semantic landmarks, labelled icon links, form labels, live status region, keyboard-friendly nav
 - **TypeScript throughout** — Strict typing for data models and component props
 - **Image optimisation** — `next/image` with meaningful `sizes` and priority for primary featured media
-- **Contact paths** — EmailJS form, Calendly embed, mailto and CV download without exposing private service secrets in UI copy
+- **Contact paths** — EmailJS form, mailto and CV download without exposing private service secrets in UI copy
 
 ---
 
@@ -223,7 +223,6 @@ kabiru/
 │   ├── Header.tsx
 │   ├── Contact.tsx
 │   ├── ContactForm.tsx
-│   ├── CalendlyBooking.tsx
 │   ├── Socials.tsx
 │   ├── data/
 │   │   └── projectData.ts  # Projects, categories, featured order
@@ -293,8 +292,6 @@ I built it to show how I think about products, how I structure interfaces and ho
 | **GitHub** | [github.com/kabornblack](https://github.com/kabornblack) |
 | **CV** | Download from the live site (`/Kabiru-Shaibu-Frontend-Engineer-CV.pdf`) |
 | **Portfolio** | Deployed Next.js application from this repository |
-
-You can also schedule a meeting through Calendly from the Contact section of the site.
 
 ---
 

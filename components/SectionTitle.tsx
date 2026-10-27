@@ -29,7 +29,7 @@ type SectionTitleProps = {
 /**
  * Shared animated section headline: letters fly in from the screen edges and
  * settle into the title as the section scrolls into view. Extracted so every
- * section (About, Portfolio, Mentors, Design, AI Engineering, ...) shares one
+ * section (About, Portfolio, Design, AI Engineering, ...) shares one
  * implementation instead of re-deriving the same ~80 lines per component.
  */
 export default function SectionTitle({
@@ -130,7 +130,6 @@ export default function SectionTitle({
 
   return (
     <div ref={dividerRef} className="section-title-wrap max-w-6xl">
-      <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
 
       <div className="relative h-14 w-full md:h-16">
         <HeadingTag id={headingId} className="sr-only">

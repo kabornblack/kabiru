@@ -6,13 +6,14 @@ import Contact from "@/components/Contact";
 import Header from "@/components/Header";
 import AboutPage from "@/components/About";
 import HomePortfolioShowcase from "@/components/PortfolioShowcase";
-import Mentors from "@/components/Mentors";
 import Design from "@/components/Design";
 import AIEngineering from "@/components/AIEngineering";
+import GridBackground from "@/components/GridBackground";
 
 export default function Home() {
   return (
-    <div className="h-screen scroll-smooth bg-[var(--page-bg)]">
+    <div className="h-screen scroll-smooth">
+      <GridBackground />
       <main
         id="page-scroll-container"
         className="h-full overflow-y-auto overflow-x-hidden scroll-smooth"
@@ -38,13 +39,12 @@ export default function Home() {
           <Skills />
         </section>
         <HomePortfolioShowcase />
-        <Mentors />
         <Design />
         <AIEngineering />
         <section id="contact" aria-label="Contact" className="pb-8">
           <Contact />
         </section>
-        <footer className="flex w-full items-center justify-center border-t border-[var(--border-subtle)] px-5 py-10">
+        <footer className="flex w-full items-center justify-center px-5 py-10">
           <div className="max-w-xl text-center">
             <p className="text-sm leading-relaxed text-[var(--text-muted)] md:text-base">
               Building products with scalability, usability and long-term

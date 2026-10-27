@@ -1,293 +1,186 @@
 "use client";
 
+import { motion } from "framer-motion";
+import SectionTitle from "./SectionTitle";
 import {
-  CSSProperties,
-  ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import { useReducedMotion } from "framer-motion";
+  CodeArray,
+  CodePunct,
+  CodeString,
+  CodeWindow,
+  StackedConnector,
+  useReveal,
+} from "./CodeWindow";
 
-const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
+type ProfileValue = string | string[];
 
-const clamp = (value: number, min: number, max: number): number =>
-  Math.min(Math.max(value, min), max);
+const PROFILE: [key: string, value: ProfileValue][] = [
+  ["name", "Kabiru Shaibu"],
+  ["role", "Full-stack product engineer"],
+  [
+    "focus",
+    "Reliable, user-friendly software that solves real business problems and remains maintainable as products grow",
+  ],
+  ["builds", ["Customer-facing SaaS products", "Internal operational tools"]],
+  [
+    "stack",
+    ["React", "TypeScript", "Node.js", "PostgreSQL", "Modern cloud technologies"],
+  ],
+  [
+    "recentWork",
+    [
+      "Loyalty infrastructure",
+      "Prediction platforms",
+      "Secure dashboards",
+      "Workflow automation",
+    ],
+  ],
+];
 
-/** Deterministic per-card timing so glows never sync and stay calm. */
-const GLOW_TIMINGS = [
-  { duration: 14, delay: 0, reverse: false },
-  { duration: 9.5, delay: 2.8, reverse: true },
-  { duration: 17, delay: 1.2, reverse: false },
-  { duration: 11.5, delay: 4.6, reverse: true },
-  { duration: 15.5, delay: 0.7, reverse: false },
-  { duration: 12.5, delay: 3.4, reverse: true },
-] as const;
+const PHILOSOPHY = [
+  "I balance delivery speed with security, usability, and long-term maintainability.",
+  "I use AI-assisted development to improve planning, implementation, debugging, and documentation without replacing careful engineering judgement.",
+];
 
-interface ContentSectionProps {
-  title: string;
-  children: ReactNode;
-  glowDuration: number;
-  glowDelay: number;
-  glowReverse: boolean;
-  reducedMotion: boolean | null;
-}
+const DETAILS = [
+  {
+    title: "How I Work",
+    body: "I take ownership from product discovery and architecture through implementation, testing, deployment, and continuous improvement. I collaborate closely with stakeholders and engineering teams to turn business requirements into practical, scalable solutions.",
+  },
+  {
+    title: "What I Value",
+    body: "Clarity, ownership, and honest trade-offs. I prefer simple systems that teams can reason about, feedback that improves the product, and collaboration that keeps users and business outcomes at the centre of every decision.",
+  },
+  {
+    title: "Where I Thrive",
+    body: "I do my best work where product thinking meets engineering craft — cross-functional teams, real users, and systems that need to stay reliable as they grow. I enjoy turning ambiguity into shipped, well-structured software.",
+  },
+];
 
-interface ContentItem {
-  title: string;
-  content: ReactNode;
-}
-
-const ContentSection = ({
-  title,
-  children,
-  glowDuration,
-  glowDelay,
-  glowReverse,
-  reducedMotion,
-}: ContentSectionProps) => {
-  const glowStyle = {
-    "--about-glow-duration": `${glowDuration}s`,
-    "--about-glow-delay": `${glowDelay}s`,
-  } as CSSProperties;
-
-  return (
-    <article className="about-card h-full w-full">
-      {!reducedMotion && (
-        <span
-          className={`about-card-glow${glowReverse ? " about-card-glow--reverse" : ""}`}
-          style={glowStyle}
-          aria-hidden="true"
-        />
-      )}
-
-      <div className="about-card-inner">
-        <div className="px-4 py-3.5 md:px-5">
-          <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
-            {title}
-          </h3>
-        </div>
-
-        <div className="flex flex-1 border-t border-[var(--border-subtle)] px-4 py-4 md:px-5">
-          <div className="text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
-            {children}
-          </div>
-        </div>
-      </div>
-    </article>
-  );
-};
+const ProfileLine = ({
+  name,
+  value,
+  last,
+}: {
+  name: string;
+  value: ProfileValue;
+  last: boolean;
+}) => (
+  <div className="pl-4">
+    <span className="text-[var(--gold)]">&quot;{name}&quot;</span>
+    <CodePunct>: </CodePunct>
+    {Array.isArray(value) ? (
+      <CodeArray items={value} />
+    ) : (
+      <CodeString>{value}</CodeString>
+    )}
+    {!last && <CodePunct>,</CodePunct>}
+  </div>
+);
 
 export default function About() {
-  const dividerRef = useRef<HTMLDivElement | null>(null);
-  const [globalProgress, setGlobalProgress] = useState(0);
-  const [screenWidth, setScreenWidth] = useState(1200);
-  const reducedMotion = useReducedMotion();
-
-  useEffect(() => {
-    let frameId: number;
-
-    const updateProgress = () => {
-      if (!dividerRef.current) return;
-
-      setScreenWidth(window.innerWidth);
-
-      if (reducedMotion) {
-        setGlobalProgress(1);
-        return;
-      }
-
-      const rect = dividerRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const start = windowHeight;
-      const end = windowHeight * 0.35;
-      const raw = (start - rect.top) / (start - end);
-
-      setGlobalProgress(clamp(raw, 0, 1));
-    };
-
-    const handleScroll = () => {
-      if (frameId) {
-        cancelAnimationFrame(frameId);
-      }
-
-      frameId = requestAnimationFrame(updateProgress);
-    };
-
-    const scrollContainer = document.getElementById("page-scroll-container");
-
-    updateProgress();
-
-    window.addEventListener("resize", handleScroll);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    scrollContainer?.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
-
-    return () => {
-      if (frameId) {
-        cancelAnimationFrame(frameId);
-      }
-
-      window.removeEventListener("resize", handleScroll);
-      window.removeEventListener("scroll", handleScroll);
-      scrollContainer?.removeEventListener("scroll", handleScroll);
-    };
-  }, [reducedMotion]);
-
-  const letters = useMemo(() => "About".split(""), []);
-  const letterCount = letters.length;
-  const letterGap = screenWidth < 640 ? 44 : screenWidth < 1024 ? 58 : 72;
-
-  const letterData = useMemo(() => {
-    return letters.map((letter, index) => {
-      const finalX = (index - (letterCount - 1) / 2) * letterGap;
-
-      let startX = finalX;
-
-      if (index === 0) {
-        startX = -screenWidth / 2;
-      }
-
-      if (index === letterCount - 1) {
-        startX = screenWidth / 2;
-      }
-
-      return {
-        letter,
-        startX,
-        finalX,
-        startScale: 0.3,
-        finalScale: 1,
-      };
-    });
-  }, [letters, letterCount, letterGap, screenWidth]);
-
-  const progress = reducedMotion ? 1 : easeOutCubic(globalProgress);
-
-  const content: ContentItem[] = [
-    {
-      title: "Who I Am",
-      content: (
-        <p>
-          I&apos;m{" "}
-          <span className="font-semibold text-[var(--gold)]">
-            Kabiru Shaibu
-          </span>
-          , a full-stack product engineer focused on building reliable,
-          user-friendly software that solves real business problems and remains
-          maintainable as products grow.
-        </p>
-      ),
-    },
-    {
-      title: "What I Build",
-      content: (
-        <p>
-          I build customer-facing SaaS products and internal operational tools
-          using React, TypeScript, Node.js, PostgreSQL, and modern cloud
-          technologies. My recent work includes loyalty infrastructure,
-          prediction platforms, secure dashboards, and workflow automation.
-        </p>
-      ),
-    },
-    {
-      title: "How I Work",
-      content: (
-        <p>
-          I take ownership from product discovery and architecture through
-          implementation, testing, deployment, and continuous improvement. I
-          collaborate closely with stakeholders and engineering teams to turn
-          business requirements into practical, scalable solutions.
-        </p>
-      ),
-    },
-    {
-      title: "Engineering Philosophy",
-      content: (
-        <p>
-          I balance delivery speed with security, usability, and long-term
-          maintainability. I use AI-assisted development to improve planning,
-          implementation, debugging, and documentation without replacing careful
-          engineering judgement.
-        </p>
-      ),
-    },
-    {
-      title: "What I Value",
-      content: (
-        <p>
-          Clarity, ownership, and honest trade-offs. I prefer simple systems
-          that teams can reason about, feedback that improves the product, and
-          collaboration that keeps users and business outcomes at the centre of
-          every decision.
-        </p>
-      ),
-    },
-    {
-      title: "Where I Thrive",
-      content: (
-        <p>
-          I do my best work where product thinking meets engineering craft —
-          cross-functional teams, real users, and systems that need to stay
-          reliable as they grow. I enjoy turning ambiguity into shipped,
-          well-structured software.
-        </p>
-      ),
-    },
-  ];
+  const reveal = useReveal();
 
   return (
-    <section className="w-full bg-[var(--page-bg)]">
-      <div ref={dividerRef} className="section-title-wrap max-w-6xl">
-        <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
+    <section className="w-full" aria-labelledby="about-heading">
+      <SectionTitle text="About" headingId="about-heading" />
 
-        <div className="relative h-14 w-full md:h-16">
-          <h2 className="sr-only">About</h2>
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 md:px-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-center lg:gap-16 lg:px-14 lg:pt-10">
+        <motion.div {...reveal(0)}>
+          <p className="font-display text-4xl leading-[1.05] md:text-5xl">
+            <span className="block text-[var(--gold)]">Product thinking</span>
+            <span className="block text-[var(--text-primary)]">
+              meets engineering craft.
+            </span>
+          </p>
+          <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
+            Building reliable, user-friendly software that solves real business
+            problems.
+          </p>
+        </motion.div>
 
-          {letterData.map(
-            ({ letter, startX, finalX, startScale, finalScale }, index) => {
-              const currentX = startX + (finalX - startX) * progress;
+        <StackedConnector />
 
-              const scale = startScale + (finalScale - startScale) * progress;
+        <div className="lg:pb-6">
+          <motion.div className="code-window-stage relative" {...reveal(0.1)}>
+            {/* Headline → profile panel; ends ~14px inside the box because
+                the tilt pulls the panel's visible left edge inward. */}
+            <svg
+              aria-hidden="true"
+              className="code-connector pointer-events-none absolute top-1/2 right-[calc(100%-14px)] hidden -translate-y-1/2 lg:block"
+              width="78"
+              height="8"
+              viewBox="0 0 78 8"
+            >
+              <line x1="3" y1="4" x2="75" y2="4" />
+              <circle cx="3" cy="4" r="3" />
+              <circle cx="75" cy="4" r="3" />
+            </svg>
 
-              return (
-                <span
-                  key={`${letter}-${index}`}
-                  aria-hidden="true"
-                  style={{
-                    left: "50%",
-                    transform: `translateX(${currentX}px) translateY(-50%) scale(${scale})`,
-                    opacity: progress,
-                  }}
-                  className="font-display absolute top-1/2 -translate-x-1/2 text-3xl font-black uppercase text-[var(--gold)] md:text-4xl"
-                >
-                  {letter}
-                </span>
-              );
-            },
-          )}
+            <CodeWindow
+              title="profile.json"
+              className="code-window--tilted about-window--primary"
+            >
+              <CodePunct>{"{"}</CodePunct>
+              {PROFILE.map(([name, value], index) => (
+                <ProfileLine
+                  key={name}
+                  name={name}
+                  value={value}
+                  last={index === PROFILE.length - 1}
+                />
+              ))}
+              <CodePunct>{"}"}</CodePunct>
+            </CodeWindow>
+          </motion.div>
+
+          <StackedConnector />
+
+          <motion.div
+            className="code-window-stage relative lg:-mt-6 lg:-ml-8 lg:w-[86%]"
+            {...reveal(0.2)}
+          >
+            {/* Profile panel → philosophy panel (elbow off the right edge) */}
+            <svg
+              aria-hidden="true"
+              className="code-connector pointer-events-none absolute top-6 left-full hidden overflow-visible lg:block"
+              width="44"
+              height="52"
+              viewBox="0 0 44 52"
+            >
+              <path d="M0 48 H40 V0" />
+              <circle cx="0" cy="48" r="3" />
+              <circle cx="40" cy="48" r="2" />
+              <circle cx="40" cy="0" r="3" />
+            </svg>
+
+            <CodeWindow
+              title="philosophy.ts"
+              className="code-window--tilted about-window--secondary"
+            >
+              <div className="space-y-3">
+                {PHILOSOPHY.map((point) => (
+                  <div key={point} className="grid grid-cols-[auto_1fr] gap-x-2">
+                    <span className="text-[var(--gold)]">{"//"}</span>
+                    <span className="text-[var(--text-muted)]">{point}</span>
+                  </div>
+                ))}
+              </div>
+            </CodeWindow>
+          </motion.div>
         </div>
       </div>
 
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 auto-rows-fr gap-3 px-6 pb-4 md:grid-cols-2 md:gap-4 md:px-10 lg:px-14">
-        {content.map((section, index) => {
-          const timing = GLOW_TIMINGS[index] ?? GLOW_TIMINGS[0];
-
-          return (
-            <ContentSection
-              key={section.title}
-              title={section.title}
-              glowDuration={timing.duration}
-              glowDelay={timing.delay}
-              glowReverse={timing.reverse}
-              reducedMotion={reducedMotion}
-            >
-              {section.content}
-            </ContentSection>
-          );
-        })}
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 px-6 pt-14 pb-4 md:grid-cols-3 md:px-10 lg:px-14">
+        {DETAILS.map((detail, index) => (
+          <motion.div key={detail.title} {...reveal(0.1 * index)}>
+            <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
+              {detail.title}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
+              {detail.body}
+            </p>
+          </motion.div>
+        ))}
       </div>
     </section>
   );

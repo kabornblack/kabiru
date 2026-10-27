@@ -1,103 +1,60 @@
 "use client";
 
-import React, { useEffect, useId, useMemo, useRef, useState } from "react";
-import { MapPinIcon } from "@heroicons/react/24/solid";
-import { motion, useReducedMotion } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import Script from "next/script";
-import dynamic from "next/dynamic";
-import { FaEnvelope, FaFileDownload } from "react-icons/fa";
 import ContactForm from "./ContactForm";
-import Socials from "./Socials";
+import SectionTitle from "./SectionTitle";
+import { SOCIAL_LINKS } from "./Socials";
 import {
-  CV_FILENAME,
-  CV_URL,
-  PUBLIC_EMAIL,
-  PUBLIC_EMAIL_MAILTO,
-} from "@/lib/contact";
+  CodePunct,
+  CodeString,
+  CodeWindow,
+  StackedConnector,
+  useReveal,
+} from "./CodeWindow";
+import { PUBLIC_EMAIL, PUBLIC_EMAIL_MAILTO } from "@/lib/contact";
 
-const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
-const clamp = (value: number, min: number, max: number): number =>
-  Math.min(Math.max(value, min), max);
+const Key = ({ children }: { children: string }) => (
+  <span className="text-[var(--gold)]">&quot;{children}&quot;</span>
+);
 
-// react-calendly only ships to visitors who actually open this tab, instead
-// of shipping on every home-page load for a feature most people won't use.
-const CalendlyBooking = dynamic(() => import("./CalendlyBooking"), {
-  ssr: false,
-  loading: () => (
-    <div
-      className="flex min-h-[320px] items-center justify-center text-sm text-[var(--text-muted)]"
-      role="status"
-    >
-      Loading scheduling calendar…
-    </div>
-  ),
-});
+const linkClass =
+  "focus-ring text-[var(--text-primary)] underline decoration-[rgba(184,134,11,0.5)] underline-offset-4 transition-colors hover:text-[var(--gold)]";
+
+function CopyEmail() {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(PUBLIC_EMAIL);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard blocked (insecure context, permissions): open the mail client instead.
+      window.location.href = PUBLIC_EMAIL_MAILTO;
+    }
+  };
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={copy}
+        aria-label={`Copy email address ${PUBLIC_EMAIL}`}
+        className="focus-ring ml-2 inline-flex min-h-8 items-center rounded-[var(--radius-sm)] bg-white/[0.06] px-2 align-middle text-[13px] text-[var(--text-muted)] transition-colors hover:text-[var(--gold)]"
+      >
+        {copied ? "copied" : "copy"}
+      </button>
+      <span className="sr-only" aria-live="polite">
+        {copied ? "Copied" : ""}
+      </span>
+    </>
+  );
+}
 
 function Contact() {
-  const [activeTab, setActiveTab] = useState<"message" | "meeting">("message");
-  const dividerRef = useRef<HTMLDivElement | null>(null);
-  const [globalProgress, setGlobalProgress] = useState(0);
-  const [screenWidth, setScreenWidth] = useState(1200);
-  const tabId = useId();
-  const reducedMotion = useReducedMotion();
-  const CALENDLY_URL = "https://calendly.com/kabornblack";
-
-  useEffect(() => {
-    let frameId: number;
-
-    const updateProgress = () => {
-      if (!dividerRef.current) return;
-      setScreenWidth(window.innerWidth);
-
-      if (reducedMotion) {
-        setGlobalProgress(1);
-        return;
-      }
-
-      const rect = dividerRef.current.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const start = windowHeight;
-      const end = windowHeight * 0.35;
-      const raw = (start - rect.top) / (start - end);
-      setGlobalProgress(clamp(raw, 0, 1));
-    };
-
-    const handleScroll = () => {
-      if (frameId) cancelAnimationFrame(frameId);
-      frameId = requestAnimationFrame(updateProgress);
-    };
-
-    const scrollContainer = document.getElementById("page-scroll-container");
-    updateProgress();
-    window.addEventListener("resize", handleScroll);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    scrollContainer?.addEventListener("scroll", handleScroll, {
-      passive: true,
-    });
-
-    return () => {
-      if (frameId) cancelAnimationFrame(frameId);
-      window.removeEventListener("resize", handleScroll);
-      window.removeEventListener("scroll", handleScroll);
-      scrollContainer?.removeEventListener("scroll", handleScroll);
-    };
-  }, [reducedMotion]);
-
-  const letters = useMemo(() => "Contact".split(""), []);
-  const letterCount = letters.length;
-  const letterGap = screenWidth < 640 ? 34 : screenWidth < 1024 ? 48 : 62;
-
-  const letterData = useMemo(() => {
-    return letters.map((letter, idx) => {
-      const finalX = (idx - (letterCount - 1) / 2) * letterGap;
-      let startX = finalX;
-      if (idx === 0) startX = -screenWidth / 2;
-      if (idx === letterCount - 1) startX = screenWidth / 2;
-      return { letter, startX, finalX, startScale: 0.3, finalScale: 1 };
-    });
-  }, [letters, letterCount, letterGap, screenWidth]);
-
-  const progress = reducedMotion ? 1 : easeOutCubic(globalProgress);
+  const reveal = useReveal();
 
   return (
     <div className="relative">
@@ -106,139 +63,127 @@ function Contact() {
         strategy="afterInteractive"
       />
 
-      <div className="mx-auto flex max-w-7xl flex-col justify-center pt-2 text-center md:pt-4">
-        <div ref={dividerRef} className="section-title-wrap">
-          <div className="pointer-events-none absolute inset-x-6 top-1/2 h-px -translate-y-1/2 bg-gradient-to-r from-transparent via-[rgba(184,134,11,0.3)] to-transparent" />
-          <div className="relative h-14 w-full md:h-16">
-            <h2 className="sr-only">Contact</h2>
-            {letterData.map(
-              ({ letter, startX, finalX, startScale, finalScale }, idx) => {
-                const currentX = startX + (finalX - startX) * progress;
-                const scale = startScale + (finalScale - startScale) * progress;
-                return (
-                  <span
-                    key={`${letter}-${idx}`}
-                    aria-hidden="true"
-                    style={{
-                      left: "50%",
-                      transform: `translateX(${currentX}px) translateY(-50%) scale(${scale})`,
-                      opacity: progress,
-                    }}
-                    className="font-display absolute top-1/2 -translate-x-1/2 text-3xl font-black uppercase text-[var(--gold)] md:text-4xl"
-                  >
-                    {letter}
-                  </span>
-                );
-              },
-            )}
-          </div>
-        </div>
+      <SectionTitle
+        text="Contact"
+        headingId="contact-heading"
+        gapSm={34}
+        gapMd={48}
+        gapLg={62}
+      />
 
-        <div className="mx-auto flex w-full max-w-3xl flex-col items-center justify-center px-5 pb-12 text-center md:px-6">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: reducedMotion ? 0 : 0.4 }}
-            viewport={{ once: true }}
-            className="max-w-xl text-sm text-[var(--text-muted)] md:text-base"
+      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 pb-6 md:px-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center lg:gap-14 lg:px-14 lg:pt-10">
+        <motion.div
+          className="relative lg:col-start-2 lg:row-start-1"
+          {...reveal(0)}
+        >
+          {/* Headline → main panel. Anchored to the headline (not the panel)
+              so it stays level with it however tall the form panel is; spans
+              the 56px column gap to the flat panel's right edge. */}
+          <svg
+            aria-hidden="true"
+            className="code-connector pointer-events-none absolute top-1/2 right-full hidden -translate-y-1/2 lg:block"
+            width="56"
+            height="8"
+            viewBox="0 0 56 8"
           >
-            Open to roles where strong frontend craft meets full-stack product
-            ownership. Let&apos;s talk.
-          </motion.p>
+            <line x1="3" y1="4" x2="53" y2="4" />
+            <circle cx="3" cy="4" r="3" />
+            <circle cx="53" cy="4" r="3" />
+          </svg>
+          <p className="font-display text-4xl leading-[1.05] md:text-5xl">
+            <span className="block text-[var(--gold)]">Open to roles.</span>
+            <span className="block text-[var(--text-primary)]">
+              Let&apos;s talk.
+            </span>
+          </p>
+          <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
+            Where strong frontend craft meets full-stack product ownership.
+          </p>
+        </motion.div>
 
-          <div className="mt-3 flex items-center justify-center gap-2 text-[var(--text-muted)]">
-            <MapPinIcon
-              className="h-4 w-4 text-[var(--gold)]"
+        <StackedConnector />
+
+        <div className="lg:col-start-1 lg:row-start-1 lg:pb-6">
+          {/* No tilt on either panel: the main one holds a form. */}
+          <motion.div className="code-window-stage relative" {...reveal(0.1)}>
+            <CodeWindow title="message.ts">
+              <ContactForm />
+            </CodeWindow>
+          </motion.div>
+
+          <StackedConnector />
+
+          <motion.div
+            className="code-window-stage relative lg:-mt-3 lg:-mr-8 lg:ml-auto lg:w-[86%]"
+            {...reveal(0.2)}
+          >
+            {/* Main panel → contact.json (elbow off the left edge) */}
+            <svg
               aria-hidden="true"
-            />
-            <p className="text-sm md:text-base">Tallinn, Estonia</p>
-          </div>
-
-          <div className="mt-4 mb-6 flex flex-col items-center gap-4">
-            <a
-              href={PUBLIC_EMAIL_MAILTO}
-              aria-label={`Email Kabiru Shaibu at ${PUBLIC_EMAIL}`}
-              className="focus-ring inline-flex items-center gap-2 text-sm text-[var(--text-muted)] transition-colors hover:text-[var(--gold)] md:text-base"
+              className="code-connector pointer-events-none absolute top-3 right-full hidden lg:block"
+              width="44"
+              height="52"
+              viewBox="0 0 44 52"
             >
-              <FaEnvelope
-                className="h-4 w-4 text-[var(--gold)]"
-                aria-hidden="true"
-              />
-              <span>{PUBLIC_EMAIL}</span>
-            </a>
+              <path d="M44 48 H4 V0" />
+              <circle cx="44" cy="48" r="3" />
+              <circle cx="4" cy="48" r="2" />
+              <circle cx="4" cy="0" r="3" />
+            </svg>
 
-            <div className="flex flex-wrap items-center justify-center gap-3">
-              <Socials />
-              <a
-                href={CV_URL}
-                download={CV_FILENAME}
-                aria-label="Download Kabiru Shaibu CV PDF"
-                className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-sm)] border border-[var(--border-subtle)] px-4 text-xs tracking-[0.12em] text-[var(--text-muted)] uppercase transition-colors hover:border-[var(--border-gold)] hover:text-[var(--gold)]"
-              >
-                <FaFileDownload className="h-4 w-4" aria-hidden="true" />
-                Download CV
-              </a>
-            </div>
-          </div>
-
-          <div className="surface-card w-full p-5 md:p-7">
-            <div
-              role="tablist"
-              aria-label="Contact options"
-              className="mb-6 inline-flex w-full rounded-[var(--radius-sm)] border border-[var(--border-subtle)] bg-black/20 p-1"
-            >
-              <button
-                id={`${tabId}-message`}
-                type="button"
-                role="tab"
-                aria-selected={activeTab === "message"}
-                aria-controls={`${tabId}-message-panel`}
-                onClick={() => setActiveTab("message")}
-                className={[
-                  "focus-ring min-h-10 flex-1 rounded-[5px] px-3 py-2.5 text-xs font-semibold tracking-[0.08em] uppercase transition-all duration-200 md:text-sm",
-                  activeTab === "message"
-                    ? "bg-[rgba(184,134,11,0.18)] text-[var(--gold)] shadow-[var(--shadow-gold)]"
-                    : "text-[var(--text-muted)] hover:text-[var(--gold)]",
-                ].join(" ")}
-              >
-                Send a Message
-              </button>
-              <button
-                id={`${tabId}-meeting`}
-                type="button"
-                role="tab"
-                aria-selected={activeTab === "meeting"}
-                aria-controls={`${tabId}-meeting-panel`}
-                onClick={() => setActiveTab("meeting")}
-                className={[
-                  "focus-ring min-h-10 flex-1 rounded-[5px] px-3 py-2.5 text-xs font-semibold tracking-[0.08em] uppercase transition-all duration-200 md:text-sm",
-                  activeTab === "meeting"
-                    ? "bg-[rgba(184,134,11,0.18)] text-[var(--gold)] shadow-[var(--shadow-gold)]"
-                    : "text-[var(--text-muted)] hover:text-[var(--gold)]",
-                ].join(" ")}
-              >
-                Schedule a Meeting
-              </button>
-            </div>
-
-            {activeTab === "message" ? (
-              <div
-                id={`${tabId}-message-panel`}
-                role="tabpanel"
-                aria-labelledby={`${tabId}-message`}
-              >
-                <ContactForm />
+            <CodeWindow title="contact.json">
+              <CodePunct>{"{"}</CodePunct>
+              <div className="space-y-1 pl-4">
+                <div>
+                  <Key>email</Key>
+                  <CodePunct>: </CodePunct>
+                  <a
+                    href={PUBLIC_EMAIL_MAILTO}
+                    aria-label={`Email Kabiru Shaibu at ${PUBLIC_EMAIL}`}
+                    className={linkClass}
+                  >
+                    &quot;{PUBLIC_EMAIL}&quot;
+                  </a>
+                  <CodePunct>,</CodePunct>
+                  <CopyEmail />
+                </div>
+                <div>
+                  <Key>location</Key>
+                  <CodePunct>: </CodePunct>
+                  <CodeString>Tallinn, Estonia</CodeString>
+                  <CodePunct>,</CodePunct>
+                </div>
+                <div>
+                  <Key>linkedin</Key>
+                  <CodePunct>: </CodePunct>
+                  <a
+                    href={SOCIAL_LINKS.linkedin}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Kabiru Shaibu on LinkedIn (opens in a new tab)"
+                    className={linkClass}
+                  >
+                    &quot;in/kabiru-shaibu-a81082164&quot;
+                  </a>
+                  <CodePunct>,</CodePunct>
+                </div>
+                <div>
+                  <Key>github</Key>
+                  <CodePunct>: </CodePunct>
+                  <a
+                    href={SOCIAL_LINKS.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Kabiru Shaibu on GitHub (opens in a new tab)"
+                    className={linkClass}
+                  >
+                    &quot;kabornblack&quot;
+                  </a>
+                </div>
               </div>
-            ) : (
-              <div
-                id={`${tabId}-meeting-panel`}
-                role="tabpanel"
-                aria-labelledby={`${tabId}-meeting`}
-              >
-                <CalendlyBooking url={CALENDLY_URL} />
-              </div>
-            )}
-          </div>
+              <CodePunct>{"}"}</CodePunct>
+            </CodeWindow>
+          </motion.div>
         </div>
       </div>
     </div>
