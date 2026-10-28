@@ -9,19 +9,6 @@ import {
   type ContactField,
 } from "@/lib/contactValidation";
 
-declare global {
-  interface Window {
-    confetti?: (options?: {
-      particleCount?: number;
-      angle?: number;
-      spread?: number;
-      origin?: { x?: number; y?: number };
-      colors?: string[];
-      disableForReducedMotion?: boolean;
-    }) => void;
-  }
-}
-
 type FieldName = ContactField;
 type FieldErrors = ContactErrors;
 
@@ -37,19 +24,23 @@ function ContactForm() {
   const [errors, setErrors] = useState<FieldErrors>({});
   const reducedMotion = useReducedMotion();
 
-  const triggerConfetti = () => {
-    if (reducedMotion || typeof window === "undefined" || !window.confetti) {
-      return;
-    }
+  // Loaded only after a successful send, never for reduced motion.
+  const triggerConfetti = async () => {
+    if (reducedMotion) return;
 
-    const colors = ["#B8860B", "#CD853F", "#DAA520", "#D4AF37"];
-    window.confetti({
-      particleCount: 120,
-      spread: 80,
-      origin: { y: 0.55, x: 0.5 },
-      colors,
-      disableForReducedMotion: true,
-    });
+    try {
+      const { default: confetti } = await import("canvas-confetti");
+      const colors = ["#B8860B", "#CD853F", "#DAA520", "#D4AF37"];
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.55, x: 0.5 },
+        colors,
+        disableForReducedMotion: true,
+      });
+    } catch {
+      // Purely decorative; a failed chunk load must not affect the form.
+    }
   };
 
   const clearError = (field: FieldName) => {
@@ -94,7 +85,7 @@ function ContactForm() {
       setStatus("success");
       setStatusMessage("Message sent successfully. Thank you!");
       form.current.reset();
-      triggerConfetti();
+      void triggerConfetti();
     } catch {
       setStatus("error");
       setStatusMessage("Something went wrong. Please try again.");

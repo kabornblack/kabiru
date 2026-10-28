@@ -31,14 +31,9 @@ export const SOCIAL_LINKS = {
   github: "https://github.com/kabornblack",
 } as const;
 
-function Socials({ compact = false }: { compact?: boolean }) {
+function Socials() {
   return (
-    <div
-      className={[
-        "z-50 flex items-center",
-        compact ? "gap-2" : "gap-3 lg:gap-4",
-      ].join(" ")}
-    >
+    <div className="z-50 flex items-center gap-3 lg:gap-4">
       <SocialIcon
         icon={FaLinkedin}
         href={SOCIAL_LINKS.linkedin}

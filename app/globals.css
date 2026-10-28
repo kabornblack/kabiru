@@ -13,16 +13,12 @@
   --focus-ring: #d4a017;
   --radius-sm: 6px;
   --radius-md: 10px;
-  --radius-lg: 14px;
   --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.28);
-  --shadow-card-hover: 0 14px 36px rgba(0, 0, 0, 0.4);
   --shadow-gold: 0 0 0 1px rgba(184, 134, 11, 0.28),
     0 10px 28px rgba(184, 134, 11, 0.08);
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 180ms;
   --duration: 280ms;
-  --background: var(--page-bg);
-  --foreground: var(--text-primary);
 }
 
 @theme inline {
@@ -65,7 +61,16 @@ body {
   line-height: 1.6;
 }
 
-.font-protest,
+/* Home page scroll container: scrolls without a visible scrollbar. */
+#page-scroll-container {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+#page-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
 .font-display {
   font-family: var(--font-protest), var(--font-quicksand), sans-serif;
 }
@@ -135,11 +140,6 @@ body {
     transform var(--duration) var(--ease-premium);
 }
 
-.surface-card-interactive:hover {
-  box-shadow: var(--shadow-card-hover);
-  transform: translateY(-2px);
-}
-
 .field-input {
   width: 100%;
   border: 1px solid var(--border-subtle);
@@ -201,24 +201,6 @@ body {
     #000 94%,
     transparent 100%
   );
-}
-
-@keyframes portfolioScroll {
-  from {
-    transform: translateY(0);
-  }
-  to {
-    transform: translateY(-50%);
-  }
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
 }
 
 /* Floating "open to opportunities" chip: same dark glass and gold edge as the

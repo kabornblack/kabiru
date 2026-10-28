@@ -7,8 +7,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   FaBars,
   FaBriefcase,
-  // FaChalkboardTeacher,
-  // FaEnvelope,
   FaHome,
   FaPalette,
   FaRobot,
@@ -49,13 +47,6 @@ const navLinks: NavLink[] = [
     icon: FaBriefcase,
     match: "portfolio",
   },
-  // {
-  //   label: "Mentors",
-  //   href: "/#mentors",
-  //   icon: FaChalkboardTeacher,
-  //   match: "hash",
-  //   hash: "mentors",
-  // },
   {
     label: "Design",
     href: "/#design",
@@ -70,13 +61,6 @@ const navLinks: NavLink[] = [
     match: "hash",
     hash: "ai-engineering",
   },
-  // {
-  //   label: "Contact",
-  //   href: "/#contact",
-  //   icon: FaEnvelope,
-  //   match: "hash",
-  //   hash: "contact",
-  // },
 ];
 
 function Header() {
@@ -106,12 +90,13 @@ function Header() {
     const updateActiveSection = () => {
       if (isPortfolio) return;
 
+      // "projects" and "contact" have no nav link but stay listed: scrolling
+      // into them clears the previous section's highlight.
       const sections = [
         "home",
         "about",
         "skills",
         "projects",
-        "mentors",
         "design",
         "ai-engineering",
         "contact",
@@ -175,6 +160,10 @@ function Header() {
     return activeHash === link.hash;
   };
 
+  // /portfolio is a page; the rest are positions within the home page.
+  const ariaCurrent = (link: NavLink) =>
+    isActive(link) ? (link.match === "portfolio" ? "page" : "location") : undefined;
+
   const handleNavClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
     link: NavLink,
@@ -216,7 +205,7 @@ function Header() {
                 key={link.label}
                 href={link.href}
                 aria-label={link.label}
-                aria-current={active ? "page" : undefined}
+                aria-current={ariaCurrent(link)}
                 title={link.label}
                 onClick={(event) => handleNavClick(event, link)}
                 className={[
@@ -296,7 +285,7 @@ function Header() {
                       key={link.label}
                       href={link.href}
                       onClick={(event) => handleNavClick(event, link)}
-                      aria-current={active ? "page" : undefined}
+                      aria-current={ariaCurrent(link)}
                       className={[
                         "focus-ring flex min-h-12 items-center gap-3 rounded-md px-3 py-3 text-sm tracking-[0.12em] uppercase transition-colors",
                         active

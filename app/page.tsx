@@ -17,16 +17,7 @@ export default function Home() {
       <main
         id="page-scroll-container"
         className="h-full overflow-y-auto overflow-x-hidden scroll-smooth"
-        style={{
-          msOverflowStyle: "none",
-          scrollbarWidth: "none",
-        }}
       >
-        <style jsx>{`
-          main::-webkit-scrollbar {
-            display: none;
-          }
-        `}</style>
         <Header />
 
         <section id="home" aria-label="Home" className="pb-8">

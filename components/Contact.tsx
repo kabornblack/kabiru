@@ -2,7 +2,6 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import Script from "next/script";
 import ContactForm from "./ContactForm";
 import SectionTitle from "./SectionTitle";
 import { SOCIAL_LINKS } from "./Socials";
@@ -58,11 +57,6 @@ function Contact() {
 
   return (
     <div className="relative">
-      <Script
-        src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"
-        strategy="afterInteractive"
-      />
-
       <SectionTitle
         text="Contact"
         headingId="contact-heading"
