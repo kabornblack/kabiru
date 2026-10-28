@@ -3,12 +3,10 @@
 import Link from "next/link";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   FaBars,
   FaBriefcase,
-  // FaChalkboardTeacher,
-  // FaEnvelope,
   FaHome,
   FaPalette,
   FaRobot,
@@ -17,7 +15,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import Socials from "./Socials";
-import { scrollToHash } from "@/lib/scroll";
+import { ACTIVE_SECTION_OFFSET, scrollToHash } from "@/lib/scroll";
 
 type NavLink = {
   label: string;
@@ -49,13 +47,6 @@ const navLinks: NavLink[] = [
     icon: FaBriefcase,
     match: "portfolio",
   },
-  // {
-  //   label: "Mentors",
-  //   href: "/#mentors",
-  //   icon: FaChalkboardTeacher,
-  //   match: "hash",
-  //   hash: "mentors",
-  // },
   {
     label: "Design",
     href: "/#design",
@@ -70,13 +61,6 @@ const navLinks: NavLink[] = [
     match: "hash",
     hash: "ai-engineering",
   },
-  // {
-  //   label: "Contact",
-  //   href: "/#contact",
-  //   icon: FaEnvelope,
-  //   match: "hash",
-  //   hash: "contact",
-  // },
 ];
 
 function Header() {
@@ -88,6 +72,7 @@ function Header() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const isPortfolio = pathname?.startsWith("/portfolio") ?? false;
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const scrollContainer = document.getElementById("page-scroll-container");
@@ -105,12 +90,13 @@ function Header() {
     const updateActiveSection = () => {
       if (isPortfolio) return;
 
+      // "projects" and "contact" have no nav link but stay listed: scrolling
+      // into them clears the previous section's highlight.
       const sections = [
         "home",
         "about",
         "skills",
         "projects",
-        "mentors",
         "design",
         "ai-engineering",
         "contact",
@@ -121,7 +107,7 @@ function Header() {
       for (const id of sections) {
         const el = document.getElementById(id);
         if (!el) continue;
-        const top = el.offsetTop - 120;
+        const top = el.offsetTop - ACTIVE_SECTION_OFFSET;
         if (scrollY >= top) current = id;
       }
 
@@ -174,6 +160,10 @@ function Header() {
     return activeHash === link.hash;
   };
 
+  // /portfolio is a page; the rest are positions within the home page.
+  const ariaCurrent = (link: NavLink) =>
+    isActive(link) ? (link.match === "portfolio" ? "page" : "location") : undefined;
+
   const handleNavClick = (
     event: React.MouseEvent<HTMLAnchorElement>,
     link: NavLink,
@@ -192,11 +182,12 @@ function Header() {
     }
   };
 
+  // h-20 / top-20 here are HEADER_HEIGHT in lib/scroll.ts; keep them in sync.
   return (
     <motion.header
       initial={false}
       animate={{ y: showHeader ? 0 : "-100%" }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      transition={{ duration: reducedMotion ? 0 : 0.3, ease: "easeInOut" }}
       className={[
         "fixed top-0 left-0 z-50 h-20 w-full border-b transition-colors duration-300",
         scrolled
@@ -215,7 +206,7 @@ function Header() {
                 key={link.label}
                 href={link.href}
                 aria-label={link.label}
-                aria-current={active ? "page" : undefined}
+                aria-current={ariaCurrent(link)}
                 title={link.label}
                 onClick={(event) => handleNavClick(event, link)}
                 className={[
@@ -282,7 +273,7 @@ function Header() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: reducedMotion ? 0 : 0.2 }}
               className="absolute top-20 left-0 z-50 w-full border-b border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-4 shadow-2xl lg:hidden"
             >
               <nav aria-label="Mobile primary" className="flex flex-col gap-1">
@@ -295,11 +286,11 @@ function Header() {
                       key={link.label}
                       href={link.href}
                       onClick={(event) => handleNavClick(event, link)}
-                      aria-current={active ? "page" : undefined}
+                      aria-current={ariaCurrent(link)}
                       className={[
                         "focus-ring flex min-h-12 items-center gap-3 rounded-md px-3 py-3 text-sm tracking-[0.12em] uppercase transition-colors",
                         active
-                          ? "bg-[rgba(184,134,11,0.12)] text-[var(--gold)]"
+                          ? "bg-[color-mix(in_srgb,var(--gold)_12%,transparent)] text-[var(--gold)]"
                           : "text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--gold)]",
                       ].join(" ")}
                     >

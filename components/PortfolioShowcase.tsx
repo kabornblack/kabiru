@@ -6,11 +6,11 @@ import { useEffect, useId, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { getFeaturedProjects, projects, type Project } from "./data/projectData";
 import SectionTitle from "./SectionTitle";
-import { hostOf } from "@/lib/url";
 import {
   CodeArray,
   CodePunct,
   CodeWindow,
+  HostPill,
   StackedConnector,
   useReveal,
 } from "./CodeWindow";
@@ -145,7 +145,7 @@ export default function HomePortfolioShowcase() {
                 role="tablist"
                 aria-label="Featured projects"
                 aria-orientation={vertical ? "vertical" : "horizontal"}
-                className="tablist-fade -mx-1 flex gap-1 overflow-x-auto px-1 [scrollbar-width:none] lg:mx-0 lg:flex-col lg:gap-0 lg:overflow-visible lg:px-0 [&::-webkit-scrollbar]:hidden"
+                className="tablist-fade -mx-1 -my-0.5 flex gap-1 overflow-x-auto px-1 py-0.5 [scrollbar-width:none] lg:mx-0 lg:flex-col lg:gap-0 lg:overflow-visible lg:px-0 [&::-webkit-scrollbar]:hidden"
               >
                 {items.map((project, index) => {
                   const isActive = index === activeIndex;
@@ -165,9 +165,9 @@ export default function HomePortfolioShowcase() {
                       onClick={() => selectIndex(index)}
                       onKeyDown={onTabKeyDown}
                       className={[
-                        "focus-ring code-tab flex h-10 shrink-0 cursor-pointer items-center rounded-[var(--radius-sm)] px-3 text-left font-mono text-[13px] whitespace-nowrap transition-colors duration-150",
+                        "focus-ring code-tab hit-target flex h-10 shrink-0 cursor-pointer items-center rounded-[var(--radius-sm)] px-3 text-left font-mono text-[13px] whitespace-nowrap transition-colors duration-150",
                         isActive
-                          ? "bg-[rgba(184,134,11,0.08)] text-[var(--gold)] shadow-[inset_2px_0_0_var(--gold)]"
+                          ? "bg-[color-mix(in_srgb,var(--gold)_8%,transparent)] text-[var(--gold)] shadow-[inset_2px_0_0_var(--gold)]"
                           : "text-[var(--text-muted)] hover:text-[var(--gold)]",
                       ].join(" ")}
                     >
@@ -184,11 +184,7 @@ export default function HomePortfolioShowcase() {
 
           <motion.div className="code-window-stage relative" {...reveal(0.2)}>
             <CodeWindow
-              title={
-                <span className="ml-2 min-w-0 truncate rounded-full bg-white/[0.05] px-3 py-0.5 font-mono text-[13px] text-[var(--text-muted)]">
-                  {hostOf(active.liveUrl)}
-                </span>
-              }
+              title={<HostPill url={active.liveUrl} />}
               className="code-window--tilted projects-window--main"
             >
               <div className="code-panes">

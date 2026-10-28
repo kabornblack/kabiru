@@ -1,118 +1,76 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import emailjs from "@emailjs/browser";
+import React, { useState } from "react";
 import { useReducedMotion } from "framer-motion";
+import {
+  validateContact,
+  type ContactErrors,
+  type ContactField,
+} from "@/lib/contactValidation";
+import { HoneypotField, useEmailForm } from "@/lib/useEmailForm";
 
-declare global {
-  interface Window {
-    confetti?: (options?: {
-      particleCount?: number;
-      angle?: number;
-      spread?: number;
-      origin?: { x?: number; y?: number };
-      colors?: string[];
-      disableForReducedMotion?: boolean;
-    }) => void;
-  }
-}
-
-type FieldName = "name" | "email" | "subject" | "message";
-type FieldErrors = Partial<Record<FieldName, string>>;
+type FieldName = ContactField;
+type FieldErrors = ContactErrors;
 
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-// NEW copy: per-field validation messages.
-const validate = (data: FormData): FieldErrors => {
-  const value = (field: FieldName) => String(data.get(field) || "").trim();
-  const errors: FieldErrors = {};
-
-  if (!value("name")) errors.name = "Please enter your name.";
-  if (!value("email")) errors.email = "Please enter your email address.";
-  else if (!EMAIL_PATTERN.test(value("email")))
-    errors.email = "Please enter a valid email address.";
-  if (!value("subject")) errors.subject = "Please add a subject.";
-  if (!value("message")) errors.message = "Please write a message.";
-
-  return errors;
-};
 
 const labelClass = "text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase";
 
 function ContactForm() {
-  const form = useRef<HTMLFormElement>(null);
-  const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [statusMessage, setStatusMessage] = useState("");
   const [errors, setErrors] = useState<FieldErrors>({});
   const reducedMotion = useReducedMotion();
 
-  const triggerConfetti = () => {
-    if (reducedMotion || typeof window === "undefined" || !window.confetti) {
-      return;
-    }
+  // Loaded only after a successful send, never for reduced motion.
+  const triggerConfetti = async () => {
+    if (reducedMotion) return;
 
-    const colors = ["#B8860B", "#CD853F", "#DAA520", "#D4AF37"];
-    window.confetti({
-      particleCount: 120,
-      spread: 80,
-      origin: { y: 0.55, x: 0.5 },
-      colors,
-      disableForReducedMotion: true,
-    });
+    try {
+      const { default: confetti } = await import("canvas-confetti");
+      const colors = ["#B8860B", "#CD853F", "#DAA520", "#D4AF37"];
+      confetti({
+        particleCount: 120,
+        spread: 80,
+        origin: { y: 0.55, x: 0.5 },
+        colors,
+        disableForReducedMotion: true,
+      });
+    } catch {
+      // Purely decorative; a failed chunk load must not affect the form.
+    }
   };
 
   const clearError = (field: FieldName) => {
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
-  const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!form.current || loading) return;
+  const { formRef, loading, handleSubmit } = useEmailForm({
+    validate: (data) => {
+      const nextErrors = validateContact(data, FIELD_ORDER);
+      setErrors(nextErrors);
+      const firstInvalid = FIELD_ORDER.find((field) => nextErrors[field]);
+      if (!firstInvalid) return true;
 
-    const formData = new FormData(form.current);
-    const honeypot = String(formData.get("company_website") || "");
-    if (honeypot.trim()) {
-      setStatus("success");
-      setStatusMessage("Message sent successfully. Thank you!");
-      form.current.reset();
-      return;
-    }
-
-    const nextErrors = validate(formData);
-    setErrors(nextErrors);
-    const firstInvalid = FIELD_ORDER.find((field) => nextErrors[field]);
-    if (firstInvalid) {
       setStatus("idle");
       setStatusMessage("");
-      form.current.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
-      return;
-    }
-
-    setLoading(true);
-    setStatus("idle");
-    setStatusMessage("");
-
-    try {
-      await emailjs.sendForm(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        form.current,
-        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC!,
-      );
-
+      formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
+      return false;
+    },
+    onSending: () => {
+      setStatus("idle");
+      setStatusMessage("");
+    },
+    onSuccess: ({ honeypot }) => {
       setStatus("success");
       setStatusMessage("Message sent successfully. Thank you!");
-      form.current.reset();
-      triggerConfetti();
-    } catch {
+      if (!honeypot) void triggerConfetti();
+    },
+    onError: () => {
       setStatus("error");
       setStatusMessage("Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
-    }
-  };
+    },
+  });
 
   /** Props shared by every visible field: error wiring + scoped styling. */
   const fieldProps = (field: FieldName) => ({
@@ -137,25 +95,13 @@ function ContactForm() {
 
   return (
     <form
-      ref={form}
-      onSubmit={sendEmail}
+      ref={formRef}
+      onSubmit={handleSubmit}
       aria-busy={loading}
       className="flex w-full flex-1 flex-col space-y-4 text-left font-sans text-sm"
       noValidate
     >
-      <div
-        className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
-        aria-hidden="true"
-      >
-        <label htmlFor="company_website">Company website</label>
-        <input
-          id="company_website"
-          name="company_website"
-          type="text"
-          tabIndex={-1}
-          autoComplete="off"
-        />
-      </div>
+      <HoneypotField id="company_website" />
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="flex flex-col gap-1.5">

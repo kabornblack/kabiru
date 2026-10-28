@@ -51,6 +51,8 @@ My approach prioritises:
 | **Backend** | Node.js, Fastify/Express-style APIs, authentication and frontend-to-backend data flow |
 | **Web3** | Solana-oriented product work, wallet authentication and on-chain loyalty systems |
 | **AI** | Agent workflows and model API integration in selected projects |
+| **AI Engineering** | How AI fits into the engineering loop, written as an architecture decision record with explicit boundaries |
+| **Design** | Colour, type and visual-system principles, with a live palette switcher and computed WCAG contrast |
 | **Architecture** | Reusable components, shared design tokens, project data abstraction and responsive layouts |
 | **Contact** | Email, LinkedIn, GitHub and contact form |
 | **Resume** | Downloadable CV available from the live site |
@@ -87,7 +89,6 @@ Barter and donation marketplace focused on clear information architecture, respo
 
 | Project | Focus |
 | --- | --- |
-| **Global Update** | Next.js / TypeScript interface for structured global information browsing |
 | **AI Agent Builder** | Configurable AI agent workflows with FastAPI, Streamlit and model APIs |
 | **Grey Geese** | Small-business site delivered from design through a production Next.js frontend |
 | **C-U School** | Educational site with multi-language support on React / Next.js / TypeScript |
@@ -102,10 +103,12 @@ Barter and donation marketplace focused on clear information architecture, respo
 | Layer | Technologies |
 | --- | --- |
 | Framework | Next.js 15 (App Router), React 19, TypeScript |
-| Styling | Tailwind CSS 4, CSS design tokens |
-| Motion | Framer Motion, tsparticles (hero accents) |
-| Forms | EmailJS |
-| UI utilities | clsx, tailwind-merge, react-icons, Heroicons |
+| Styling | Tailwind CSS 4 (CSS-first config), CSS design tokens |
+| Motion | Framer Motion, CSS animations (all with reduced-motion paths) |
+| Forms | EmailJS, canvas-confetti (loaded on successful send) |
+| Icons | react-icons |
+| Analytics | Vercel Analytics, plus a Telegram visit ping from a Next.js route handler |
+| SEO | Next.js Metadata API, generated Open Graph image and apple icon (`next/og`), robots and sitemap |
 
 ### Frontend
 
@@ -174,7 +177,7 @@ The portfolio is intentionally dark, editorial and restrained — navy surfaces,
 | Principle | How it shows up |
 | --- | --- |
 | Responsive | Layouts adapt from ~320px through wide desktop |
-| Accessible | Labels, focus states, accordion ARIA, reduced-motion paths |
+| Accessible | Labels, focus states, keyboard tabs (ARIA), reduced-motion paths |
 | Performance | `next/image`, selective client boundaries, controlled animation cost |
 | Typography | Display font reserved for brand; body/UI stay readable |
 | Mobile-first | Stacked sections, touch-friendly targets, usable navigation |
@@ -188,16 +191,17 @@ The portfolio is intentionally dark, editorial and restrained — navy surfaces,
 
 Implementation details that reflect how I build product software:
 
-- **Component architecture** — Section components for Hero, About, Skills, Portfolio and Contact, with shared UI primitives
-- **Reusable project cards** — One `ProjectCard` model for featured and supporting work
-- **Project data abstraction** — Central `projectData` source for titles, tags, links and featured ordering
+- **Component architecture** — Section components for Hero, About, Skills, Projects, Design, AI Engineering and Contact, built on shared "code window" primitives (`CodeWindow`, `CodeTabs`, connectors)
+- **Reusable project cards** — One `ProjectCard` for the `/portfolio` grid; the home page shows a featured-projects explorer
+- **Project data abstraction** — Central `projectData` source for titles, tags, links, categories and featured ordering
 - **Design system tokens** — CSS variables for surfaces, gold accent, borders, radius and focus
-- **Responsive layouts** — CSS-first breakpoints; featured cards densify information without hover-only content
-- **Motion with restraint** — Framer Motion for section reveals; marquee and particles respect reduced motion
-- **Accessibility** — Semantic landmarks, labelled icon links, form labels, live status region, keyboard-friendly nav
-- **TypeScript throughout** — Strict typing for data models and component props
-- **Image optimisation** — `next/image` with meaningful `sizes` and priority for primary featured media
-- **Contact paths** — EmailJS form, mailto and CV download without exposing private service secrets in UI copy
+- **Responsive layouts** — Tilted floating windows on desktop that stack flat on tablet and mobile
+- **Motion with restraint** — Framer Motion reveals, marquee, floating windows, header and hash scrolling all respect reduced motion
+- **Accessibility** — Semantic landmarks, one `h1` per page, keyboard tablists, labelled icon links, form validation with live errors, a focus-trapped exit-intent dialog
+- **TypeScript throughout** — Strict typing for data models, component props and the API route
+- **Image optimisation** — `next/image` with meaningful `sizes`; above-the-fold screenshots load eagerly
+- **Contact paths** — EmailJS form, mailto, copy-to-clipboard and CV download without exposing private service secrets in UI copy
+- **Visit ping** — Same-origin-only route handler with body and input limits, sending a Telegram notification once per session
 
 ---
 
@@ -206,32 +210,53 @@ Implementation details that reflect how I build product software:
 ```text
 kabiru/
 ├── app/
-│   ├── layout.tsx          # Root layout, fonts, metadata
-│   ├── page.tsx            # Home composition
-│   ├── globals.css         # Design tokens and shared styles
-│   ├── favicon.ico
+│   ├── layout.tsx              # Root layout, fonts, metadata, viewport
+│   ├── page.tsx                # Home composition
+│   ├── globals.css             # Design tokens, Tailwind theme and shared styles
+│   ├── icon.svg                # KS favicon
+│   ├── apple-icon.tsx          # Generated apple-touch-icon (next/og)
+│   ├── opengraph-image.tsx     # Generated social card (next/og)
+│   ├── twitter-image.tsx       # Same card for Twitter/X
+│   ├── robots.ts
+│   ├── sitemap.ts
+│   ├── api/
+│   │   └── visit/route.ts      # Telegram visit ping (POST, same-origin only)
 │   └── portfolio/
-│       └── page.tsx        # Dedicated portfolio route
+│       ├── page.tsx            # Dedicated portfolio route
+│       ├── opengraph-image.tsx
+│       └── twitter-image.tsx
 ├── components/
+│   ├── Header.tsx
 │   ├── Hero.tsx
 │   ├── About.tsx
 │   ├── Skills.tsx
 │   ├── SkillStackShowcase.tsx
-│   ├── Portfolio.tsx
-│   ├── PortfolioShowcase.tsx
-│   ├── ProjectCard.tsx
-│   ├── Header.tsx
+│   ├── PortfolioShowcase.tsx   # Home featured-projects explorer
+│   ├── Design.tsx              # Palette switcher with WCAG contrast
+│   ├── AIEngineering.tsx
 │   ├── Contact.tsx
 │   ├── ContactForm.tsx
+│   ├── Portfolio.tsx           # /portfolio page body
+│   ├── ProjectCard.tsx
+│   ├── CodeWindow.tsx          # Shared window, tabs and connector primitives
+│   ├── SectionTitle.tsx        # Animated section heading
+│   ├── GridBackground.tsx      # Page-wide gold grid
+│   ├── FloatingCTA.tsx         # "Open to opportunities" chip
+│   ├── ExitIntentPopup.tsx
+│   ├── ExitIntentForm.tsx
+│   ├── VisitorPing.tsx         # Calls /api/visit once per session
 │   ├── Socials.tsx
-│   ├── data/
-│   │   └── projectData.ts  # Projects, categories, featured order
-│   └── ui/                 # Shared visual primitives
+│   └── data/
+│       └── projectData.ts      # Projects, categories, featured order
 ├── lib/
-│   ├── contact.ts          # Public email and CV paths
-│   ├── scroll.ts           # Hash scrolling for nested layout
-│   └── utils.ts
-├── public/                 # Static assets, screenshots, CV PDF
+│   ├── contact.ts              # Public email and CV paths
+│   ├── contactValidation.ts    # Shared form validation
+│   ├── ksMark.tsx              # KS mark for generated images
+│   ├── scroll.ts               # Hash scrolling for the nested scroll container
+│   └── url.ts
+├── types/                      # Declarations for untyped packages
+├── public/                     # Project screenshots and CV PDF
+├── .env.example
 ├── package.json
 └── README.md
 ```
@@ -257,7 +282,17 @@ npm run build   # Production build
 npm run start   # Serve the production build
 ```
 
-Contact form submission expects EmailJS public environment variables in `.env.local` (service ID, template ID and public key). Those values are not committed.
+Copy `.env.example` to `.env.local` and fill in the values (they are never committed):
+
+| Variable | Used by |
+| --- | --- |
+| `NEXT_PUBLIC_EMAILJS_SERVICE_ID` | Contact and exit-intent forms |
+| `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID` | Contact and exit-intent forms |
+| `NEXT_PUBLIC_EMAILJS_PUBLIC` | Contact and exit-intent forms (EmailJS public key) |
+| `TELEGRAM_BOT_TOKEN` | `/api/visit` (server only) |
+| `TELEGRAM_CHAT_ID` | `/api/visit` (server only) |
+
+Without the Telegram variables the site works; the visit ping just returns 502.
 
 ---
 
@@ -271,7 +306,7 @@ Build output is generated with:
 npm run build
 ```
 
-Configure the same public EmailJS variables in the host environment so the contact form continues to work after deploy.
+Configure the same five variables in the host environment (Vercel → Settings → Environment Variables) so the forms and the visit ping work after deploy. Canonical URLs, the sitemap and social images use `https://www.kabiru.dev`.
 
 ---
 
@@ -290,7 +325,7 @@ I built it to show how I think about products, how I structure interfaces and ho
 | **Email** | [shaibu.kabiru@email.com](mailto:shaibu.kabiru@email.com) |
 | **LinkedIn** | [linkedin.com/in/kabiru-shaibu-a81082164](https://www.linkedin.com/in/kabiru-shaibu-a81082164/) |
 | **GitHub** | [github.com/kabornblack](https://github.com/kabornblack) |
-| **CV** | Download from the live site (`/Kabiru-Shaibu-Frontend-Engineer-CV.pdf`) |
+| **CV** | Download from the live site (`/Kabiru_Shaibu_Senior_Eng.pdf`) |
 | **Portfolio** | Deployed Next.js application from this repository |
 
 ---

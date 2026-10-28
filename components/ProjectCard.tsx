@@ -2,8 +2,7 @@
 
 import Image from "next/image";
 import type { Project } from "./data/projectData";
-import { CodeArray, CodePunct, CodeWindow } from "./CodeWindow";
-import { hostOf } from "@/lib/url";
+import { CodeArray, CodePunct, CodeWindow, HostPill } from "./CodeWindow";
 
 type ProjectCardProps = {
   project: Project;
@@ -18,11 +17,7 @@ const IMAGE_SIZES =
 export default function ProjectCard({ project, eager = false }: ProjectCardProps) {
   return (
     <CodeWindow
-      title={
-        <span className="ml-2 min-w-0 truncate rounded-full bg-white/[0.05] px-3 py-0.5 font-mono text-[13px] text-[var(--text-muted)]">
-          {hostOf(project.liveUrl)}
-        </span>
-      }
+      title={<HostPill url={project.liveUrl} />}
       className="project-card flex h-full flex-col"
       bodyClassName="flex flex-1 flex-col"
     >

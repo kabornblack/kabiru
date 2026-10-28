@@ -2,6 +2,7 @@
 
 import { ReactNode, useRef } from "react";
 import { useReducedMotion } from "framer-motion";
+import { hostOf } from "@/lib/url";
 
 /** Shared pieces for the "floating code window" sections (About, Skills). */
 
@@ -45,8 +46,8 @@ export const CodeWindow = ({
   <div className={`code-window ${className}`}>
     <div className="flex items-center gap-2 bg-black/30 px-4 py-2.5">
       <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--gold)]" />
-      <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[rgba(184,134,11,0.6)]" />
-      <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[rgba(184,134,11,0.3)]" />
+      <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[color-mix(in_srgb,var(--gold)_60%,transparent)]" />
+      <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[color-mix(in_srgb,var(--gold)_30%,transparent)]" />
       {typeof title === "string" ? (
         <span className="ml-2 font-mono text-[13px] text-[var(--text-muted)]">
           {title}
@@ -61,6 +62,13 @@ export const CodeWindow = ({
       {children}
     </div>
   </div>
+);
+
+/** Browser-style address pill for a CodeWindow title bar, e.g. "stayloyal.xyz". */
+export const HostPill = ({ url }: { url: string }) => (
+  <span className="ml-2 min-w-0 truncate rounded-full bg-white/[0.05] px-3 py-0.5 font-mono text-[13px] text-[var(--text-muted)]">
+    {hostOf(url)}
+  </span>
 );
 
 export type CodeTab = {
@@ -128,7 +136,7 @@ export const CodeTabs = ({
     <div
       role="tablist"
       aria-label={label}
-      className="tablist-fade code-tabs ml-2 flex min-w-0 flex-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className="tablist-fade code-tabs -my-1.5 ml-2 flex min-w-0 flex-1 overflow-x-auto py-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
       {tabs.map((tab, index) => {
         const isActive = index === activeIndex;
@@ -148,7 +156,7 @@ export const CodeTabs = ({
             onClick={() => onSelect(index)}
             onKeyDown={onKeyDown}
             className={[
-              `focus-ring code-tab shrink-0 cursor-pointer px-2 py-1.5 font-mono text-[13px] transition-colors duration-200 ${tabClassName}`,
+              `focus-ring code-tab hit-target shrink-0 cursor-pointer px-2 py-1.5 font-mono text-[13px] transition-colors duration-200 ${tabClassName}`,
               isActive
                 ? "text-[var(--gold)] shadow-[inset_0_-2px_0_var(--gold)]"
                 : "text-[var(--text-muted)] hover:text-[var(--gold)]",
@@ -166,9 +174,9 @@ export const CodeTabs = ({
 /** Short vertical line + node that stands in for the desktop connectors. */
 export const StackedConnector = () => (
   <div aria-hidden="true" className="flex flex-col items-start pl-6 lg:hidden">
-    <span className="h-8 w-px bg-[rgba(184,134,11,0.45)]" />
+    <span className="code-connector-stem h-8 w-px" />
     <span className="code-node -mt-px -ml-[3px] h-[7px] w-[7px] rounded-full bg-[var(--gold)]" />
-    <span className="h-3 w-px bg-[rgba(184,134,11,0.45)]" />
+    <span className="code-connector-stem h-3 w-px" />
   </div>
 );
 

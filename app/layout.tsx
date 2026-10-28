@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Quicksand, Protest_Revolution } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -22,7 +22,22 @@ const quicksand = Quicksand({
   display: "swap",
 });
 
+// Matches --page-bg in globals.css.
+export const viewport: Viewport = {
+  themeColor: "#030712",
+};
+
+/*
+ * The home page is a client component and can't export metadata, so the
+ * defaults here are the home page's. /portfolio overrides canonical,
+ * openGraph and twitter. The og:image / twitter:image come from
+ * app/opengraph-image.tsx and app/twitter-image.tsx.
+ */
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.kabiru.dev"),
+  alternates: {
+    canonical: "/",
+  },
   title: {
     default: "Kabiru Shaibu | Frontend-Focused Full-Stack Product Engineer",
     template: "%s | Kabiru Shaibu",
@@ -47,6 +62,8 @@ export const metadata: Metadata = {
     title: "Kabiru Shaibu | Frontend-Focused Full-Stack Product Engineer",
     description:
       "Portfolio of Kabiru Shaibu, a frontend-focused full-stack product engineer building accessible SaaS, Web3 and modern web applications with React, TypeScript, Next.js and Node.js.",
+    url: "/",
+    siteName: "Kabiru Shaibu",
     type: "website",
     locale: "en_US",
   },

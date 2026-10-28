@@ -8,6 +8,7 @@ import Header from "@/components/Header";
 import GridBackground from "@/components/GridBackground";
 import ProjectCard from "@/components/ProjectCard";
 import SectionTitle from "@/components/SectionTitle";
+import SiteFooter from "@/components/SiteFooter";
 import {
   CodeTabs,
   CodeWindow,
@@ -146,17 +147,7 @@ export default function Portfolio() {
         </div>
       </main>
 
-      <footer className="flex w-full items-center justify-center px-5 py-10">
-        <div className="max-w-xl text-center">
-          <p className="text-sm leading-relaxed text-[var(--text-muted)] md:text-base">
-            Building products with scalability, usability and long-term
-            maintainability in mind.
-          </p>
-          <p className="mt-4 text-xs tracking-[0.16em] text-[var(--text-muted)] uppercase md:text-sm">
-            Designed & Built by Kabiru — © {new Date().getFullYear()}
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

@@ -18,6 +18,7 @@ export default function ExitIntentPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const [sent, setSent] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   const reducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -67,10 +68,38 @@ export default function ExitIntentPopup() {
   useEffect(() => {
     if (!isOpen) return;
 
+    // Remember where focus was so closing the dialog can put it back.
+    const previouslyFocused =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
     closeButtonRef.current?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setIsOpen(false);
+      if (event.key === "Escape") {
+        setIsOpen(false);
+        return;
+      }
+      if (event.key !== "Tab" || !dialogRef.current) return;
+
+      // Keep Tab / Shift+Tab cycling inside the dialog.
+      const focusable = [
+        ...dialogRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), input:not([type="hidden"]):not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ].filter((el) => el.tabIndex >= 0 && !el.closest('[aria-hidden="true"]'));
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement;
+      const inside = dialogRef.current.contains(active);
+
+      if (event.shiftKey && (active === first || !inside)) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && (active === last || !inside)) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener("keydown", onKeyDown);
 
@@ -82,6 +111,9 @@ export default function ExitIntentPopup() {
     return () => {
       window.removeEventListener("keydown", onKeyDown);
       if (scrollContainer) scrollContainer.style.overflow = previousOverflow;
+      if (previouslyFocused?.isConnected) {
+        previouslyFocused.focus({ preventScroll: true });
+      }
     };
   }, [isOpen]);
 
@@ -108,6 +140,7 @@ export default function ExitIntentPopup() {
               duration: reducedMotion ? 0 : 0.25,
               ease: [0.22, 1, 0.36, 1],
             }}
+            ref={dialogRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="exit-intent-heading"
@@ -118,16 +151,20 @@ export default function ExitIntentPopup() {
               type="button"
               onClick={close}
               aria-label="Close"
-              className="focus-ring absolute top-3 right-3 flex h-9 w-9 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:bg-white/5 hover:text-[var(--gold)]"
+              className="focus-ring absolute top-2 right-2 flex h-11 w-11 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:bg-white/5 hover:text-[var(--gold)]"
             >
               <FaTimes className="h-4 w-4" aria-hidden="true" />
             </button>
 
             {sent ? (
               <div className="py-6 text-center">
-                <p className="font-display text-lg tracking-[0.04em] text-[var(--gold)] uppercase">
+                {/* Same id as the form state's heading, so the dialog keeps its name. */}
+                <h2
+                  id="exit-intent-heading"
+                  className="font-display text-lg tracking-[0.04em] text-[var(--gold)] uppercase"
+                >
                   Message sent
-                </p>
+                </h2>
                 <p className="mt-2 text-sm text-[var(--text-muted)]">
                   Thanks for reaching out — I&apos;ll get back to you soon.
                 </p>

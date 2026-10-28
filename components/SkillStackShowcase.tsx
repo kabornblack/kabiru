@@ -101,20 +101,6 @@ export default function SkillStackShowcase({
   return (
     <div className="lg:pb-6">
       <motion.div className="code-window-stage relative" {...reveal(0.1)}>
-        {/* Main panel → headline; starts ~14px inside the box because the
-            tilt pulls the panel's visible right edge inward. */}
-        <svg
-          aria-hidden="true"
-          className="code-connector pointer-events-none absolute top-1/2 left-[calc(100%-14px)] hidden -translate-y-1/2 lg:block"
-          width="70"
-          height="8"
-          viewBox="0 0 70 8"
-        >
-          <line x1="3" y1="4" x2="67" y2="4" />
-          <circle cx="3" cy="4" r="3" />
-          <circle cx="67" cy="4" r="3" />
-        </svg>
-
         <CodeWindow
           title={tabs}
           className="code-window--tilted skills-window--primary"
