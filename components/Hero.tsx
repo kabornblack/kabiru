@@ -123,7 +123,10 @@ export function Hero() {
           {/* A status, not a control. */}
           <p className="hero-enter mb-6 flex justify-center">
             <span className="cta-chip inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 font-mono text-[13px] text-[var(--text-primary)]">
-              <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
+              <span
+                className="relative flex h-2 w-2 shrink-0"
+                aria-hidden="true"
+              >
                 <span className="cta-dot-pulse" />
                 <span className="relative h-2 w-2 rounded-full bg-[var(--gold)]" />
               </span>
@@ -149,32 +152,23 @@ export function Hero() {
             style={{ animationDelay: "140ms" }}
           >
             Frontend-focused Full-Stack Product Engineer. I design and ship
-            accessible SaaS and Web3 products with production quality and scale in
-            mind.
+            accessible SaaS and Web3 products with production quality and scale
+            in mind.
           </p>
 
           <p
             className="hero-enter mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]"
             style={{ animationDelay: "210ms" }}
           >
-            Specializing in TypeScript, React, Next.js, Node.js, Python, Supabase
-            and Solana — owning the path from product idea to reliable release.
+            Specializing in TypeScript, React, Next.js, Node.js, Python,
+            Supabase and Solana — owning the path from product idea to reliable
+            release.
           </p>
 
           <div
             className="hero-enter mt-7 flex flex-wrap items-center justify-center gap-3 md:mt-8 md:gap-4"
             style={{ animationDelay: "280ms" }}
           >
-            <Link
-              href="#contact"
-              onClick={(event) => {
-                event.preventDefault();
-                scrollToHash("contact");
-              }}
-              className="focus-ring btn-primary contact-submit"
-            >
-              <ScrambleText text="Contact Me" />
-            </Link>
             <Link href="/portfolio" className="focus-ring btn-secondary">
               <ScrambleText text="View Projects" />
             </Link>
