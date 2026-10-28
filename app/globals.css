@@ -369,8 +369,15 @@ main[tabindex="-1"]:focus {
   }
 }
 
-/* Home page grid background — gold lines, top glow, cursor spotlight */
+/* Home page grid background — gold lines, top glow, cursor spotlight.
+   Touch and reduced motion: the faint static grid. Mouse: the grid is hidden
+   and only the spotlight reveals it around the cursor. */
 .grid-bg {
+  --grid-base-opacity: 1; /* static grid layer (touch, reduced motion) */
+  --spotlight-radius: 320px;
+  --spotlight-opacity: 32%; /* gold in the minor lines at the spotlight centre */
+  --spotlight-major-opacity: 55%; /* every-4th-cell lines, so they still stand out */
+  --spotlight-fade: 300ms;
   background-color: var(--page-bg);
 }
 
@@ -408,6 +415,7 @@ main[tabindex="-1"]:focus {
 .grid-bg-lines {
   --grid-minor: color-mix(in srgb, var(--gold) 6%, transparent);
   --grid-major: color-mix(in srgb, var(--gold) 11%, transparent);
+  opacity: var(--grid-base-opacity);
   -webkit-mask-image: radial-gradient(
     ellipse 75% 70% at 50% 40%,
     #000 40%,
@@ -420,25 +428,31 @@ main[tabindex="-1"]:focus {
   );
 }
 
+/* Eased stops (roughly a cosine falloff) so the edge melts away with no ring. */
 .grid-bg-spotlight {
-  --grid-minor: color-mix(in srgb, var(--gold) 28%, transparent);
-  --grid-major: color-mix(in srgb, var(--gold) 28%, transparent);
+  --grid-minor: color-mix(in srgb, var(--gold) var(--spotlight-opacity), transparent);
+  --grid-major: color-mix(in srgb, var(--gold) var(--spotlight-major-opacity), transparent);
+  --spotlight-mask: radial-gradient(
+    var(--spotlight-radius) circle at var(--mx, -999px) var(--my, -999px),
+    #000 0%,
+    rgba(0, 0, 0, 0.86) 20%,
+    rgba(0, 0, 0, 0.6) 40%,
+    rgba(0, 0, 0, 0.32) 60%,
+    rgba(0, 0, 0, 0.1) 80%,
+    transparent 100%
+  );
   display: none;
   opacity: 0;
-  transition: opacity var(--duration) var(--ease-premium);
-  -webkit-mask-image: radial-gradient(
-    280px circle at var(--mx, -999px) var(--my, -999px),
-    #000 0%,
-    transparent 100%
-  );
-  mask-image: radial-gradient(
-    280px circle at var(--mx, -999px) var(--my, -999px),
-    #000 0%,
-    transparent 100%
-  );
+  transition: opacity var(--spotlight-fade) ease; /* --ease-premium front-loads it into ~100ms */
+  -webkit-mask-image: var(--spotlight-mask);
+  mask-image: var(--spotlight-mask);
 }
 
 @media (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .grid-bg {
+    --grid-base-opacity: 0; /* was 1 (always-on faint grid); set back to 1 to restore it */
+  }
+
   .grid-bg-spotlight {
     display: block;
   }
