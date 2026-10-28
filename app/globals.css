@@ -97,6 +97,11 @@ body {
   outline-offset: 3px;
 }
 
+/* The Header's skip link focuses <main>; the whole page needs no ring. */
+main[tabindex="-1"]:focus {
+  outline: none;
+}
+
 /* Shared premium controls */
 .btn-primary,
 .btn-secondary {
