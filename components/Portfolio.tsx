@@ -153,7 +153,10 @@ export default function Portfolio() {
             maintainability in mind.
           </p>
           <p className="mt-4 text-xs tracking-[0.16em] text-[var(--text-muted)] uppercase md:text-sm">
-            Designed & Built by Kabiru — © {new Date().getFullYear()}
+            Designed & Built by Kabiru — ©{" "}
+            {/* Prerendered: the HTML carries the build year, so a client in a
+                later year must not flag a hydration mismatch. */}
+            <span suppressHydrationWarning>{new Date().getFullYear()}</span>
           </p>
         </div>
       </footer>

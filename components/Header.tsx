@@ -3,7 +3,7 @@
 import Link from "next/link";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   FaBars,
   FaBriefcase,
@@ -88,6 +88,7 @@ function Header() {
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const pathname = usePathname();
   const isPortfolio = pathname?.startsWith("/portfolio") ?? false;
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     const scrollContainer = document.getElementById("page-scroll-container");
@@ -196,7 +197,7 @@ function Header() {
     <motion.header
       initial={false}
       animate={{ y: showHeader ? 0 : "-100%" }}
-      transition={{ duration: 0.3, ease: "easeInOut" }}
+      transition={{ duration: reducedMotion ? 0 : 0.3, ease: "easeInOut" }}
       className={[
         "fixed top-0 left-0 z-50 h-20 w-full border-b transition-colors duration-300",
         scrolled
@@ -282,7 +283,7 @@ function Header() {
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: reducedMotion ? 0 : 0.2 }}
               className="absolute top-20 left-0 z-50 w-full border-b border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 py-4 shadow-2xl lg:hidden"
             >
               <nav aria-label="Mobile primary" className="flex flex-col gap-1">

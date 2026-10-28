@@ -3,6 +3,11 @@
 import React, { useRef, useState } from "react";
 import emailjs from "@emailjs/browser";
 import { useReducedMotion } from "framer-motion";
+import {
+  validateContact,
+  type ContactErrors,
+  type ContactField,
+} from "@/lib/contactValidation";
 
 declare global {
   interface Window {
@@ -17,26 +22,10 @@ declare global {
   }
 }
 
-type FieldName = "name" | "email" | "subject" | "message";
-type FieldErrors = Partial<Record<FieldName, string>>;
+type FieldName = ContactField;
+type FieldErrors = ContactErrors;
 
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-// NEW copy: per-field validation messages.
-const validate = (data: FormData): FieldErrors => {
-  const value = (field: FieldName) => String(data.get(field) || "").trim();
-  const errors: FieldErrors = {};
-
-  if (!value("name")) errors.name = "Please enter your name.";
-  if (!value("email")) errors.email = "Please enter your email address.";
-  else if (!EMAIL_PATTERN.test(value("email")))
-    errors.email = "Please enter a valid email address.";
-  if (!value("subject")) errors.subject = "Please add a subject.";
-  if (!value("message")) errors.message = "Please write a message.";
-
-  return errors;
-};
 
 const labelClass = "text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase";
 
@@ -80,7 +69,7 @@ function ContactForm() {
       return;
     }
 
-    const nextErrors = validate(formData);
+    const nextErrors = validateContact(formData, FIELD_ORDER);
     setErrors(nextErrors);
     const firstInvalid = FIELD_ORDER.find((field) => nextErrors[field]);
     if (firstInvalid) {
