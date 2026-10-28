@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { motion, useReducedMotion } from "framer-motion";
 import { scrollToHash } from "@/lib/scroll";
+import ScrambleText from "./ScrambleText";
 
 // Sections the badge should get out of the way of: the hero (its tech
 // marquee sits low enough on mobile to collide with a bottom-anchored badge
@@ -196,7 +197,7 @@ export default function FloatingCTA() {
           <span className="relative h-2.5 w-2.5 rounded-full bg-[var(--gold)]" />
         </span>
         <span className="cta-label" aria-hidden="true">
-          Open to opportunities
+          <ScrambleText text="Open to opportunities" />
         </span>
       </Link>
       <button

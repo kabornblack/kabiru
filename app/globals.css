@@ -25,6 +25,13 @@
   --ghost-travel: 1.6s; /* time to travel the line; the rest is rest */
   --ghost-stagger: 0.4s; /* offset between connectors in a section */
   --ghost-opacity: 0.35; /* peak opacity */
+
+  /* Button/link label "scramble roll" (components/ScrambleText.tsx). */
+  --scramble-delay: 60ms; /* all letters roll before the first one locks */
+  --scramble-stagger: 50ms; /* between letters locking, left to right */
+  --scramble-max: 600ms; /* long labels lock faster to stay under this */
+  --scramble-step: 16ms; /* how often a rolling letter changes glyph */
+  --scramble-color: currentColor; /* rolling glyphs; e.g. var(--gold-hover) for a brighter tone */
 }
 
 @theme inline {
@@ -459,6 +466,38 @@ body {
   stroke: var(--gold);
   stroke-opacity: 0.45;
   stroke-width: 1;
+}
+
+/* ScrambleText: the real label keeps the layout; the rolling letters sit
+   in an overlay with one fixed-width slot per glyph, so nothing reflows. */
+.scramble {
+  position: relative;
+  display: inline-block;
+}
+
+.scramble-base,
+.scramble-layer {
+  user-select: none;
+}
+
+.scramble[data-active] > .scramble-base {
+  visibility: hidden;
+}
+
+.scramble-layer {
+  position: absolute;
+  inset: 0;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.scramble-layer > span {
+  display: inline-block;
+  white-space: pre;
+}
+
+.scramble-layer > [data-rolling] {
+  color: var(--scramble-color);
 }
 
 /* Travelling copy of a connector node; Connector.tsx animates only its

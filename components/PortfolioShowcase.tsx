@@ -14,6 +14,7 @@ import {
   HostPill,
   useReveal,
 } from "./CodeWindow";
+import ScrambleText from "./ScrambleText";
 
 const SHOWCASE_COUNT = 4;
 
@@ -225,7 +226,7 @@ export default function HomePortfolioShowcase() {
                             rel="noopener noreferrer"
                             className="focus-ring btn-primary"
                           >
-                            Live
+                            <ScrambleText text="Live" />
                             <span className="sr-only">
                               {" "}
                               {project.title} (opens in a new tab)
@@ -239,7 +240,7 @@ export default function HomePortfolioShowcase() {
                             rel="noopener noreferrer"
                             className="focus-ring btn-secondary"
                           >
-                            Code
+                            <ScrambleText text="Code" />
                             <span className="sr-only">
                               {" "}
                               {project.title} (opens in a new tab)
@@ -257,7 +258,7 @@ export default function HomePortfolioShowcase() {
 
         <motion.div className="mt-12 flex justify-center" {...reveal(0)}>
           <Link href="/portfolio" className="focus-ring btn-secondary">
-            View all projects
+            <ScrambleText text="View all projects" />
           </Link>
         </motion.div>
       </div>

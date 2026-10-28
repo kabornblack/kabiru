@@ -16,6 +16,7 @@ import {
   codeTabId,
   useReveal,
 } from "./CodeWindow";
+import ScrambleText from "@/components/ScrambleText";
 
 /* Filters come from the categories the projects actually use, in the order
    the data file defines them; empty categories get no tab. */
@@ -133,10 +134,10 @@ export default function Portfolio() {
 
         <div className="mt-12 flex flex-wrap justify-center gap-3">
           <Link href="/" className="focus-ring btn-secondary">
-            Back to home
+            <ScrambleText text="Back to home" />
           </Link>
           <Link href="/#contact" className="focus-ring btn-secondary">
-            Contact
+            <ScrambleText text="Contact" />
           </Link>
         </div>
       </main>

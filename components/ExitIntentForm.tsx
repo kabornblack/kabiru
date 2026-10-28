@@ -7,6 +7,7 @@ import {
   type ContactField,
 } from "@/lib/contactValidation";
 import { HoneypotField, useEmailForm } from "@/lib/useEmailForm";
+import ScrambleText from "./ScrambleText";
 
 type ExitIntentFormProps = {
   onSuccess?: () => void;
@@ -146,7 +147,7 @@ function ExitIntentForm({ onSuccess }: ExitIntentFormProps) {
           loading ? "cursor-not-allowed opacity-50" : "",
         ].join(" ")}
       >
-        {loading ? "Sending..." : "Send Message"}
+        <ScrambleText text={loading ? "Sending..." : "Send Message"} />
       </button>
     </form>
   );

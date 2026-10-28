@@ -22,6 +22,7 @@ import {
   SiRedux,
   SiGraphql,
 } from "react-icons/si";
+import ScrambleText from "./ScrambleText";
 
 const techStack = [
   { icon: SiReact, name: "React" },
@@ -172,10 +173,10 @@ export function Hero() {
               }}
               className="focus-ring btn-primary contact-submit"
             >
-              Contact Me
+              <ScrambleText text="Contact Me" />
             </Link>
             <Link href="/portfolio" className="focus-ring btn-secondary">
-              View Projects
+              <ScrambleText text="View Projects" />
             </Link>
             <a
               href={CV_URL}
@@ -184,7 +185,7 @@ export function Hero() {
               className="focus-ring inline-flex min-h-11 items-center gap-2 rounded-[var(--radius-sm)] px-3 text-xs font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase underline-offset-4 transition-colors hover:text-[var(--gold)] hover:underline"
             >
               <FaDownload className="h-3.5 w-3.5" aria-hidden="true" />
-              Download CV
+              <ScrambleText text="Download CV" />
             </a>
           </div>
         </div>

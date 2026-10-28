@@ -16,6 +16,7 @@ import {
 } from "react-icons/fa";
 import Socials from "./Socials";
 import { ACTIVE_SECTION_OFFSET, scrollToHash } from "@/lib/scroll";
+import ScrambleText from "@/components/ScrambleText";
 
 type NavLink = {
   label: string;
@@ -221,7 +222,7 @@ function Header() {
                   aria-hidden="true"
                 />
                 <span className="text-[10px] tracking-[0.12em] uppercase">
-                  {link.label}
+                  <ScrambleText text={link.label} />
                 </span>
                 <span
                   className={[
@@ -241,7 +242,9 @@ function Header() {
           aria-label="Home"
         >
           <FaHome className="h-5 w-5" aria-hidden="true" />
-          <span className="ml-2 text-sm tracking-[0.12em] uppercase">Home</span>
+          <span className="ml-2 text-sm tracking-[0.12em] uppercase">
+            <ScrambleText text="Home" />
+          </span>
         </Link>
 
         <div className="hidden items-center px-4 lg:flex">
@@ -295,7 +298,9 @@ function Header() {
                       ].join(" ")}
                     >
                       <Icon className="h-5 w-5" aria-hidden="true" />
-                      <span>{link.label}</span>
+                      <span>
+                        <ScrambleText text={link.label} />
+                      </span>
                     </Link>
                   );
                 })}

@@ -8,6 +8,7 @@ import {
   type ContactField,
 } from "@/lib/contactValidation";
 import { HoneypotField, useEmailForm } from "@/lib/useEmailForm";
+import ScrambleText from "./ScrambleText";
 
 type FieldName = ContactField;
 type FieldErrors = ContactErrors;
@@ -188,7 +189,7 @@ function ContactForm() {
               className="mr-2 h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent"
             />
           )}
-          {loading ? "Sending..." : "Send Message"}
+          <ScrambleText text={loading ? "Sending..." : "Send Message"} />
         </button>
       </div>
     </form>
