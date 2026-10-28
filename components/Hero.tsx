@@ -96,48 +96,53 @@ export function Hero() {
   const reducedMotion = Boolean(prefersReducedMotion);
 
   return (
-    <div className="relative mx-auto flex min-h-[88svh] max-w-7xl flex-col items-center justify-center overflow-hidden px-5 pb-24 pt-24 md:min-h-[90svh] md:pt-28">
-      <div className="relative z-20 mx-auto max-w-3xl text-center">
-        <h1 className="font-display text-4xl font-bold leading-none text-[var(--gold)] md:text-6xl lg:text-7xl">
-          Kabiru Shaibu
-        </h1>
-
-        <p className="mx-auto mt-5 max-w-2xl text-base leading-snug font-medium text-[var(--text-primary)] md:mt-6 md:text-xl md:leading-snug">
-          Frontend-focused Full-Stack Product Engineer. I design and ship
-          accessible SaaS and Web3 products with production quality and scale in
-          mind.
-        </p>
-
-        <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
-          Specializing in TypeScript, React, Next.js, Node.js, Python, Supabase
-          and Solana — owning the path from product idea to reliable release.
-        </p>
-
-        <div className="mt-7 flex flex-wrap items-center justify-center gap-3 md:mt-8 md:gap-4">
-          <Link href="/portfolio" className="focus-ring btn-primary">
-            View Projects
-          </Link>
-          <Link
-            href="#contact"
-            onClick={(event) => {
-              event.preventDefault();
-              scrollToHash("contact");
-            }}
-            className="focus-ring btn-secondary"
+    <section id="home" aria-labelledby="home-heading" className="pb-8">
+      <div className="relative mx-auto flex min-h-[88svh] max-w-7xl flex-col items-center justify-center overflow-hidden px-5 pb-24 pt-24 md:min-h-[90svh] md:pt-28">
+        <div className="relative z-20 mx-auto max-w-3xl text-center">
+          <h1
+            id="home-heading"
+            className="font-display text-4xl font-bold leading-none text-[var(--gold)] md:text-6xl lg:text-7xl"
           >
-            Contact Me
-          </Link>
-          <a
-            href={CV_URL}
-            download={CV_FILENAME}
-            aria-label="Download Kabiru Shaibu CV PDF"
-            className="focus-ring btn-secondary"
-          >
-            Download CV
-          </a>
+            Kabiru Shaibu
+          </h1>
+
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-snug font-medium text-[var(--text-primary)] md:mt-6 md:text-xl md:leading-snug">
+            Frontend-focused Full-Stack Product Engineer. I design and ship
+            accessible SaaS and Web3 products with production quality and scale in
+            mind.
+          </p>
+
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
+            Specializing in TypeScript, React, Next.js, Node.js, Python, Supabase
+            and Solana — owning the path from product idea to reliable release.
+          </p>
+
+          <div className="mt-7 flex flex-wrap items-center justify-center gap-3 md:mt-8 md:gap-4">
+            <Link href="/portfolio" className="focus-ring btn-primary">
+              View Projects
+            </Link>
+            <Link
+              href="#contact"
+              onClick={(event) => {
+                event.preventDefault();
+                scrollToHash("contact");
+              }}
+              className="focus-ring btn-secondary"
+            >
+              Contact Me
+            </Link>
+            <a
+              href={CV_URL}
+              download={CV_FILENAME}
+              aria-label="Download Kabiru Shaibu CV PDF"
+              className="focus-ring btn-secondary"
+            >
+              Download CV
+            </a>
+          </div>
         </div>
+        <TechMarquee reducedMotion={reducedMotion} />
       </div>
-      <TechMarquee reducedMotion={reducedMotion} />
-    </div>
+    </section>
   );
 }

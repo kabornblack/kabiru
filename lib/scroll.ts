@@ -1,3 +1,12 @@
+/** Fixed Header height in px (its `h-20` / `top-20` classes). */
+export const HEADER_HEIGHT = 80;
+
+/** Hash scrolling lands a section this far from the top: clear of the header plus a small gap. */
+export const HASH_SCROLL_OFFSET = HEADER_HEIGHT + 8;
+
+/** A section counts as "current" for the nav once its top passes this line. */
+export const ACTIVE_SECTION_OFFSET = HEADER_HEIGHT + 40;
+
 export function scrollToHash(hash: string) {
   if (typeof window === "undefined") return;
 
@@ -20,7 +29,7 @@ export function scrollToHash(hash: string) {
   if (container) {
     const containerTop = container.getBoundingClientRect().top;
     const targetTop = target.getBoundingClientRect().top;
-    const nextTop = container.scrollTop + (targetTop - containerTop) - 88;
+    const nextTop = container.scrollTop + (targetTop - containerTop) - HASH_SCROLL_OFFSET;
     container.scrollTo({ top: Math.max(0, nextTop), behavior });
     return;
   }

@@ -445,7 +445,7 @@ export default function Skills() {
   const reveal = useReveal();
 
   return (
-    <div className="w-full">
+    <section id="skills" aria-labelledby="skills-heading" className="w-full pb-8">
       <SectionTitle
         text="Skills"
         headingId="skills-heading"
@@ -492,6 +492,6 @@ export default function Skills() {
           <SkillStackShowcase categories={skillCategories} />
         </div>
       </div>
-    </div>
+    </section>
   );
 }

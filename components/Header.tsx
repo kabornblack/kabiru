@@ -15,7 +15,7 @@ import {
   FaUser,
 } from "react-icons/fa";
 import Socials from "./Socials";
-import { scrollToHash } from "@/lib/scroll";
+import { ACTIVE_SECTION_OFFSET, scrollToHash } from "@/lib/scroll";
 
 type NavLink = {
   label: string;
@@ -107,7 +107,7 @@ function Header() {
       for (const id of sections) {
         const el = document.getElementById(id);
         if (!el) continue;
-        const top = el.offsetTop - 120;
+        const top = el.offsetTop - ACTIVE_SECTION_OFFSET;
         if (scrollY >= top) current = id;
       }
 
@@ -182,6 +182,7 @@ function Header() {
     }
   };
 
+  // h-20 / top-20 here are HEADER_HEIGHT in lib/scroll.ts; keep them in sync.
   return (
     <motion.header
       initial={false}
@@ -289,7 +290,7 @@ function Header() {
                       className={[
                         "focus-ring flex min-h-12 items-center gap-3 rounded-md px-3 py-3 text-sm tracking-[0.12em] uppercase transition-colors",
                         active
-                          ? "bg-[rgba(184,134,11,0.12)] text-[var(--gold)]"
+                          ? "bg-[color-mix(in_srgb,var(--gold)_12%,transparent)] text-[var(--gold)]"
                           : "text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--gold)]",
                       ].join(" ")}
                     >

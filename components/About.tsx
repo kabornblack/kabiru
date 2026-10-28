@@ -81,7 +81,7 @@ export default function About() {
   const reveal = useReveal();
 
   return (
-    <section className="w-full" aria-labelledby="about-heading">
+    <section id="about" aria-labelledby="about-heading" className="w-full pb-8">
       <SectionTitle text="About" headingId="about-heading" />
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 md:px-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-center lg:gap-16 lg:px-14 lg:pt-10">
@@ -173,7 +173,7 @@ export default function About() {
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 px-6 pt-14 pb-4 md:grid-cols-3 md:px-10 lg:px-14">
         {DETAILS.map((detail, index) => (
-          <motion.div key={detail.title} {...reveal(0.1 * index)}>
+          <motion.div key={detail.title} {...reveal(0.05 * index)}>
             <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
               {detail.title}
             </h3>

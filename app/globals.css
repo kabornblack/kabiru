@@ -9,13 +9,13 @@
   --gold: #b8860b;
   --gold-hover: #d4a017;
   --border-subtle: rgba(255, 255, 255, 0.1);
-  --border-gold: rgba(184, 134, 11, 0.35);
+  --border-gold: color-mix(in srgb, var(--gold) 35%, transparent);
   --focus-ring: #d4a017;
   --radius-sm: 6px;
   --radius-md: 10px;
   --shadow-card: 0 8px 24px rgba(0, 0, 0, 0.28);
-  --shadow-gold: 0 0 0 1px rgba(184, 134, 11, 0.28),
-    0 10px 28px rgba(184, 134, 11, 0.08);
+  --shadow-gold: 0 0 0 1px color-mix(in srgb, var(--gold) 28%, transparent),
+    0 10px 28px color-mix(in srgb, var(--gold) 8%, transparent);
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 180ms;
   --duration: 280ms;
@@ -107,13 +107,13 @@ body {
 
 .btn-primary {
   border: 1px solid var(--gold);
-  background: rgba(184, 134, 11, 0.16);
+  background: color-mix(in srgb, var(--gold) 16%, transparent);
   color: var(--gold);
-  box-shadow: 0 0 0 1px rgba(184, 134, 11, 0.08);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 8%, transparent);
 }
 
 .btn-primary:hover {
-  background: rgba(184, 134, 11, 0.28);
+  background: color-mix(in srgb, var(--gold) 28%, transparent);
   color: var(--gold-hover);
   box-shadow: var(--shadow-gold);
   transform: translateY(-1px);
@@ -158,14 +158,14 @@ body {
 }
 
 .field-input:hover {
-  border-color: rgba(184, 134, 11, 0.28);
+  border-color: color-mix(in srgb, var(--gold) 28%, transparent);
 }
 
 .field-input:focus {
   outline: none;
   border-color: var(--gold);
-  background: rgba(184, 134, 11, 0.05);
-  box-shadow: 0 0 0 3px rgba(184, 134, 11, 0.12);
+  background: color-mix(in srgb, var(--gold) 5%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--gold) 12%, transparent);
 }
 
 .section-title-wrap {
@@ -389,10 +389,32 @@ body {
   stroke-width: 1;
 }
 
+/* Vertical line of the stacked (below lg) connector. */
+.code-connector-stem {
+  background: color-mix(in srgb, var(--gold) 45%, transparent);
+}
+
 .code-connector circle,
 .code-node {
   fill: var(--gold);
   filter: drop-shadow(0 0 4px var(--gold));
+}
+
+/* Invisible 44x44px minimum hit area around small controls; the visible box
+   is unchanged. Inside a scrolling tablist the list gets matching negative
+   margin + padding (e.g. -my-1.5 py-1.5) so the area isn't clipped. */
+.hit-target {
+  position: relative;
+}
+
+.hit-target::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
 }
 
 /* File-style tabs sit inside a scroll container, so keep the focus ring inside the tab. */
@@ -420,9 +442,9 @@ body {
 
 /* Tilt angles per window; mirrored sections flip the rotateY sign. */
 .about-window--primary {
-  --tilt-y: -7deg;
-  --tilt-x: 4deg;
-  --float-duration: 9s;
+  --tilt-y: -6deg;
+  --tilt-x: 3deg;
+  --float-duration: 10s;
 }
 
 .about-window--secondary {
@@ -507,6 +529,11 @@ body {
 .design-section .code-node {
   background: var(--palette-primary);
   filter: drop-shadow(0 0 4px var(--palette-primary));
+  transition: background-color 200ms var(--ease-premium);
+}
+
+.design-section .code-connector-stem {
+  background: color-mix(in srgb, var(--palette-primary) 45%, transparent);
   transition: background-color 200ms var(--ease-premium);
 }
 
@@ -601,7 +628,8 @@ body {
 }
 
 .contact-field[aria-invalid="true"] {
-  border-color: #f87171;
+  /* Same red as the error text (text-red-400). */
+  border-color: var(--color-red-400);
 }
 
 .contact-submit {

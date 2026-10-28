@@ -219,7 +219,7 @@ export default function Design() {
     <div
       role="tablist"
       aria-label="Colour palettes"
-      className="tablist-fade code-tabs ml-2 flex min-w-0 flex-1 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      className="tablist-fade code-tabs -my-1.5 ml-2 flex min-w-0 flex-1 overflow-x-auto py-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
     >
       {PALETTES.map((palette, index) => {
         const isActive = index === activeIndex;
@@ -239,7 +239,7 @@ export default function Design() {
             onClick={() => setActiveIndex(index)}
             onKeyDown={onTabKeyDown}
             className={[
-              "focus-ring code-tab shrink-0 cursor-pointer px-2 py-1.5 font-mono text-[13px] transition-colors duration-200",
+              "focus-ring code-tab hit-target shrink-0 cursor-pointer px-2 py-1.5 font-mono text-[13px] transition-colors duration-200",
               isActive
                 ? "design-tab-active"
                 : "text-[var(--text-muted)] hover:text-[var(--text-primary)]",

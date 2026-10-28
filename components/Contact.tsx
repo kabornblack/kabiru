@@ -19,7 +19,7 @@ const Key = ({ children }: { children: string }) => (
 );
 
 const linkClass =
-  "focus-ring text-[var(--text-primary)] underline decoration-[rgba(184,134,11,0.5)] underline-offset-4 transition-colors hover:text-[var(--gold)]";
+  "focus-ring text-[var(--text-primary)] underline decoration-[color-mix(in_srgb,var(--gold)_50%,transparent)] underline-offset-4 transition-colors hover:text-[var(--gold)]";
 
 function CopyEmail() {
   const [copied, setCopied] = useState(false);
@@ -41,7 +41,7 @@ function CopyEmail() {
         type="button"
         onClick={copy}
         aria-label={`Copy email address ${PUBLIC_EMAIL}`}
-        className="focus-ring ml-2 inline-flex min-h-8 items-center rounded-[var(--radius-sm)] bg-white/[0.06] px-2 align-middle text-[13px] text-[var(--text-muted)] transition-colors hover:text-[var(--gold)]"
+        className="focus-ring hit-target ml-2 inline-flex min-h-8 items-center rounded-[var(--radius-sm)] bg-white/[0.06] px-2 align-middle text-[13px] text-[var(--text-muted)] transition-colors hover:text-[var(--gold)]"
       >
         {copied ? "copied" : "copy"}
       </button>
@@ -56,7 +56,7 @@ function Contact() {
   const reveal = useReveal();
 
   return (
-    <div className="relative">
+    <section id="contact" aria-labelledby="contact-heading" className="relative pb-8">
       <SectionTitle
         text="Contact"
         headingId="contact-heading"
@@ -180,7 +180,7 @@ function Contact() {
           </motion.div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
