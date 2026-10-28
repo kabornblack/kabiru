@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import ContactForm from "./ContactForm";
 import SectionTitle from "./SectionTitle";
+import Connector, { StackedConnector } from "./Connector";
 import { SOCIAL_LINKS } from "./Socials";
 import {
   CodePunct,
   CodeString,
   CodeWindow,
-  StackedConnector,
   useReveal,
 } from "./CodeWindow";
 import { PUBLIC_EMAIL, PUBLIC_EMAIL_MAILTO } from "@/lib/contact";
@@ -78,17 +78,11 @@ function Contact() {
               {/* Main panel → headline, centred on the white line's first
                   row; spans the 56px column gap to the flat panel's right
                   edge. */}
-              <svg
-                aria-hidden="true"
-                className="code-connector pointer-events-none absolute top-[0.525em] right-full hidden -translate-y-1/2 lg:block"
-                width="56"
-                height="8"
-                viewBox="0 0 56 8"
-              >
-                <line x1="3" y1="4" x2="53" y2="4" />
-                <circle cx="3" cy="4" r="3" />
-                <circle cx="53" cy="4" r="3" />
-              </svg>
+              <Connector
+                variant="horizontal"
+                length={56}
+                className="absolute top-[0.525em] right-full -translate-y-1/2"
+              />
             </span>
           </p>
           <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
@@ -113,18 +107,10 @@ function Contact() {
             {...reveal(0.2)}
           >
             {/* Main panel → contact.json (elbow off the left edge) */}
-            <svg
-              aria-hidden="true"
-              className="code-connector pointer-events-none absolute top-3 right-full hidden lg:block"
-              width="44"
-              height="52"
-              viewBox="0 0 44 52"
-            >
-              <path d="M44 48 H4 V0" />
-              <circle cx="44" cy="48" r="3" />
-              <circle cx="4" cy="48" r="2" />
-              <circle cx="4" cy="0" r="3" />
-            </svg>
+            <Connector
+              variant="elbow-left"
+              className="absolute top-3 right-full"
+            />
 
             <CodeWindow title="contact.json">
               <CodePunct>{"{"}</CodePunct>

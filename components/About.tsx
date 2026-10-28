@@ -2,12 +2,12 @@
 
 import { motion } from "framer-motion";
 import SectionTitle from "./SectionTitle";
+import Connector, { StackedConnector } from "./Connector";
 import {
   CodeArray,
   CodePunct,
   CodeString,
   CodeWindow,
-  StackedConnector,
   useReveal,
 } from "./CodeWindow";
 
@@ -94,17 +94,11 @@ export default function About() {
               {/* Headline → profile panel, centred on the white line's first
                   row; ends ~14px inside the box because the tilt pulls the
                   panel's visible left edge inward. */}
-              <svg
-                aria-hidden="true"
-                className="code-connector pointer-events-none absolute top-[0.525em] left-full hidden -translate-y-1/2 lg:block"
-                width="78"
-                height="8"
-                viewBox="0 0 78 8"
-              >
-                <line x1="3" y1="4" x2="75" y2="4" />
-                <circle cx="3" cy="4" r="3" />
-                <circle cx="75" cy="4" r="3" />
-              </svg>
+              <Connector
+                variant="horizontal"
+                length={78}
+                className="absolute top-[0.525em] left-full -translate-y-1/2"
+              />
             </span>
           </p>
           <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
@@ -141,18 +135,10 @@ export default function About() {
             {...reveal(0.2)}
           >
             {/* Profile panel → philosophy panel (elbow off the right edge) */}
-            <svg
-              aria-hidden="true"
-              className="code-connector pointer-events-none absolute top-6 left-full hidden overflow-visible lg:block"
-              width="44"
-              height="52"
-              viewBox="0 0 44 52"
-            >
-              <path d="M0 48 H40 V0" />
-              <circle cx="0" cy="48" r="3" />
-              <circle cx="40" cy="48" r="2" />
-              <circle cx="40" cy="0" r="3" />
-            </svg>
+            <Connector
+              variant="elbow-right"
+              className="absolute top-6 left-full"
+            />
 
             <CodeWindow
               title="philosophy.ts"

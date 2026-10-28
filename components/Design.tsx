@@ -3,7 +3,8 @@
 import { CSSProperties, useId, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import SectionTitle from "./SectionTitle";
-import { CodePunct, CodeWindow, StackedConnector, useReveal } from "./CodeWindow";
+import Connector, { StackedConnector } from "./Connector";
+import { CodePunct, CodeWindow, useReveal } from "./CodeWindow";
 
 type Palette = {
   name: string;
@@ -275,17 +276,11 @@ export default function Design() {
               {/* Palette panel → headline, centred on the white line's first
                   row; starts inside the box because the tilt pulls the
                   panel's visible right edge inward. */}
-              <svg
-                aria-hidden="true"
-                className="code-connector pointer-events-none absolute top-[0.525em] right-full hidden -translate-y-1/2 lg:block"
-                width="70"
-                height="8"
-                viewBox="0 0 70 8"
-              >
-                <line x1="3" y1="4" x2="67" y2="4" />
-                <circle cx="3" cy="4" r="3" />
-                <circle cx="67" cy="4" r="3" />
-              </svg>
+              <Connector
+                variant="horizontal"
+                length={70}
+                className="absolute top-[0.525em] right-full -translate-y-1/2"
+              />
             </span>
           </p>
           <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
@@ -361,18 +356,10 @@ export default function Design() {
             {...reveal(0.2)}
           >
             {/* Palette panel → preview panel (elbow off the left edge) */}
-            <svg
-              aria-hidden="true"
-              className="code-connector pointer-events-none absolute top-3 right-full hidden lg:block"
-              width="44"
-              height="52"
-              viewBox="0 0 44 52"
-            >
-              <path d="M44 48 H4 V0" />
-              <circle cx="44" cy="48" r="3" />
-              <circle cx="4" cy="48" r="2" />
-              <circle cx="4" cy="0" r="3" />
-            </svg>
+            <Connector
+              variant="elbow-left"
+              className="absolute top-3 right-full"
+            />
 
             <CodeWindow
               title="preview.tsx"
