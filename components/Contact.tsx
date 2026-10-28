@@ -66,28 +66,29 @@ function Contact() {
       />
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 pb-6 md:px-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center lg:gap-14 lg:px-14 lg:pt-10">
+        {/* Top-aligned, a little below the panel's top edge. */}
         <motion.div
-          className="relative lg:col-start-2 lg:row-start-1"
+          className="lg:col-start-2 lg:row-start-1 lg:self-start lg:pt-14"
           {...reveal(0)}
         >
-          {/* Headline → main panel. Anchored to the headline (not the panel)
-              so it stays level with it however tall the form panel is; spans
-              the 56px column gap to the flat panel's right edge. */}
-          <svg
-            aria-hidden="true"
-            className="code-connector pointer-events-none absolute top-1/2 right-full hidden -translate-y-1/2 lg:block"
-            width="56"
-            height="8"
-            viewBox="0 0 56 8"
-          >
-            <line x1="3" y1="4" x2="53" y2="4" />
-            <circle cx="3" cy="4" r="3" />
-            <circle cx="53" cy="4" r="3" />
-          </svg>
           <p className="font-display text-4xl leading-[1.05] md:text-5xl">
             <span className="block text-[var(--gold)]">Open to roles.</span>
-            <span className="block text-[var(--text-primary)]">
+            <span className="relative block text-[var(--text-primary)]">
               Let&apos;s talk.
+              {/* Main panel → headline, centred on the white line's first
+                  row; spans the 56px column gap to the flat panel's right
+                  edge. */}
+              <svg
+                aria-hidden="true"
+                className="code-connector pointer-events-none absolute top-[0.525em] right-full hidden -translate-y-1/2 lg:block"
+                width="56"
+                height="8"
+                viewBox="0 0 56 8"
+              >
+                <line x1="3" y1="4" x2="53" y2="4" />
+                <circle cx="3" cy="4" r="3" />
+                <circle cx="53" cy="4" r="3" />
+              </svg>
             </span>
           </p>
           <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
