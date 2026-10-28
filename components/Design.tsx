@@ -263,11 +263,29 @@ export default function Design() {
       <SectionTitle text="Design" headingId="design-heading" />
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 pb-6 md:px-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center lg:gap-14 lg:px-14 lg:pt-10">
-        <motion.div className="lg:col-start-2 lg:row-start-1" {...reveal(0)}>
+        {/* Top-aligned, a little below the panel's top edge. */}
+        <motion.div
+          className="lg:col-start-2 lg:row-start-1 lg:self-start lg:pt-14"
+          {...reveal(0)}
+        >
           <p className="font-display text-4xl leading-[1.05] md:text-5xl">
             <span className="block text-[var(--gold)]">Color, type</span>
-            <span className="block text-[var(--text-primary)]">
+            <span className="relative block text-[var(--text-primary)]">
               &amp; visual systems.
+              {/* Palette panel → headline, centred on the white line's first
+                  row; starts inside the box because the tilt pulls the
+                  panel's visible right edge inward. */}
+              <svg
+                aria-hidden="true"
+                className="code-connector pointer-events-none absolute top-[0.525em] right-full hidden -translate-y-1/2 lg:block"
+                width="70"
+                height="8"
+                viewBox="0 0 70 8"
+              >
+                <line x1="3" y1="4" x2="67" y2="4" />
+                <circle cx="3" cy="4" r="3" />
+                <circle cx="67" cy="4" r="3" />
+              </svg>
             </span>
           </p>
           <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
@@ -280,20 +298,6 @@ export default function Design() {
 
         <div className="lg:col-start-1 lg:row-start-1 lg:pb-6">
           <motion.div className="code-window-stage relative" {...reveal(0.1)}>
-            {/* Palette panel → headline; starts inside the box because the
-                tilt pulls the panel's visible right edge inward. */}
-            <svg
-              aria-hidden="true"
-              className="code-connector pointer-events-none absolute top-1/2 left-[calc(100%-14px)] hidden -translate-y-1/2 lg:block"
-              width="70"
-              height="8"
-              viewBox="0 0 70 8"
-            >
-              <line x1="3" y1="4" x2="67" y2="4" />
-              <circle cx="3" cy="4" r="3" />
-              <circle cx="67" cy="4" r="3" />
-            </svg>
-
             <CodeWindow
               title={tabs}
               className="code-window--tilted design-window--primary"

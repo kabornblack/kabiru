@@ -140,13 +140,27 @@ export default function AIEngineering() {
       />
 
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 md:px-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start lg:gap-16 lg:px-14 lg:pt-10">
-        {/* Top-aligned (not centred) because the ADR column is much taller. */}
-        <motion.div className="lg:pt-24" {...reveal(0)}>
+        {/* Top-aligned, a little below the panel's top edge. */}
+        <motion.div className="lg:pt-14" {...reveal(0)}>
           <p className="font-display text-4xl leading-[1.05] md:text-5xl">
             {/* NEW (headline) */}
             <span className="block text-[var(--gold)]">AI-assisted,</span>
-            <span className="block text-[var(--text-primary)]">
+            <span className="relative block text-[var(--text-primary)]">
               engineer-owned.
+              {/* Headline → ADR panel, centred on the white line's first row;
+                  ends ~14px inside the box because the tilt pulls the panel's
+                  visible left edge inward. */}
+              <svg
+                aria-hidden="true"
+                className="code-connector pointer-events-none absolute top-[0.525em] left-full hidden -translate-y-1/2 lg:block"
+                width="78"
+                height="8"
+                viewBox="0 0 78 8"
+              >
+                <line x1="3" y1="4" x2="75" y2="4" />
+                <circle cx="3" cy="4" r="3" />
+                <circle cx="75" cy="4" r="3" />
+              </svg>
             </span>
           </p>
           <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
@@ -159,21 +173,6 @@ export default function AIEngineering() {
 
         <div className="lg:pb-6">
           <motion.div className="code-window-stage relative" {...reveal(0.1)}>
-            {/* Headline → ADR panel, level with the headline (pt-24 + half its
-                height); ends ~14px inside the box because the tilt pulls the
-                panel's visible left edge inward. */}
-            <svg
-              aria-hidden="true"
-              className="code-connector pointer-events-none absolute top-48 right-[calc(100%-14px)] hidden -translate-y-1/2 lg:block"
-              width="78"
-              height="8"
-              viewBox="0 0 78 8"
-            >
-              <line x1="3" y1="4" x2="75" y2="4" />
-              <circle cx="3" cy="4" r="3" />
-              <circle cx="75" cy="4" r="3" />
-            </svg>
-
             <CodeWindow
               title={
                 <CodeTabs
