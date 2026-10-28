@@ -81,6 +81,7 @@ function Contact() {
               <Connector
                 variant="horizontal"
                 length={56}
+                ghostFrom="end"
                 className="absolute top-[0.525em] right-full -translate-y-1/2"
               />
             </span>
@@ -100,7 +101,7 @@ function Contact() {
             </CodeWindow>
           </motion.div>
 
-          <StackedConnector />
+          <StackedConnector stagger={1} />
 
           <motion.div
             className="code-window-stage relative lg:-mt-3 lg:-mr-8 lg:ml-auto lg:w-[86%]"
@@ -109,6 +110,7 @@ function Contact() {
             {/* Main panel → contact.json (elbow off the left edge) */}
             <Connector
               variant="elbow-left"
+              stagger={1}
               className="absolute top-3 right-full"
             />
 

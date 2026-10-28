@@ -279,6 +279,7 @@ export default function Design() {
               <Connector
                 variant="horizontal"
                 length={70}
+                ghostFrom="end"
                 className="absolute top-[0.525em] right-full -translate-y-1/2"
               />
             </span>
@@ -349,7 +350,7 @@ export default function Design() {
             </CodeWindow>
           </motion.div>
 
-          <StackedConnector />
+          <StackedConnector stagger={1} />
 
           <motion.div
             className="code-window-stage relative lg:-mt-3 lg:-mr-8 lg:ml-auto lg:w-[86%]"
@@ -358,6 +359,7 @@ export default function Design() {
             {/* Palette panel → preview panel (elbow off the left edge) */}
             <Connector
               variant="elbow-left"
+              stagger={1}
               className="absolute top-3 right-full"
             />
 

@@ -223,7 +223,7 @@ export default function AIEngineering() {
             </CodeWindow>
           </motion.div>
 
-          <StackedConnector />
+          <StackedConnector stagger={1} />
 
           <motion.div
             className="code-window-stage relative lg:-mt-3 lg:-ml-8 lg:w-[86%]"
@@ -232,6 +232,7 @@ export default function AIEngineering() {
             {/* ADR panel → boundaries panel (elbow off the right edge) */}
             <Connector
               variant="elbow-right"
+              stagger={1}
               className="absolute top-3 left-full"
             />
 

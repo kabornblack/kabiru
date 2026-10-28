@@ -19,6 +19,12 @@
   --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
   --duration-fast: 180ms;
   --duration: 280ms;
+
+  /* Connector "ghost" signal (components/Connector.tsx reads these once). */
+  --ghost-cycle: 5s; /* one pass every cycle */
+  --ghost-travel: 1.6s; /* time to travel the line; the rest is rest */
+  --ghost-stagger: 0.4s; /* offset between connectors in a section */
+  --ghost-opacity: 0.35; /* peak opacity */
 }
 
 @theme inline {
@@ -455,6 +461,24 @@ body {
   stroke-width: 1;
 }
 
+/* Travelling copy of a connector node; Connector.tsx animates only its
+   transform and opacity. Invisible until animated. */
+.connector-ghost {
+  position: absolute;
+  border-radius: 9999px;
+  background: var(--gold);
+  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--gold) 80%, transparent);
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .connector-ghost {
+    display: none;
+  }
+}
+
 /* Vertical line of the stacked (below lg) connector. */
 .code-connector-stem {
   background: color-mix(in srgb, var(--gold) 45%, transparent);
@@ -596,6 +620,11 @@ body {
   background: var(--palette-primary);
   filter: drop-shadow(0 0 4px var(--palette-primary));
   transition: background-color 200ms var(--ease-premium);
+}
+
+.design-section .connector-ghost {
+  background: var(--palette-primary);
+  box-shadow: 0 0 6px 1px color-mix(in srgb, var(--palette-primary) 80%, transparent);
 }
 
 .design-section .code-connector-stem {

@@ -128,7 +128,7 @@ export default function About() {
             </CodeWindow>
           </motion.div>
 
-          <StackedConnector />
+          <StackedConnector stagger={1} />
 
           <motion.div
             className="code-window-stage relative lg:-mt-6 lg:-ml-8 lg:w-[86%]"
@@ -137,6 +137,7 @@ export default function About() {
             {/* Profile panel → philosophy panel (elbow off the right edge) */}
             <Connector
               variant="elbow-right"
+              stagger={1}
               className="absolute top-6 left-full"
             />
 

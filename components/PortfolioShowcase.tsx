@@ -121,6 +121,7 @@ export default function HomePortfolioShowcase() {
             <Connector
               variant="horizontal"
               length={72}
+              stagger={1}
               className="absolute left-[calc(100%-4px)] -translate-y-1/2 transition-[top] duration-150"
               style={{ top: ROW_OFFSET + activeIndex * ROW_HEIGHT + ROW_HEIGHT / 2 }}
             />
@@ -168,7 +169,7 @@ export default function HomePortfolioShowcase() {
             </CodeWindow>
           </motion.div>
 
-          <StackedConnector />
+          <StackedConnector stagger={1} />
 
           <motion.div className="code-window-stage relative" {...reveal(0.2)}>
             <CodeWindow

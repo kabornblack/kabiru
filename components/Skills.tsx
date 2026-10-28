@@ -471,6 +471,7 @@ export default function Skills() {
               <Connector
                 variant="horizontal"
                 length={70}
+                ghostFrom="end"
                 className="absolute top-[0.525em] right-full -translate-y-1/2"
               />
             </span>
