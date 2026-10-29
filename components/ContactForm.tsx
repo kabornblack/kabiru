@@ -15,7 +15,8 @@ type FieldErrors = ContactErrors;
 
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
 
-const labelClass = "text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase";
+const labelClass =
+  "text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase";
 
 function ContactForm() {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -55,7 +56,9 @@ function ContactForm() {
 
       setStatus("idle");
       setStatusMessage("");
-      formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
+      formRef.current
+        ?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)
+        ?.focus();
       return false;
     },
     onSending: () => {
@@ -177,7 +180,7 @@ function ContactForm() {
       <div>
         <button
           className={[
-            "focus-ring btn-primary contact-submit w-full sm:w-auto",
+            "focus-ring btn-primary contact-submit w-full sm:w-auto cursor-pointer",
             loading ? "cursor-not-allowed opacity-60" : "",
           ].join(" ")}
           type="submit"
