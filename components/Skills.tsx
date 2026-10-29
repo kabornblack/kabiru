@@ -3,7 +3,8 @@
 import { motion } from "framer-motion";
 import SkillStackShowcase, { type SkillCategory } from "./SkillStackShowcase";
 import SectionTitle from "./SectionTitle";
-import { StackedConnector, useReveal } from "./CodeWindow";
+import Connector, { StackedConnector } from "./Connector";
+import { useReveal } from "./CodeWindow";
 
 const skillCategories: SkillCategory[] = [
   {
@@ -467,17 +468,12 @@ export default function Skills() {
               {/* Main panel → headline, centred on the white line's first
                   row; starts ~14px inside the box because the tilt pulls the
                   panel's visible right edge inward. */}
-              <svg
-                aria-hidden="true"
-                className="code-connector pointer-events-none absolute top-[0.525em] right-full hidden -translate-y-1/2 lg:block"
-                width="70"
-                height="8"
-                viewBox="0 0 70 8"
-              >
-                <line x1="3" y1="4" x2="67" y2="4" />
-                <circle cx="3" cy="4" r="3" />
-                <circle cx="67" cy="4" r="3" />
-              </svg>
+              <Connector
+                variant="horizontal"
+                length={70}
+                ghostFrom="end"
+                className="absolute top-[0.525em] right-full -translate-y-1/2"
+              />
             </span>
           </p>
           <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">

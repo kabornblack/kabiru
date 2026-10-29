@@ -1,5 +1,5 @@
-/** Fixed Header height in px (its `h-20` / `top-20` classes). */
-export const HEADER_HEIGHT = 80;
+/** Fixed Header height in px (its `h-17` classes). */
+export const HEADER_HEIGHT = 68;
 
 /** Hash scrolling lands a section this far from the top: clear of the header plus a small gap. */
 export const HASH_SCROLL_OFFSET = HEADER_HEIGHT + 8;

@@ -2,6 +2,7 @@
 
 import { useId, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import Connector, { StackedConnector } from "./Connector";
 import {
   CodeArray,
   CodePunct,
@@ -10,7 +11,6 @@ import {
   CodeWindow,
   codeTabId,
   codeTabPanelId,
-  StackedConnector,
   useReveal,
 } from "./CodeWindow";
 
@@ -140,25 +140,18 @@ export default function SkillStackShowcase({
         </CodeWindow>
       </motion.div>
 
-      <StackedConnector />
+      <StackedConnector stagger={1} />
 
       <motion.div
         className="code-window-stage relative lg:-mt-3 lg:-mr-8 lg:ml-auto lg:w-[86%]"
         {...reveal(0.2)}
       >
         {/* Main panel → summary panel (elbow off the left edge) */}
-        <svg
-          aria-hidden="true"
-          className="code-connector pointer-events-none absolute top-3 right-full hidden lg:block"
-          width="44"
-          height="52"
-          viewBox="0 0 44 52"
-        >
-          <path d="M44 48 H4 V0" />
-          <circle cx="44" cy="48" r="3" />
-          <circle cx="4" cy="48" r="2" />
-          <circle cx="4" cy="0" r="3" />
-        </svg>
+        <Connector
+          variant="elbow-left"
+          stagger={1}
+          className="absolute top-3 right-full"
+        />
 
         <CodeWindow
           title="summary.ts"

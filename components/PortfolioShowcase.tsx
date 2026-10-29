@@ -6,14 +6,15 @@ import { useEffect, useId, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { getFeaturedProjects, projects, type Project } from "./data/projectData";
 import SectionTitle from "./SectionTitle";
+import Connector, { StackedConnector } from "./Connector";
 import {
   CodeArray,
   CodePunct,
   CodeWindow,
   HostPill,
-  StackedConnector,
   useReveal,
 } from "./CodeWindow";
+import ScrambleText from "./ScrambleText";
 
 const SHOWCASE_COUNT = 4;
 
@@ -109,33 +110,22 @@ export default function HomePortfolioShowcase() {
         <div className="grid grid-cols-1 lg:mt-12 lg:grid-cols-[15rem_minmax(0,1fr)] lg:items-start lg:gap-14">
           <motion.div className="code-window-stage relative" {...reveal(0.1)}>
             {/* Headline → explorer */}
-            <svg
-              aria-hidden="true"
-              className="code-connector pointer-events-none absolute bottom-full left-8 hidden lg:block"
-              width="8"
-              height="48"
-              viewBox="0 0 8 48"
-            >
-              <line x1="4" y1="3" x2="4" y2="45" />
-              <circle cx="4" cy="3" r="3" />
-              <circle cx="4" cy="45" r="3" />
-            </svg>
+            <Connector
+              variant="vertical"
+              length={48}
+              className="absolute bottom-full left-8"
+            />
 
             {/* Explorer → window, follows the active row. Starts a few px
                 inside the box and overshoots the gap because both tilts pull
                 the facing edges inward. */}
-            <svg
-              aria-hidden="true"
-              className="code-connector pointer-events-none absolute left-[calc(100%-4px)] hidden -translate-y-1/2 transition-[top] duration-150 lg:block"
+            <Connector
+              variant="horizontal"
+              length={72}
+              stagger={1}
+              className="absolute left-[calc(100%-4px)] -translate-y-1/2 transition-[top] duration-150"
               style={{ top: ROW_OFFSET + activeIndex * ROW_HEIGHT + ROW_HEIGHT / 2 }}
-              width="72"
-              height="8"
-              viewBox="0 0 72 8"
-            >
-              <line x1="3" y1="4" x2="69" y2="4" />
-              <circle cx="3" cy="4" r="3" />
-              <circle cx="69" cy="4" r="3" />
-            </svg>
+            />
 
             <CodeWindow
               title="projects/"
@@ -180,7 +170,7 @@ export default function HomePortfolioShowcase() {
             </CodeWindow>
           </motion.div>
 
-          <StackedConnector />
+          <StackedConnector stagger={1} />
 
           <motion.div className="code-window-stage relative" {...reveal(0.2)}>
             <CodeWindow
@@ -236,7 +226,7 @@ export default function HomePortfolioShowcase() {
                             rel="noopener noreferrer"
                             className="focus-ring btn-primary"
                           >
-                            Live
+                            <ScrambleText text="Live" />
                             <span className="sr-only">
                               {" "}
                               {project.title} (opens in a new tab)
@@ -250,7 +240,7 @@ export default function HomePortfolioShowcase() {
                             rel="noopener noreferrer"
                             className="focus-ring btn-secondary"
                           >
-                            Code
+                            <ScrambleText text="Code" />
                             <span className="sr-only">
                               {" "}
                               {project.title} (opens in a new tab)
@@ -268,7 +258,7 @@ export default function HomePortfolioShowcase() {
 
         <motion.div className="mt-12 flex justify-center" {...reveal(0)}>
           <Link href="/portfolio" className="focus-ring btn-secondary">
-            View all projects
+            <ScrambleText text="View all projects" />
           </Link>
         </motion.div>
       </div>

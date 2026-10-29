@@ -8,13 +8,15 @@ import {
   type ContactField,
 } from "@/lib/contactValidation";
 import { HoneypotField, useEmailForm } from "@/lib/useEmailForm";
+import ScrambleText from "./ScrambleText";
 
 type FieldName = ContactField;
 type FieldErrors = ContactErrors;
 
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
 
-const labelClass = "text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase";
+const labelClass =
+  "text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase";
 
 function ContactForm() {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -54,7 +56,9 @@ function ContactForm() {
 
       setStatus("idle");
       setStatusMessage("");
-      formRef.current?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)?.focus();
+      formRef.current
+        ?.querySelector<HTMLElement>(`[name="${firstInvalid}"]`)
+        ?.focus();
       return false;
     },
     onSending: () => {
@@ -176,7 +180,7 @@ function ContactForm() {
       <div>
         <button
           className={[
-            "focus-ring btn-primary contact-submit w-full sm:w-auto",
+            "focus-ring btn-primary contact-submit w-full sm:w-auto cursor-pointer",
             loading ? "cursor-not-allowed opacity-60" : "",
           ].join(" ")}
           type="submit"
@@ -188,7 +192,7 @@ function ContactForm() {
               className="mr-2 h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent"
             />
           )}
-          {loading ? "Sending..." : "Send Message"}
+          <ScrambleText text={loading ? "Sending..." : "Send Message"} />
         </button>
       </div>
     </form>

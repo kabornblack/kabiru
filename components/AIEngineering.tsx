@@ -3,6 +3,7 @@
 import { ReactNode, useId, useState } from "react";
 import { motion } from "framer-motion";
 import SectionTitle from "./SectionTitle";
+import Connector, { StackedConnector } from "./Connector";
 import {
   CodePunct,
   CodeString,
@@ -10,7 +11,6 @@ import {
   CodeWindow,
   codeTabId,
   codeTabPanelId,
-  StackedConnector,
   useReveal,
 } from "./CodeWindow";
 
@@ -150,17 +150,11 @@ export default function AIEngineering() {
               {/* Headline → ADR panel, centred on the white line's first row;
                   ends ~14px inside the box because the tilt pulls the panel's
                   visible left edge inward. */}
-              <svg
-                aria-hidden="true"
-                className="code-connector pointer-events-none absolute top-[0.525em] left-full hidden -translate-y-1/2 lg:block"
-                width="78"
-                height="8"
-                viewBox="0 0 78 8"
-              >
-                <line x1="3" y1="4" x2="75" y2="4" />
-                <circle cx="3" cy="4" r="3" />
-                <circle cx="75" cy="4" r="3" />
-              </svg>
+              <Connector
+                variant="horizontal"
+                length={78}
+                className="absolute top-[0.525em] left-full -translate-y-1/2"
+              />
             </span>
           </p>
           <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
@@ -229,25 +223,18 @@ export default function AIEngineering() {
             </CodeWindow>
           </motion.div>
 
-          <StackedConnector />
+          <StackedConnector stagger={1} />
 
           <motion.div
             className="code-window-stage relative lg:-mt-3 lg:-ml-8 lg:w-[86%]"
             {...reveal(0.2)}
           >
             {/* ADR panel → boundaries panel (elbow off the right edge) */}
-            <svg
-              aria-hidden="true"
-              className="code-connector pointer-events-none absolute top-3 left-full hidden lg:block"
-              width="44"
-              height="52"
-              viewBox="0 0 44 52"
-            >
-              <path d="M0 48 H40 V0" />
-              <circle cx="0" cy="48" r="3" />
-              <circle cx="40" cy="48" r="2" />
-              <circle cx="40" cy="0" r="3" />
-            </svg>
+            <Connector
+              variant="elbow-right"
+              stagger={1}
+              className="absolute top-3 left-full"
+            />
 
             <CodeWindow
               title="boundaries.ts"

@@ -8,14 +8,15 @@ import Header from "@/components/Header";
 import GridBackground from "@/components/GridBackground";
 import ProjectCard from "@/components/ProjectCard";
 import SectionTitle from "@/components/SectionTitle";
+import Connector, { StackedConnector } from "@/components/Connector";
 import SiteFooter from "@/components/SiteFooter";
 import {
   CodeTabs,
   CodeWindow,
-  StackedConnector,
   codeTabId,
   useReveal,
 } from "./CodeWindow";
+import ScrambleText from "@/components/ScrambleText";
 
 /* Filters come from the categories the projects actually use, in the order
    the data file defines them; empty categories get no tab. */
@@ -83,17 +84,11 @@ export default function Portfolio() {
           {...reveal(0.1)}
         >
           {/* Headline → filter bar */}
-          <svg
-            aria-hidden="true"
-            className="code-connector pointer-events-none absolute bottom-full left-8 hidden lg:block"
-            width="8"
-            height="48"
-            viewBox="0 0 8 48"
-          >
-            <line x1="4" y1="3" x2="4" y2="45" />
-            <circle cx="4" cy="3" r="3" />
-            <circle cx="4" cy="45" r="3" />
-          </svg>
+          <Connector
+            variant="vertical"
+            length={48}
+            className="absolute bottom-full left-8"
+          />
 
           <CodeWindow
             title={
@@ -139,10 +134,10 @@ export default function Portfolio() {
 
         <div className="mt-12 flex flex-wrap justify-center gap-3">
           <Link href="/" className="focus-ring btn-secondary">
-            Back to home
+            <ScrambleText text="Back to home" />
           </Link>
           <Link href="/#contact" className="focus-ring btn-secondary">
-            Contact
+            <ScrambleText text="Contact" />
           </Link>
         </div>
       </main>

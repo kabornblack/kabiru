@@ -171,15 +171,6 @@ export const CodeTabs = ({
   );
 };
 
-/** Short vertical line + node that stands in for the desktop connectors. */
-export const StackedConnector = () => (
-  <div aria-hidden="true" className="flex flex-col items-start pl-6 lg:hidden">
-    <span className="code-connector-stem h-8 w-px" />
-    <span className="code-node -mt-px -ml-[3px] h-[7px] w-[7px] rounded-full bg-[var(--gold)]" />
-    <span className="code-connector-stem h-3 w-px" />
-  </div>
-);
-
 /** Fade/slide-in on scroll; instant under prefers-reduced-motion. */
 export function useReveal() {
   const reducedMotion = useReducedMotion();

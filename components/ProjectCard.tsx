@@ -3,6 +3,7 @@
 import Image from "next/image";
 import type { Project } from "./data/projectData";
 import { CodeArray, CodePunct, CodeWindow, HostPill } from "./CodeWindow";
+import ScrambleText from "./ScrambleText";
 
 type ProjectCardProps = {
   project: Project;
@@ -61,7 +62,7 @@ export default function ProjectCard({ project, eager = false }: ProjectCardProps
             rel="noopener noreferrer"
             className="focus-ring btn-primary"
           >
-            Live
+            <ScrambleText text="Live" />
             <span className="sr-only"> {project.title} (opens in a new tab)</span>
           </a>
         )}
@@ -72,7 +73,7 @@ export default function ProjectCard({ project, eager = false }: ProjectCardProps
             rel="noopener noreferrer"
             className="focus-ring btn-secondary"
           >
-            Code
+            <ScrambleText text="Code" />
             <span className="sr-only"> {project.title} (opens in a new tab)</span>
           </a>
         )}
