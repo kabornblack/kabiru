@@ -15,8 +15,7 @@ type FieldErrors = ContactErrors;
 
 const FIELD_ORDER: FieldName[] = ["name", "email", "subject", "message"];
 
-const labelClass =
-  "text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase";
+const labelClass = "eyebrow";
 
 function ContactForm() {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -30,7 +29,8 @@ function ContactForm() {
 
     try {
       const { default: confetti } = await import("canvas-confetti");
-      const colors = ["#B8860B", "#CD853F", "#DAA520", "#D4AF37"];
+      // canvas-confetti needs literal colours: gold-400, gold-300, rust-400, cream-100.
+      const colors = ["#C9A96B", "#D9BE86", "#A84A33", "#F2EADB"];
       confetti({
         particleCount: 120,
         spread: 80,
@@ -90,7 +90,7 @@ function ContactForm() {
     errors[field] ? (
       <p
         id={`contact-${field}-error`}
-        className="text-sm text-red-400"
+        className="text-sm text-[var(--status-error)]"
         aria-live="polite"
       >
         {errors[field]}
@@ -164,16 +164,16 @@ function ContactForm() {
       </div>
 
       <div
-        className="min-h-5 text-sm"
+        className="text-sm empty:mb-0"
         role="status"
         aria-live="polite"
         aria-atomic="true"
       >
         {status === "success" ? (
-          <p className="text-emerald-400">{statusMessage}</p>
+          <p className="text-[var(--status-success)]">{statusMessage}</p>
         ) : null}
         {status === "error" ? (
-          <p className="text-red-400">{statusMessage}</p>
+          <p className="text-[var(--status-error)]">{statusMessage}</p>
         ) : null}
       </div>
 

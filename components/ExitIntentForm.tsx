@@ -16,7 +16,7 @@ type ExitIntentFormProps = {
 /** Required here; the message is optional. */
 const REQUIRED_FIELDS: ContactField[] = ["name", "email"];
 
-const labelClass = "text-xs tracking-[0.08em] text-[var(--text-muted)] uppercase";
+const labelClass = "eyebrow";
 
 /** Compact name + email + optional message form — same EmailJS pipeline and template as the main ContactForm. */
 function ExitIntentForm({ onSuccess }: ExitIntentFormProps) {
@@ -67,7 +67,7 @@ function ExitIntentForm({ onSuccess }: ExitIntentFormProps) {
 
   const FieldError = ({ field }: { field: ContactField }) =>
     errors[field] ? (
-      <p id={`exit-${field}-error`} className="text-sm text-red-400" aria-live="polite">
+      <p id={`exit-${field}-error`} className="text-sm text-[var(--status-error)]" aria-live="polite">
         {errors[field]}
       </p>
     ) : null;
@@ -132,10 +132,10 @@ function ExitIntentForm({ onSuccess }: ExitIntentFormProps) {
         aria-atomic="true"
       >
         {status === "success" ? (
-          <p className="text-emerald-400">{statusMessage}</p>
+          <p className="text-[var(--status-success)]">{statusMessage}</p>
         ) : null}
         {status === "error" ? (
-          <p className="text-red-400">{statusMessage}</p>
+          <p className="text-[var(--status-error)]">{statusMessage}</p>
         ) : null}
       </div>
 

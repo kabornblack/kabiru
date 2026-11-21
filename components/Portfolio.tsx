@@ -7,7 +7,8 @@ import { projectCategories, projects } from "./data/projectData";
 import Header from "@/components/Header";
 import GridBackground from "@/components/GridBackground";
 import ProjectCard from "@/components/ProjectCard";
-import SectionTitle from "@/components/SectionTitle";
+import SectionHeading from "@/components/SectionHeading";
+import Container from "@/components/Container";
 import Connector, { StackedConnector } from "@/components/Connector";
 import SiteFooter from "@/components/SiteFooter";
 import {
@@ -50,96 +51,92 @@ export default function Portfolio() {
       <GridBackground />
       <Header />
 
-      <main className="mx-auto w-full max-w-6xl px-6 pt-24 pb-16 md:px-10 md:pt-28 lg:px-14">
-        <SectionTitle
+      <main className="section section--page">
+        <SectionHeading
           text="Portfolio"
           headingId="portfolio-page-heading"
           headingLevel="h1"
-          gapSm={28}
-          gapMd={44}
-          gapLg={58}
         />
-
-        <motion.div className="mt-6 max-w-2xl" {...reveal(0)}>
-          <p className="font-display text-4xl leading-[1.05] md:text-5xl">
-            <span className="block text-[var(--gold)]">Production products,</span>
-            <span className="block text-[var(--text-primary)]">
-              designed for real users.
-            </span>
-          </p>
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
-            Across Web3, marketplaces and full-stack applications — built with
-            React and TypeScript.
-          </p>
-          <p className="mt-3 font-mono text-[13px] text-[var(--text-muted)] md:text-sm">
-            <span className="text-[var(--gold)]">{"// "}</span>
-            {plural(projects.length)}
-          </p>
-        </motion.div>
-
-        <StackedConnector />
-
-        <motion.div
-          className="code-window-stage relative lg:mt-12"
-          {...reveal(0.1)}
-        >
-          {/* Headline → filter bar */}
-          <Connector
-            variant="vertical"
-            length={48}
-            className="absolute bottom-full left-8"
-          />
-
-          <CodeWindow
-            title={
-              <CodeTabs
-                label="Filter projects by category"
-                idPrefix={tabsId}
-                tabs={FILTERS}
-                activeIndex={activeIndex}
-                onSelect={setActiveIndex}
-                controls={panelId}
-                tabClassName="min-h-11"
-              />
-            }
-          >
-            <p aria-live="polite" className="text-[var(--text-muted)]">
-              <span className="text-[var(--gold)]">{"// "}</span>
-              showing {plural(visible.length)}
-              {category ? ` in ${category}` : ""}
+        <Container className="section-body">
+          <motion.div className="max-w-2xl" {...reveal(0)}>
+            <p className="display-lede">
+              <span className="block text-[var(--gold)]">Production products,</span>
+              <span className="block text-[var(--text-primary)]">
+                designed for real users.
+              </span>
             </p>
-          </CodeWindow>
-        </motion.div>
+            <p className="body-copy mt-3 max-w-xl">
+              Across Web3, marketplaces and full-stack applications — built with
+              React and TypeScript.
+            </p>
+            <p className="mt-2 font-mono text-[13px] text-[var(--text-muted)] md:text-sm">
+              {plural(projects.length)}
+            </p>
+          </motion.div>
 
-        <motion.div
-          key={activeIndex}
-          id={panelId}
-          role="tabpanel"
-          aria-labelledby={codeTabId(tabsId, activeIndex)}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: reducedMotion ? 0 : 0.15 }}
-          className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2"
-        >
-          {visible.map((project, index) => (
-            <motion.div
-              key={project.title}
-              className="h-full"
-              {...reveal(0.05 * (index % 2))}
+          <StackedConnector />
+
+          <motion.div
+            className="code-window-stage relative lg:mt-8"
+            {...reveal(0.1)}
+          >
+            {/* Headline → filter bar */}
+            <Connector
+              variant="vertical"
+              length={32}
+              className="absolute bottom-full left-8"
+            />
+
+            <CodeWindow
+              title={
+                <CodeTabs
+                  label="Filter projects by category"
+                  idPrefix={tabsId}
+                  tabs={FILTERS}
+                  activeIndex={activeIndex}
+                  onSelect={setActiveIndex}
+                  controls={panelId}
+                  tabClassName="min-h-11"
+                />
+              }
             >
-              <ProjectCard project={project} eager={index < 2} />
-            </motion.div>
-          ))}
-        </motion.div>
+              <p aria-live="polite" className="text-[var(--text-muted)]">
+                showing {plural(visible.length)}
+                {category ? ` in ${category}` : ""}
+              </p>
+            </CodeWindow>
+          </motion.div>
 
-        <div className="mt-12 flex flex-wrap justify-center gap-3">
-          <Link href="/" className="focus-ring btn-secondary">
-            <ScrambleText text="Back to home" />
-          </Link>
-          <Link href="/#contact" className="focus-ring btn-secondary">
-            <ScrambleText text="Contact" />
-          </Link>
-        </div>
+          <motion.div
+            key={activeIndex}
+            id={panelId}
+            role="tabpanel"
+            aria-labelledby={codeTabId(tabsId, activeIndex)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: reducedMotion ? 0 : 0.15 }}
+            className="project-grid mt-[var(--gap)] grid auto-rows-fr grid-cols-1 gap-[var(--gap)] lg:grid-cols-2"
+          >
+            {visible.map((project, index) => (
+              <motion.div
+                key={project.title}
+                className="h-full"
+                {...reveal(0.05 * (index % 2))}
+              >
+                <ProjectCard project={project} eager={index === 0} />
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <div className="mt-12 flex flex-wrap justify-center gap-3">
+            <Link href="/" className="focus-ring btn-secondary">
+              <ScrambleText text="Back to home" />
+            </Link>
+            <Link href="/#contact" className="focus-ring btn-secondary">
+              <ScrambleText text="Contact" />
+            </Link>
+          </div>
+        </Container>
       </main>
 
       <SiteFooter />

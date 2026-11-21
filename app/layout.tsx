@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Quicksand, Protest_Revolution } from "next/font/google";
+import { Archivo, Source_Sans_3 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 
 import VisitorPing from "@/components/VisitorPing";
@@ -8,23 +8,24 @@ import ExitIntentPopup from "@/components/ExitIntentPopup";
 
 import "./globals.css";
 
-const protest = Protest_Revolution({
+// Display: condensed neo-grotesk (variable; the wdth axis gives the condensed cut).
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: "400",
-  variable: "--font-protest",
+  axes: ["wdth"],
+  variable: "--font-archivo",
   display: "swap",
 });
 
-const quicksand = Quicksand({
+// Body: humanist sans.
+const sourceSans = Source_Sans_3({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-quicksand",
+  variable: "--font-source-sans",
   display: "swap",
 });
 
-// Matches --page-bg in globals.css.
+// Mirrors --ink-900 in globals.css (metadata needs a literal value).
 export const viewport: Viewport = {
-  themeColor: "#030712",
+  themeColor: "#171B12",
 };
 
 /*
@@ -87,10 +88,10 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${quicksand.variable} ${protest.variable}`}
+      className={`${archivo.variable} ${sourceSans.variable}`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-[var(--page-bg)] font-sans text-[var(--text-primary)] antialiased">
+      <body className="min-h-screen font-sans antialiased">
         {children}
         <Analytics />
         <VisitorPing />

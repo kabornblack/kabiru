@@ -2,7 +2,8 @@
 
 import { ReactNode, useId, useState } from "react";
 import { motion } from "framer-motion";
-import SectionTitle from "./SectionTitle";
+import SectionHeading from "./SectionHeading";
+import Container from "./Container";
 import Connector, { StackedConnector } from "./Connector";
 import {
   CodePunct,
@@ -129,160 +130,158 @@ export default function AIEngineering() {
     <section
       id="ai-engineering"
       aria-labelledby="ai-engineering-heading"
-      className="w-full pb-8"
+      className="section section--alt"
     >
-      <SectionTitle
+      <SectionHeading
         text="AI Engineering"
         headingId="ai-engineering-heading"
-        gapSm={17}
-        gapMd={26}
-        gapLg={34}
       />
-
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 md:px-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start lg:gap-16 lg:px-14 lg:pt-10">
-        {/* Top-aligned, a little below the panel's top edge. */}
-        <motion.div className="lg:pt-14" {...reveal(0)}>
-          <p className="font-display text-4xl leading-[1.05] md:text-5xl">
-            {/* NEW (headline) */}
-            <span className="block text-[var(--gold)]">AI-assisted,</span>
-            <span className="relative block text-[var(--text-primary)]">
-              engineer-owned.
-              {/* Headline → ADR panel, centred on the white line's first row;
-                  ends ~14px inside the box because the tilt pulls the panel's
-                  visible left edge inward. */}
-              <Connector
-                variant="horizontal"
-                length={78}
-                className="absolute top-[0.525em] left-full -translate-y-1/2"
-              />
-            </span>
-          </p>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
-            How I use AI to design, build and operate real systems, not just
-            prompt a chatbot.
-          </p>
-        </motion.div>
-
-        <StackedConnector />
-
-        <div className="lg:pb-6">
-          <motion.div className="code-window-stage relative" {...reveal(0.1)}>
-            <CodeWindow
-              title={
-                <CodeTabs
-                  label="Architecture decision record sections"
-                  idPrefix={adrId}
-                  tabs={ADR.map((block) => ({
-                    file: `${block.label.toLowerCase()}.md`,
-                    name: block.label,
-                  }))}
-                  activeIndex={activeAdr}
-                  onSelect={setActiveAdr}
+      <Container className="section-body">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-start lg:gap-x-[var(--gap)]">
+          {/* Top-aligned, a little below the panel's top edge. */}
+          <motion.div {...reveal(0)}>
+            <p className="display-lede">
+              {/* NEW (headline) */}
+              <span className="block text-[var(--gold)]">AI-assisted,</span>
+              <span className="relative block text-[var(--text-primary)]">
+                engineer-owned.
+                {/* Headline → ADR panel, centred on the white line's first row;
+                    ends ~14px inside the box because the tilt pulls the panel's
+                    visible left edge inward. */}
+                <Connector
+                  variant="horizontal"
+                  length={40}
+                  className="absolute top-[var(--lede-row-center)] left-full -translate-y-1/2"
                 />
-              }
-              className="code-window--tilted ai-window--primary"
-            >
-              <div className="space-y-4">
-                <div>
-                  <div className="text-[var(--text-primary)]">
-                    <CodePunct># </CodePunct>ADR: AI in the loop
-                  </div>
+              </span>
+            </p>
+            <p className="body-copy mt-3 max-w-md">
+              How I use AI to design, build and operate real systems, not just
+              prompt a chatbot.
+            </p>
+          </motion.div>
+
+          <StackedConnector />
+
+          <div className="lg:pb-6">
+            <motion.div className="code-window-stage relative" {...reveal(0.1)}>
+              <CodeWindow
+                title={
+                  <CodeTabs
+                    label="Architecture decision record sections"
+                    idPrefix={adrId}
+                    tabs={ADR.map((block) => ({
+                      file: `${block.label.toLowerCase()}.md`,
+                      name: block.label,
+                    }))}
+                    activeIndex={activeAdr}
+                    onSelect={setActiveAdr}
+                  />
+                }
+                className="code-window--tilted ai-window--primary"
+              >
+                <div className="space-y-4">
                   <div>
-                    <span className="text-[var(--gold)]">status</span>
-                    <CodePunct>: </CodePunct>
-                    <span className="text-[var(--text-primary)]">accepted</span>
+                    <div className="text-[var(--text-primary)]">
+                      <CodePunct># </CodePunct>ADR: AI in the loop
+                    </div>
+                    <div>
+                      <span className="text-[var(--gold)]">status</span>
+                      <CodePunct>: </CodePunct>
+                      <span className="text-[var(--text-primary)]">accepted</span>
+                    </div>
+                  </div>
+
+                  {/* Panes share one grid cell, so the body is always as tall
+                      as the longest section and never resizes between tabs. */}
+                  <div className="code-panes">
+                    {ADR.map((block, index) => (
+                      <div
+                        key={block.label}
+                        id={codeTabPanelId(adrId, index)}
+                        role="tabpanel"
+                        aria-labelledby={codeTabId(adrId, index)}
+                        data-active={index === activeAdr}
+                        aria-hidden={index !== activeAdr}
+                        className="code-pane"
+                      >
+                        <div className="text-[var(--gold)]">
+                          <CodePunct>## </CodePunct>
+                          {block.label}
+                        </div>
+                        <div className="mt-1 space-y-1.5 text-[var(--text-primary)] opacity-90">
+                          {block.lines.map((line) => (
+                            <p key={line}>{line}</p>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
+              </CodeWindow>
+            </motion.div>
 
-                {/* Panes share one grid cell, so the body is always as tall
-                    as the longest section and never resizes between tabs. */}
-                <div className="code-panes">
-                  {ADR.map((block, index) => (
-                    <div
-                      key={block.label}
-                      id={codeTabPanelId(adrId, index)}
-                      role="tabpanel"
-                      aria-labelledby={codeTabId(adrId, index)}
-                      data-active={index === activeAdr}
-                      aria-hidden={index !== activeAdr}
-                      className="code-pane"
-                    >
-                      <div className="text-[var(--gold)]">
-                        <CodePunct>## </CodePunct>
-                        {block.label}
+            <StackedConnector stagger={1} />
+
+            <motion.div
+              className="code-window-stage relative lg:-mt-3 lg:-ml-8 lg:w-[86%]"
+              {...reveal(0.2)}
+            >
+              {/* ADR panel → boundaries panel (elbow off the right edge) */}
+              <Connector
+                variant="elbow-right"
+                stagger={1}
+                className="absolute top-3 left-full"
+              />
+
+              <CodeWindow
+                title="boundaries.ts"
+                className="code-window--tilted ai-window--secondary"
+              >
+                <div>
+                  <span className="text-[var(--gold)]">export const </span>
+                  <span className="text-[var(--text-primary)]">boundaries</span>
+                  <CodePunct> = {"{"}</CodePunct>
+                </div>
+                <div className="space-y-2.5 py-1 pl-4">
+                  {BOUNDARIES.map((boundary) => (
+                    <div key={boundary.key}>
+                      <div className="grid grid-cols-[auto_1fr] gap-x-2">
+                        <span className="text-[var(--gold)]">{"//"}</span>
+                        <span className="text-[var(--text-muted)]">
+                          {boundary.comment}
+                        </span>
                       </div>
-                      <div className="mt-1 space-y-1.5 text-[var(--text-primary)] opacity-90">
-                        {block.lines.map((line) => (
-                          <p key={line}>{line}</p>
-                        ))}
+                      <div className="pl-4 -indent-4">
+                        <span className="text-[var(--text-primary)]">
+                          {boundary.key}
+                        </span>
+                        <CodePunct>: </CodePunct>
+                        <CodeString>{boundary.value}</CodeString>
+                        <CodePunct>,</CodePunct>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
-            </CodeWindow>
-          </motion.div>
-
-          <StackedConnector stagger={1} />
-
-          <motion.div
-            className="code-window-stage relative lg:-mt-3 lg:-ml-8 lg:w-[86%]"
-            {...reveal(0.2)}
-          >
-            {/* ADR panel → boundaries panel (elbow off the right edge) */}
-            <Connector
-              variant="elbow-right"
-              stagger={1}
-              className="absolute top-3 left-full"
-            />
-
-            <CodeWindow
-              title="boundaries.ts"
-              className="code-window--tilted ai-window--secondary"
-            >
-              <div>
-                <span className="text-[var(--gold)]">export const </span>
-                <span className="text-[var(--text-primary)]">boundaries</span>
-                <CodePunct> = {"{"}</CodePunct>
-              </div>
-              <div className="space-y-2.5 py-1 pl-4">
-                {BOUNDARIES.map((boundary) => (
-                  <div key={boundary.key}>
-                    <div className="grid grid-cols-[auto_1fr] gap-x-2">
-                      <span className="text-[var(--gold)]">{"//"}</span>
-                      <span className="text-[var(--text-muted)]">
-                        {boundary.comment}
-                      </span>
-                    </div>
-                    <div className="pl-4 -indent-4">
-                      <span className="text-[var(--text-primary)]">
-                        {boundary.key}
-                      </span>
-                      <CodePunct>: </CodePunct>
-                      <CodeString>{boundary.value}</CodeString>
-                      <CodePunct>,</CodePunct>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <CodePunct>{"};"}</CodePunct>
-            </CodeWindow>
-          </motion.div>
+                <CodePunct>{"};"}</CodePunct>
+              </CodeWindow>
+            </motion.div>
+          </div>
         </div>
-      </div>
 
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 px-6 pt-14 pb-4 md:grid-cols-2 md:px-10 lg:grid-cols-4 lg:px-14">
-        {VALUES.map((value, index) => (
-          <motion.div key={value.label} {...reveal(0.05 * index)}>
-            <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
-              {value.label}
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
-              {value.body}
-            </p>
-          </motion.div>
-        ))}
-      </div>
+        <div className="grid grid-cols-1 gap-[var(--gap)] pt-[var(--intro-gap)] md:grid-cols-2 lg:grid-cols-4">
+          {VALUES.map((value, index) => (
+            <motion.div key={value.label} className="card" {...reveal(0.05 * index)}>
+              <h3 className="title-sm">
+                {value.label}
+              </h3>
+              <p className="body-copy mt-2">
+                {value.body}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </Container>
     </section>
   );
 }

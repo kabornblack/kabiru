@@ -44,7 +44,7 @@ export const CodeWindow = ({
   children: ReactNode;
 }) => (
   <div className={`code-window ${className}`}>
-    <div className="flex items-center gap-2 bg-black/30 px-4 py-2.5">
+    <div className="code-window-bar flex items-center gap-2 px-4 py-[10px]">
       <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[var(--gold)]" />
       <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[color-mix(in_srgb,var(--gold)_60%,transparent)]" />
       <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-[color-mix(in_srgb,var(--gold)_30%,transparent)]" />
@@ -57,7 +57,7 @@ export const CodeWindow = ({
       )}
     </div>
     <div
-      className={`p-4 font-mono text-[13px] leading-relaxed break-words md:p-5 md:text-sm ${bodyClassName}`}
+      className={`code-window-body p-[var(--card-pad)] font-mono text-[13px] leading-[1.55] break-words ${bodyClassName}`}
     >
       {children}
     </div>
@@ -66,7 +66,7 @@ export const CodeWindow = ({
 
 /** Browser-style address pill for a CodeWindow title bar, e.g. "stayloyal.xyz". */
 export const HostPill = ({ url }: { url: string }) => (
-  <span className="ml-2 min-w-0 truncate rounded-full bg-white/[0.05] px-3 py-0.5 font-mono text-[13px] text-[var(--text-muted)]">
+  <span className="ml-2 min-w-0 truncate rounded-full bg-[var(--ink-600)] px-3 py-0.5 font-mono text-[13px] text-[var(--text-muted)]">
     {hostOf(url)}
   </span>
 );

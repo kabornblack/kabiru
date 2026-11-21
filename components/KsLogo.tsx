@@ -15,10 +15,10 @@ export default function KsLogo({
       aria-hidden="true"
       focusable="false"
     >
-      <rect width="64" height="64" rx="14" fill="#000" />
+      <rect width="64" height="64" rx="14" fill="var(--ink-900)" stroke="var(--line)" />
       <g
         fill="none"
-        stroke="#b8860b"
+        stroke="var(--gold-400)"
         strokeWidth="5.5"
         strokeLinecap="round"
         strokeLinejoin="round"

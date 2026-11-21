@@ -1,12 +1,13 @@
 "use client";
 
-import Link from "next/link";
+import Link, { useLinkStatus } from "next/link";
 import React, { useEffect, useId, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { FaBars, FaTimes } from "react-icons/fa";
 import Socials from "./Socials";
 import KsLogo from "./KsLogo";
+import Container from "./Container";
 import { ACTIVE_SECTION_OFFSET, scrollToHash } from "@/lib/scroll";
 import ScrambleText from "@/components/ScrambleText";
 
@@ -35,6 +36,18 @@ const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1
 /* Outlined gold: the Hero's Contact Me is the filled primary. */
 const contactButtonClass =
   "focus-ring inline-flex min-h-11 items-center justify-center rounded-[var(--radius-sm)] border border-[var(--gold)] px-4 text-xs font-semibold tracking-[0.14em] text-[var(--gold)] uppercase transition-colors duration-200 hover:bg-[color-mix(in_srgb,var(--gold)_12%,transparent)] hover:text-[var(--gold-hover)]";
+
+/** Shown inside a <Link> while its navigation is in flight: instant click feedback. */
+function LinkPending() {
+  const { pending } = useLinkStatus();
+  if (!pending) return null;
+  return (
+    <span
+      aria-hidden="true"
+      className="absolute right-3 bottom-1.5 left-3 h-0.5 animate-pulse bg-[var(--gold)]"
+    />
+  );
+}
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -247,7 +260,7 @@ function Header() {
       href="/"
       aria-label="Home"
       onClick={(event) => goToHash(event, "home")}
-      className="focus-ring hit-target inline-flex shrink-0 rounded-lg transition-shadow duration-300 hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--gold)_40%,transparent),0_0_18px_color-mix(in_srgb,var(--gold)_30%,transparent)]"
+      className="focus-ring hit-target inline-flex shrink-0 rounded-lg transition-shadow duration-300 hover:shadow-[0_0_0_1px_color-mix(in_srgb,var(--gold)_55%,transparent)]"
     >
       <KsLogo size={38} className="block" />
     </Link>
@@ -265,8 +278,8 @@ function Header() {
       className={[
         "fixed top-0 left-0 z-50 h-17 w-full border-b transition-colors duration-300",
         scrolled
-          ? "border-[var(--border-subtle)] bg-black/80 backdrop-blur-xl shadow-lg"
-          : "border-white/5 bg-gradient-to-br from-white/10 to-[var(--page-bg)]",
+          ? "border-[var(--line)] bg-[color-mix(in_srgb,var(--ink-900)_88%,transparent)] backdrop-blur-xl"
+          : "border-transparent bg-[color-mix(in_srgb,var(--ink-900)_72%,transparent)]",
       ].join(" ")}
     >
       <a
@@ -279,7 +292,7 @@ function Header() {
         Skip to content
       </a>
 
-      <div className="relative mx-auto flex h-17 max-w-7xl items-center gap-8 px-4 sm:px-6 xl:gap-10">
+      <Container className="relative flex h-17 items-center gap-8 xl:gap-10">
         {logo}
 
         <nav aria-label="Primary" className="hidden lg:block">
@@ -291,6 +304,7 @@ function Header() {
                 <li key={link.label}>
                   <Link
                     href={link.href}
+                    prefetch
                     aria-current={ariaCurrent(link)}
                     onClick={(event) => handleNavClick(event, link)}
                     className={[
@@ -308,6 +322,7 @@ function Header() {
                       ].join(" ")}
                       aria-hidden="true"
                     />
+                    <LinkPending />
                   </Link>
                 </li>
               );
@@ -341,7 +356,7 @@ function Header() {
             <FaBars className="h-6 w-6" aria-hidden="true" />
           )}
         </button>
-      </div>
+      </Container>
 
       <AnimatePresence>
         {isMenuOpen ? (
@@ -353,7 +368,7 @@ function Header() {
             className="absolute top-full left-0 h-[calc(100dvh-100%)] w-full lg:hidden"
           >
             <div
-              className="absolute inset-0 bg-black/60"
+              className="absolute inset-0 bg-[color-mix(in_srgb,var(--ink-900)_70%,transparent)]"
               onClick={closeMenu}
               aria-hidden="true"
             />
@@ -363,7 +378,7 @@ function Header() {
               animate={{ y: 0 }}
               exit={{ y: reducedMotion ? 0 : -8 }}
               transition={{ duration: reducedMotion ? 0 : 0.2 }}
-              className="relative max-h-full overflow-y-auto border-b border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 pt-3 pb-5 shadow-2xl sm:px-6"
+              className="relative max-h-full overflow-y-auto border-b border-[var(--border-subtle)] bg-[var(--surface-elevated)] px-4 pt-3 pb-5 sm:px-6"
             >
               <nav aria-label="Mobile primary">
                 <ul className="flex flex-col gap-1">
@@ -380,7 +395,7 @@ function Header() {
                             "focus-ring flex min-h-12 items-center rounded-md px-3 text-sm font-semibold tracking-[0.12em] uppercase transition-colors",
                             active
                               ? "bg-[color-mix(in_srgb,var(--gold)_12%,transparent)] text-[var(--gold)]"
-                              : "text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--gold)]",
+                              : "text-[var(--text-muted)] hover:bg-[var(--ink-700)] hover:text-[var(--gold)]",
                           ].join(" ")}
                         >
                           {link.label}

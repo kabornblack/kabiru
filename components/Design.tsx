@@ -2,7 +2,8 @@
 
 import { CSSProperties, useId, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import SectionTitle from "./SectionTitle";
+import SectionHeading from "./SectionHeading";
+import Container from "./Container";
 import Connector, { StackedConnector } from "./Connector";
 import { CodePunct, CodeWindow, useReveal } from "./CodeWindow";
 
@@ -258,207 +259,209 @@ export default function Design() {
     <section
       id="design"
       aria-labelledby="design-heading"
-      className="design-section w-full pb-8"
+      className="design-section section"
       style={paletteVars}
     >
-      <SectionTitle text="Design" headingId="design-heading" />
+      <SectionHeading text="Design" headingId="design-heading" />
+      <Container className="section-body">
 
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 pb-6 md:px-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center lg:gap-14 lg:px-14 lg:pt-10">
-        {/* Top-aligned, a little below the panel's top edge. */}
-        <motion.div
-          className="lg:col-start-2 lg:row-start-1 lg:self-start lg:pt-14"
-          {...reveal(0)}
-        >
-          <p className="font-display text-4xl leading-[1.05] md:text-5xl">
-            <span className="block text-[var(--gold)]">Color, type</span>
-            <span className="relative block text-[var(--text-primary)]">
-              &amp; visual systems.
-              {/* Palette panel → headline, centred on the white line's first
-                  row; starts inside the box because the tilt pulls the
-                  panel's visible right edge inward. */}
-              <Connector
-                variant="horizontal"
-                length={70}
-                ghostFrom="end"
-                className="absolute top-[0.525em] right-full -translate-y-1/2"
-              />
-            </span>
-          </p>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
-            The visual system behind every screen in this portfolio — decided
-            once, then reused everywhere instead of re-invented per page.
-          </p>
-        </motion.div>
-
-        <StackedConnector />
-
-        <div className="lg:col-start-1 lg:row-start-1 lg:pb-6">
-          <motion.div className="code-window-stage relative" {...reveal(0.1)}>
-            <CodeWindow
-              title={tabs}
-              className="code-window--tilted design-window--primary"
-            >
-              <div className="code-panes">
-                {PALETTES.map((palette, index) => (
-                  <div
-                    key={palette.name}
-                    id={`${tablistId}-panel-${index}`}
-                    role="tabpanel"
-                    aria-labelledby={`${tablistId}-tab-${index}`}
-                    data-active={index === activeIndex}
-                    aria-hidden={index !== activeIndex}
-                    className="code-pane"
-                  >
-                    <div className="grid grid-cols-[auto_1fr] gap-x-2">
-                      <span className="text-[var(--gold)]">{"//"}</span>
-                      <span className="text-[var(--text-muted)]">
-                        {palette.harmony}
-                      </span>
-                    </div>
-                    <div className="mt-2 text-[var(--text-primary)]">
-                      :root <CodePunct>{"{"}</CodePunct>
-                    </div>
-                    {TOKENS.map((token) => (
-                      <div
-                        key={token}
-                        className="flex items-center pl-4"
-                      >
-                        <span className="text-[var(--gold)]">--{token}</span>
-                        <CodePunct>:</CodePunct>
-                        <span
-                          aria-hidden="true"
-                          className="mx-2 h-3.5 w-3.5 shrink-0 rounded-[3px] ring-1 ring-white/25"
-                          style={{ background: palette[token] }}
-                        />
-                        <span className="text-[var(--text-primary)]">
-                          {palette[token]}
-                        </span>
-                        <CodePunct>;</CodePunct>
-                      </div>
-                    ))}
-                    <CodePunct>{"}"}</CodePunct>
-                    <div
-                      aria-hidden="true"
-                      className="mt-4 h-3 rounded-full"
-                      style={{
-                        background: `linear-gradient(90deg, ${palette.primary}, ${palette.secondary}, ${palette.accent})`,
-                      }}
-                    />
-                  </div>
-                ))}
-              </div>
-            </CodeWindow>
-          </motion.div>
-
-          <StackedConnector stagger={1} />
-
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center lg:gap-x-[var(--gap)]">
+          {/* Top-aligned, a little below the panel's top edge. */}
           <motion.div
-            className="code-window-stage relative lg:-mt-3 lg:-mr-8 lg:ml-auto lg:w-[86%]"
-            {...reveal(0.2)}
+            className="lg:col-start-2 lg:row-start-1 lg:self-start"
+            {...reveal(0)}
           >
-            {/* Palette panel → preview panel (elbow off the left edge) */}
-            <Connector
-              variant="elbow-left"
-              stagger={1}
-              className="absolute top-3 right-full"
-            />
-
-            <CodeWindow
-              title="preview.tsx"
-              className="code-window--tilted design-window--secondary"
-            >
-              <div className="design-preview space-y-4">
-                <div aria-hidden="true" className="space-y-3">
-                  <div className="design-preview-card rounded-[var(--radius-sm)] p-3 font-sans">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-semibold">
-                        Visual Hierarchy
-                      </span>
-                      <span className="design-preview-badge rounded-full px-2 py-0.5 text-[11px] font-semibold">
-                        accent
-                      </span>
-                    </div>
-                    <p className="mt-1 text-[13px] opacity-85">
-                      Label, headline, supporting copy, single action.
-                    </p>
-                    <div className="mt-3 flex h-12 items-end gap-1.5">
-                      {BAR_HEIGHTS.map((height, index) => (
-                        <span
-                          key={index}
-                          className="design-preview-bar w-full rounded-t-sm"
-                          style={{
-                            height: `${height}%`,
-                            background: `var(--palette-${BAR_TOKENS[index]})`,
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-2 font-sans">
-                    <span className="design-preview-primary rounded-[var(--radius-sm)] px-3 py-1.5 text-[13px] font-semibold">
-                      Primary
-                    </span>
-                    <span className="design-preview-secondary rounded-[var(--radius-sm)] px-3 py-1.5 text-[13px] font-semibold">
-                      Secondary
-                    </span>
-                  </div>
-                </div>
-
-                <div className="space-y-1" aria-live="polite">
-                  <ContrastRow
-                    label="text / surface"
-                    fg={active.text}
-                    bg={active.surface}
-                  />
-                  <ContrastRow
-                    label="button / primary"
-                    fg={active.surface}
-                    bg={active.primary}
-                  />
-                </div>
-              </div>
-            </CodeWindow>
-          </motion.div>
-        </div>
-      </div>
-
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 px-6 pt-10 md:grid-cols-3 md:px-10 lg:px-14">
-        {PRINCIPLES.map((principle, index) => (
-          <motion.div key={principle.title} {...reveal(0.05 * (index % 3))}>
-            <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
-              {principle.title}
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
-              {principle.description}
+            <p className="display-lede">
+              <span className="block text-[var(--gold)]">Color, type</span>
+              <span className="relative block text-[var(--text-primary)]">
+                &amp; visual systems.
+                {/* Palette panel → headline, centred on the white line's first
+                    row; starts inside the box because the tilt pulls the
+                    panel's visible right edge inward. */}
+                <Connector
+                  variant="horizontal"
+                  length={40}
+                  ghostFrom="end"
+                  className="absolute top-[var(--lede-row-center)] right-full -translate-y-1/2"
+                />
+              </span>
+            </p>
+            <p className="body-copy mt-3 max-w-md">
+              The visual system behind every screen in this portfolio — decided
+              once, then reused everywhere instead of re-invented per page.
             </p>
           </motion.div>
-        ))}
-      </div>
 
-      <div className="mx-auto w-full max-w-6xl px-6 pt-14 md:px-10 lg:px-14">
-        <motion.div {...reveal(0)}>
-          <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
-            What I Design
-          </h3>
-          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
-            The same six principles, applied to the assets a brand or launch
-            actually needs.
-          </p>
-        </motion.div>
+          <StackedConnector />
 
-        <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {DELIVERABLES.map((deliverable, index) => (
-            <motion.div key={deliverable.title} {...reveal(0.05 * index)}>
-              <h4 className="text-sm font-semibold tracking-[0.04em] text-[var(--text-primary)]">
-                {deliverable.title}
-              </h4>
-              <p className="mt-2 text-sm leading-relaxed text-[var(--text-muted)]">
-                {deliverable.description}
+          <div className="lg:col-start-1 lg:row-start-1 lg:pb-6">
+            <motion.div className="code-window-stage relative" {...reveal(0.1)}>
+              <CodeWindow
+                title={tabs}
+                className="code-window--tilted design-window--primary"
+              >
+                <div className="code-panes">
+                  {PALETTES.map((palette, index) => (
+                    <div
+                      key={palette.name}
+                      id={`${tablistId}-panel-${index}`}
+                      role="tabpanel"
+                      aria-labelledby={`${tablistId}-tab-${index}`}
+                      data-active={index === activeIndex}
+                      aria-hidden={index !== activeIndex}
+                      className="code-pane"
+                    >
+                      <div className="grid grid-cols-[auto_1fr] gap-x-2">
+                        <span className="text-[var(--gold)]">{"//"}</span>
+                        <span className="text-[var(--text-muted)]">
+                          {palette.harmony}
+                        </span>
+                      </div>
+                      <div className="mt-2 text-[var(--text-primary)]">
+                        :root <CodePunct>{"{"}</CodePunct>
+                      </div>
+                      {TOKENS.map((token) => (
+                        <div
+                          key={token}
+                          className="flex items-center pl-4"
+                        >
+                          <span className="text-[var(--gold)]">--{token}</span>
+                          <CodePunct>:</CodePunct>
+                          <span
+                            aria-hidden="true"
+                            className="mx-2 h-3.5 w-3.5 shrink-0 rounded-[3px] ring-1 ring-[var(--line-strong)]"
+                            style={{ background: palette[token] }}
+                          />
+                          <span className="text-[var(--text-primary)]">
+                            {palette[token]}
+                          </span>
+                          <CodePunct>;</CodePunct>
+                        </div>
+                      ))}
+                      <CodePunct>{"}"}</CodePunct>
+                      <div
+                        aria-hidden="true"
+                        className="mt-4 h-3 rounded-full"
+                        style={{
+                          background: `linear-gradient(90deg, ${palette.primary}, ${palette.secondary}, ${palette.accent})`,
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </CodeWindow>
+            </motion.div>
+
+            <StackedConnector stagger={1} />
+
+            <motion.div
+              className="code-window-stage relative lg:-mt-3 lg:-mr-8 lg:ml-auto lg:w-[86%]"
+              {...reveal(0.2)}
+            >
+              {/* Palette panel → preview panel (elbow off the left edge) */}
+              <Connector
+                variant="elbow-left"
+                stagger={1}
+                className="absolute top-3 right-full"
+              />
+
+              <CodeWindow
+                title="preview.tsx"
+                className="code-window--tilted design-window--secondary"
+              >
+                <div className="design-preview space-y-4">
+                  <div aria-hidden="true" className="space-y-3">
+                    <div className="design-preview-card rounded-[var(--radius-sm)] p-3 font-sans">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="text-sm font-semibold">
+                          Visual Hierarchy
+                        </span>
+                        <span className="design-preview-badge rounded-full px-2 py-0.5 text-[11px] font-semibold">
+                          accent
+                        </span>
+                      </div>
+                      <p className="mt-1 text-[13px] opacity-85">
+                        Label, headline, supporting copy, single action.
+                      </p>
+                      <div className="mt-3 flex h-12 items-end gap-1.5">
+                        {BAR_HEIGHTS.map((height, index) => (
+                          <span
+                            key={index}
+                            className="design-preview-bar w-full rounded-t-sm"
+                            style={{
+                              height: `${height}%`,
+                              background: `var(--palette-${BAR_TOKENS[index]})`,
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    <div className="flex flex-wrap gap-2 font-sans">
+                      <span className="design-preview-primary rounded-[var(--radius-sm)] px-3 py-1.5 text-[13px] font-semibold">
+                        Primary
+                      </span>
+                      <span className="design-preview-secondary rounded-[var(--radius-sm)] px-3 py-1.5 text-[13px] font-semibold">
+                        Secondary
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1" aria-live="polite">
+                    <ContrastRow
+                      label="text / surface"
+                      fg={active.text}
+                      bg={active.surface}
+                    />
+                    <ContrastRow
+                      label="button / primary"
+                      fg={active.surface}
+                      bg={active.primary}
+                    />
+                  </div>
+                </div>
+              </CodeWindow>
+            </motion.div>
+          </div>
+        </div>
+
+        <div className="grid auto-rows-fr grid-cols-1 gap-[var(--gap)] pt-[var(--intro-gap)] md:grid-cols-3">
+          {PRINCIPLES.map((principle, index) => (
+            <motion.div key={principle.title} className="card flex h-full flex-col" {...reveal(0.05 * (index % 3))}>
+              <h3 className="title-sm">
+                {principle.title}
+              </h3>
+              <p className="body-copy mt-2">
+                {principle.description}
               </p>
             </motion.div>
           ))}
         </div>
-      </div>
+
+        <div className="pt-[var(--intro-gap)]">
+          <motion.div {...reveal(0)}>
+            <h3 className="title-sm">
+              What I Design
+            </h3>
+            <p className="body-copy mt-3 max-w-2xl">
+              The same six principles, applied to the assets a brand or launch
+              actually needs.
+            </p>
+          </motion.div>
+
+          <div className="mt-6 grid auto-rows-fr grid-cols-1 gap-[var(--gap)] sm:grid-cols-2 xl:grid-cols-5">
+            {DELIVERABLES.map((deliverable, index) => (
+              <motion.div key={deliverable.title} className="card flex h-full flex-col" {...reveal(0.05 * index)}>
+                <h4 className="title-sm text-base">
+                  {deliverable.title}
+                </h4>
+                <p className="body-copy mt-2">
+                  {deliverable.description}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </Container>
     </section>
   );
 }

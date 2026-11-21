@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import SectionTitle from "./SectionTitle";
+import SectionHeading from "./SectionHeading";
+import Container from "./Container";
 import Connector, { StackedConnector } from "./Connector";
 import {
   CodeArray,
@@ -81,95 +82,99 @@ export default function About() {
   const reveal = useReveal();
 
   return (
-    <section id="about" aria-labelledby="about-heading" className="w-full pb-8">
-      <SectionTitle text="About" headingId="about-heading" />
-
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 md:px-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-center lg:gap-16 lg:px-14 lg:pt-10">
-        {/* Top-aligned, a little below the panel's top edge. */}
-        <motion.div className="lg:self-start lg:pt-14" {...reveal(0)}>
-          <p className="font-display text-4xl leading-[1.05] md:text-5xl">
-            <span className="block text-[var(--gold)]">Product thinking</span>
-            <span className="relative block text-[var(--text-primary)]">
-              meets engineering craft.
-              {/* Headline → profile panel, centred on the white line's first
-                  row; ends ~14px inside the box because the tilt pulls the
-                  panel's visible left edge inward. */}
-              <Connector
-                variant="horizontal"
-                length={78}
-                className="absolute top-[0.525em] left-full -translate-y-1/2"
-              />
-            </span>
-          </p>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
-            Building reliable, user-friendly software that solves real business
-            problems.
-          </p>
-        </motion.div>
-
-        <StackedConnector />
-
-        <div className="lg:pb-6">
-          <motion.div className="code-window-stage relative" {...reveal(0.1)}>
-            <CodeWindow
-              title="profile.json"
-              className="code-window--tilted about-window--primary"
-            >
-              <CodePunct>{"{"}</CodePunct>
-              {PROFILE.map(([name, value], index) => (
-                <ProfileLine
-                  key={name}
-                  name={name}
-                  value={value}
-                  last={index === PROFILE.length - 1}
+    <section id="about" aria-labelledby="about-heading" className="section section--alt">
+      <SectionHeading
+        text="About"
+        headingId="about-heading"
+      />
+      <Container className="section-body">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:items-center lg:gap-x-[var(--gap)]">
+          {/* Top-aligned, a little below the panel's top edge. */}
+          <motion.div className="lg:self-start" {...reveal(0)}>
+            <p className="display-lede">
+              <span className="block text-[var(--gold)]">Product thinking</span>
+              <span className="relative block text-[var(--text-primary)]">
+                meets engineering craft.
+                {/* Headline → profile panel, centred on the white line's first
+                    row; ends ~14px inside the box because the tilt pulls the
+                    panel's visible left edge inward. */}
+                <Connector
+                  variant="horizontal"
+                  length={40}
+                  className="absolute top-[var(--lede-row-center)] left-full -translate-y-1/2"
                 />
-              ))}
-              <CodePunct>{"}"}</CodePunct>
-            </CodeWindow>
-          </motion.div>
-
-          <StackedConnector stagger={1} />
-
-          <motion.div
-            className="code-window-stage relative lg:-mt-6 lg:-ml-8 lg:w-[86%]"
-            {...reveal(0.2)}
-          >
-            {/* Profile panel → philosophy panel (elbow off the right edge) */}
-            <Connector
-              variant="elbow-right"
-              stagger={1}
-              className="absolute top-6 left-full"
-            />
-
-            <CodeWindow
-              title="philosophy.ts"
-              className="code-window--tilted about-window--secondary"
-            >
-              <div className="space-y-3">
-                {PHILOSOPHY.map((point) => (
-                  <div key={point} className="grid grid-cols-[auto_1fr] gap-x-2">
-                    <span className="text-[var(--gold)]">{"//"}</span>
-                    <span className="text-[var(--text-muted)]">{point}</span>
-                  </div>
-                ))}
-              </div>
-            </CodeWindow>
-          </motion.div>
-        </div>
-      </div>
-
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 gap-8 px-6 pt-14 pb-4 md:grid-cols-3 md:px-10 lg:px-14">
-        {DETAILS.map((detail, index) => (
-          <motion.div key={detail.title} {...reveal(0.05 * index)}>
-            <h3 className="font-display text-sm tracking-[0.12em] text-[var(--gold)] uppercase md:text-base">
-              {detail.title}
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-[var(--text-muted)] md:text-[0.95rem]">
-              {detail.body}
+              </span>
+            </p>
+            <p className="body-copy mt-3 max-w-md">
+              Building reliable, user-friendly software that solves real business
+              problems.
             </p>
           </motion.div>
-        ))}
-      </div>
+
+          <StackedConnector />
+
+          <div className="lg:pb-6">
+            <motion.div className="code-window-stage relative" {...reveal(0.1)}>
+              <CodeWindow
+                title="profile.json"
+                className="code-window--tilted about-window--primary"
+              >
+                <CodePunct>{"{"}</CodePunct>
+                {PROFILE.map(([name, value], index) => (
+                  <ProfileLine
+                    key={name}
+                    name={name}
+                    value={value}
+                    last={index === PROFILE.length - 1}
+                  />
+                ))}
+                <CodePunct>{"}"}</CodePunct>
+              </CodeWindow>
+            </motion.div>
+
+            <StackedConnector stagger={1} />
+
+            <motion.div
+              className="code-window-stage relative lg:-mt-6 lg:-ml-8 lg:w-[86%]"
+              {...reveal(0.2)}
+            >
+              {/* Profile panel → philosophy panel (elbow off the right edge) */}
+              <Connector
+                variant="elbow-right"
+                stagger={1}
+                className="absolute top-6 left-full"
+              />
+
+              <CodeWindow
+                title="philosophy.ts"
+                className="code-window--tilted about-window--secondary"
+              >
+                <div className="space-y-3">
+                  {PHILOSOPHY.map((point) => (
+                    <div key={point} className="grid grid-cols-[auto_1fr] gap-x-2">
+                      <span className="text-[var(--gold)]">{"//"}</span>
+                      <span className="text-[var(--text-muted)]">{point}</span>
+                    </div>
+                  ))}
+                </div>
+              </CodeWindow>
+            </motion.div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-[var(--gap)] pt-[var(--intro-gap)] md:grid-cols-3">
+          {DETAILS.map((detail, index) => (
+            <motion.div key={detail.title} className="card" {...reveal(0.05 * index)}>
+              <h3 className="title-sm">
+                {detail.title}
+              </h3>
+              <p className="body-copy mt-2">
+                {detail.body}
+              </p>
+            </motion.div>
+          ))}
+        </div>
+      </Container>
     </section>
   );
 }

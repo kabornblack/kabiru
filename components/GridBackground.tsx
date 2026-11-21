@@ -22,9 +22,16 @@ export default function GridBackground() {
     ).matches;
     if (!finePointer || reducedMotion) return;
 
+    // The spotlight lives in the Hero only. Elsewhere (and on routes with no
+    // Hero) nothing is attached; the pointermove/rAF work runs only while the
+    // pointer is inside the Hero.
+    const hero = document.getElementById("home");
+    if (!hero) return;
+
     let frame = 0;
     let last = 0;
-    let visible = false;
+    let active = false; // pointermove listener attached
+    let visible = false; // spotlight showing
     let targetX = 0;
     let targetY = 0;
     let x = 0;
@@ -55,7 +62,22 @@ export default function GridBackground() {
       write();
     };
 
+    const inHero = (clientX: number, clientY: number) => {
+      const r = hero.getBoundingClientRect();
+      return (
+        clientX >= r.left &&
+        clientX <= r.right &&
+        clientY >= r.top &&
+        clientY <= r.bottom
+      );
+    };
+
     const onPointerMove = (event: PointerEvent) => {
+      // Hero scrolled away under a stationary pointer: stop as soon as we see it.
+      if (!inHero(event.clientX, event.clientY)) {
+        deactivate();
+        return;
+      }
       targetX = event.clientX;
       targetY = event.clientY;
 
@@ -77,30 +99,47 @@ export default function GridBackground() {
       }
     };
 
-    const hide = () => {
+    const activate = () => {
+      if (active) return;
+      active = true;
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+    };
+
+    const deactivate = () => {
+      if (active) {
+        active = false;
+        window.removeEventListener("pointermove", onPointerMove);
+      }
+      cancelAnimationFrame(frame);
+      frame = 0;
       visible = false;
       el.dataset.spotlight = "off";
     };
 
-    const onPointerOut = (event: PointerEvent) => {
-      if (!event.relatedTarget) hide();
-    };
+    const onHeroEnter = () => activate();
+    const onHeroLeave = () => deactivate();
 
+    // Hero fully scrolled out of view: hide even if the pointer hasn't moved.
+    const observer = new IntersectionObserver(([entry]) => {
+      if (!entry.isIntersecting) deactivate();
+    });
+    observer.observe(hero);
+
+    hero.addEventListener("pointerenter", onHeroEnter);
+    hero.addEventListener("pointerleave", onHeroLeave);
+    window.addEventListener("blur", deactivate);
     const onVisibility = () => {
-      if (document.hidden) hide();
+      if (document.hidden) deactivate();
     };
-
-    window.addEventListener("pointermove", onPointerMove, { passive: true });
-    document.addEventListener("pointerout", onPointerOut);
-    window.addEventListener("blur", hide);
     document.addEventListener("visibilitychange", onVisibility);
 
     return () => {
-      window.removeEventListener("pointermove", onPointerMove);
-      document.removeEventListener("pointerout", onPointerOut);
-      window.removeEventListener("blur", hide);
+      hero.removeEventListener("pointerenter", onHeroEnter);
+      hero.removeEventListener("pointerleave", onHeroLeave);
+      window.removeEventListener("blur", deactivate);
       document.removeEventListener("visibilitychange", onVisibility);
-      cancelAnimationFrame(frame);
+      observer.disconnect();
+      deactivate();
     };
   }, []);
 

@@ -22,7 +22,7 @@ export default function ProjectCard({ project, eager = false }: ProjectCardProps
       className="project-card flex h-full flex-col"
       bodyClassName="flex flex-1 flex-col"
     >
-      <div className="relative aspect-[16/10] overflow-hidden rounded-[var(--radius-sm)] bg-black/30">
+      <div className="relative aspect-[16/10] overflow-hidden rounded-[var(--radius-sm)] bg-[var(--ink-900)]">
         <Image
           src={project.image}
           alt={`${project.title} project screenshot`}
@@ -41,20 +41,20 @@ export default function ProjectCard({ project, eager = false }: ProjectCardProps
         </span>
       </div>
 
-      <h2 className="font-display mt-1 text-2xl text-[var(--gold)]">
+      <h2 className="font-display mt-2 text-2xl leading-none text-[var(--text-primary)]">
         {project.title}
       </h2>
-      <p className="mt-2 line-clamp-3 font-sans text-sm leading-relaxed text-[var(--text-muted)] md:text-base">
+      <p className="body-copy mt-2 line-clamp-3 font-sans">
         {project.description}
       </p>
 
-      <div className="mt-3">
+      <div className="mt-2">
         <span className="text-[var(--gold)]">stack</span>
         <CodePunct>: </CodePunct>
         <CodeArray items={project.tags} />
       </div>
 
-      <div className="mt-auto flex flex-wrap gap-3 pt-5 font-sans">
+      <div className="mt-auto flex flex-wrap gap-3 pt-4 font-sans">
         {project.liveUrl && (
           <a
             href={project.liveUrl}
