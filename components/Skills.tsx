@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion";
 import SkillStackShowcase, { type SkillCategory } from "./SkillStackShowcase";
-import SectionTitle from "./SectionTitle";
+import SectionHeading from "./SectionHeading";
+import Container from "./Container";
 import Connector, { StackedConnector } from "./Connector";
 import { useReveal } from "./CodeWindow";
 
@@ -446,48 +447,46 @@ export default function Skills() {
   const reveal = useReveal();
 
   return (
-    <section id="skills" aria-labelledby="skills-heading" className="w-full pb-8">
-      <SectionTitle
+    <section id="skills" aria-labelledby="skills-heading" className="section">
+      <SectionHeading
         text="Skills"
         headingId="skills-heading"
-        gapSm={38}
-        gapMd={52}
-        gapLg={66}
       />
+      <Container className="section-body">
+        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center lg:gap-x-[var(--gap)]">
+          {/* Top-aligned, a little below the panel's top edge. */}
+          <motion.div
+            className="lg:col-start-2 lg:row-start-1 lg:self-start"
+            {...reveal(0)}
+          >
+            <p className="display-lede">
+              <span className="block text-[var(--gold)]">Core strengths</span>
+              <span className="relative block text-[var(--text-primary)]">
+                and working knowledge.
+                {/* Main panel → headline, centred on the white line's first
+                    row; starts ~14px inside the box because the tilt pulls the
+                    panel's visible right edge inward. */}
+                <Connector
+                  variant="horizontal"
+                  length={40}
+                  ghostFrom="end"
+                  className="absolute top-[var(--lede-row-center)] right-full -translate-y-1/2"
+                />
+              </span>
+            </p>
+            <p className="body-copy mt-3 max-w-md">
+              Across frontend, backend, database &amp; cloud, AI &amp;
+              automation, Web3, and tools &amp; workflow.
+            </p>
+          </motion.div>
 
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-1 px-6 pt-6 pb-6 md:px-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-center lg:gap-14 lg:px-14 lg:pt-10">
-        {/* Top-aligned, a little below the panel's top edge. */}
-        <motion.div
-          className="lg:col-start-2 lg:row-start-1 lg:self-start lg:pt-14"
-          {...reveal(0)}
-        >
-          <p className="font-display text-4xl leading-[1.05] md:text-5xl">
-            <span className="block text-[var(--gold)]">Core strengths</span>
-            <span className="relative block text-[var(--text-primary)]">
-              and working knowledge.
-              {/* Main panel → headline, centred on the white line's first
-                  row; starts ~14px inside the box because the tilt pulls the
-                  panel's visible right edge inward. */}
-              <Connector
-                variant="horizontal"
-                length={70}
-                ghostFrom="end"
-                className="absolute top-[0.525em] right-full -translate-y-1/2"
-              />
-            </span>
-          </p>
-          <p className="mt-5 max-w-md text-base leading-relaxed text-[var(--text-muted)] md:text-lg">
-            Across frontend, backend, database &amp; cloud, AI &amp;
-            automation, Web3, and tools &amp; workflow.
-          </p>
-        </motion.div>
+          <StackedConnector />
 
-        <StackedConnector />
-
-        <div className="lg:col-start-1 lg:row-start-1">
-          <SkillStackShowcase categories={skillCategories} />
+          <div className="lg:col-start-1 lg:row-start-1">
+            <SkillStackShowcase categories={skillCategories} />
+          </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }

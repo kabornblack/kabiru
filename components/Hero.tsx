@@ -23,6 +23,7 @@ import {
   SiGraphql,
 } from "react-icons/si";
 import ScrambleText from "./ScrambleText";
+import Container from "./Container";
 
 const techStack = [
   { icon: SiReact, name: "React" },
@@ -65,8 +66,8 @@ const TechList = ({ duplicate = false }: { duplicate?: boolean }) => (
 const TechMarquee = ({ reducedMotion }: { reducedMotion: boolean }) => {
   if (reducedMotion) {
     return (
-      <div className="absolute inset-x-0 bottom-5 w-full px-5 sm:bottom-7 sm:px-8">
-        <ul className="mx-auto flex max-w-5xl flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-4">
+      <div className="absolute inset-x-0 bottom-5 w-full sm:bottom-7">
+        <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-4">
           {techStack.map((tech) => (
             <li
               key={tech.name}
@@ -82,8 +83,8 @@ const TechMarquee = ({ reducedMotion }: { reducedMotion: boolean }) => {
   }
 
   return (
-    <div className="absolute inset-x-0 bottom-5 w-full px-3 sm:bottom-7 sm:px-6">
-      <div className="mx-auto max-w-5xl pt-4">
+    <div className="absolute inset-x-0 bottom-5 w-full sm:bottom-7">
+      <div className="pt-4">
         {/* Focusable so keyboard users can pause it (hover pauses it too).
             The fade mask sits on an inner element so the focus ring isn't
             masked away. */}
@@ -111,8 +112,8 @@ export function Hero() {
   const reducedMotion = Boolean(prefersReducedMotion);
 
   return (
-    <section id="home" aria-labelledby="home-heading" className="pb-8">
-      <div className="relative mx-auto flex min-h-[88svh] max-w-7xl flex-col items-center justify-center overflow-hidden px-5 pb-24 pt-24 md:min-h-[90svh] md:pt-28">
+    <section id="home" aria-labelledby="home-heading" className="section section--flush">
+      <Container className="relative flex min-h-[88svh] flex-col items-center justify-center overflow-hidden pb-24 pt-24 md:min-h-[90svh] md:pt-28">
         <div className="relative z-20 mx-auto max-w-3xl text-center">
           {/* Soft dark wash behind the text so grid lines don't cut through it. */}
           <div
@@ -121,7 +122,7 @@ export function Hero() {
           />
 
           {/* A status, not a control. */}
-          <p className="hero-enter mb-6 flex justify-center">
+          <div className="hero-enter mb-6 flex justify-center">
             <span className="cta-chip inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 font-mono text-[13px] text-[var(--text-primary)]">
               <span
                 className="relative flex h-2 w-2 shrink-0"
@@ -137,11 +138,11 @@ export function Hero() {
               <span className="sr-only">, </span>
               <span className="text-[var(--text-muted)]">{LOCATION}</span>
             </span>
-          </p>
+          </div>
 
           <h1
             id="home-heading"
-            className="hero-enter font-display text-4xl font-bold leading-none text-[var(--gold)] md:text-6xl lg:text-7xl"
+            className="hero-enter display-hero"
             style={{ animationDelay: "70ms" }}
           >
             Kabiru Shaibu
@@ -195,7 +196,7 @@ export function Hero() {
         >
           <FaChevronDown className="hero-cue-icon h-4 w-4" aria-hidden="true" />
         </button>
-      </div>
+      </Container>
     </section>
   );
 }

@@ -127,7 +127,7 @@ export default function ExitIntentPopup() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: reducedMotion ? 0 : 0.2 }}
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-[color-mix(in_srgb,var(--ink-900)_80%,transparent)] px-4 backdrop-blur-sm"
           onClick={(event) => {
             if (event.target === event.currentTarget) close();
           }}
@@ -151,7 +151,7 @@ export default function ExitIntentPopup() {
               type="button"
               onClick={close}
               aria-label="Close"
-              className="focus-ring absolute top-2 right-2 flex h-11 w-11 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:bg-white/5 hover:text-[var(--gold)]"
+              className="focus-ring absolute top-2 right-2 flex h-11 w-11 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:bg-[var(--ink-600)] hover:text-[var(--gold)]"
             >
               <FaTimes className="h-4 w-4" aria-hidden="true" />
             </button>
