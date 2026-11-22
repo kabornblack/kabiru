@@ -24,6 +24,7 @@ import {
 } from "react-icons/si";
 import ScrambleText from "./ScrambleText";
 import Container from "./Container";
+import HeroPhotoStack from "./HeroPhotoStack";
 
 const techStack = [
   { icon: SiReact, name: "React" },
@@ -66,8 +67,8 @@ const TechList = ({ duplicate = false }: { duplicate?: boolean }) => (
 const TechMarquee = ({ reducedMotion }: { reducedMotion: boolean }) => {
   if (reducedMotion) {
     return (
-      <div className="absolute inset-x-0 bottom-5 w-full sm:bottom-7">
-        <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 pt-4">
+      <div className="hero-marquee-wrap">
+        <ul className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
           {techStack.map((tech) => (
             <li
               key={tech.name}
@@ -83,8 +84,8 @@ const TechMarquee = ({ reducedMotion }: { reducedMotion: boolean }) => {
   }
 
   return (
-    <div className="absolute inset-x-0 bottom-5 w-full sm:bottom-7">
-      <div className="pt-4">
+    <div className="hero-marquee-wrap">
+      <div>
         {/* Focusable so keyboard users can pause it (hover pauses it too).
             The fade mask sits on an inner element so the focus ring isn't
             masked away. */}
@@ -112,9 +113,13 @@ export function Hero() {
   const reducedMotion = Boolean(prefersReducedMotion);
 
   return (
-    <section id="home" aria-labelledby="home-heading" className="section section--flush">
-      <Container className="relative flex min-h-[88svh] flex-col items-center justify-center overflow-hidden pb-24 pt-24 md:min-h-[90svh] md:pt-28">
-        <div className="relative z-20 mx-auto max-w-3xl text-center">
+    <section
+      id="home"
+      aria-labelledby="home-heading"
+      className="section section--flush hero"
+    >
+      <Container className="hero-shell relative">
+        <div className="hero-main">
           {/* Soft dark wash behind the text so grid lines don't cut through it. */}
           <div
             aria-hidden="true"
@@ -140,16 +145,16 @@ export function Hero() {
             </span>
           </div>
 
-          <h1
-            id="home-heading"
-            className="hero-enter display-hero"
-            style={{ animationDelay: "70ms" }}
-          >
+          {/* The visible name is gone, so the h1 stays for the outline and
+              assistive tech; the photo stack sits right after it. */}
+          <h1 id="home-heading" className="sr-only">
             Kabiru Shaibu
           </h1>
 
+          <HeroPhotoStack />
+
           <p
-            className="hero-enter mx-auto mt-5 max-w-2xl text-base leading-snug font-medium text-[var(--text-primary)] md:mt-6 md:text-xl md:leading-snug"
+            className="hero-enter mx-auto max-w-2xl text-base leading-snug font-medium text-[var(--text-primary)] md:text-xl md:leading-snug"
             style={{ animationDelay: "140ms" }}
           >
             Frontend-focused Full-Stack Product Engineer. I design and ship
@@ -192,7 +197,7 @@ export function Hero() {
           data-scroll-cue
           onClick={() => scrollToHash("about")}
           aria-label="Scroll to the About section"
-          className="hero-cue focus-ring absolute bottom-14 left-1/2 z-20 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:text-[var(--gold)] sm:bottom-[4.25rem]"
+          className="hero-cue focus-ring absolute left-1/2 z-20 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full text-[var(--text-muted)] transition-colors hover:text-[var(--gold)] "
         >
           <FaChevronDown className="hero-cue-icon h-4 w-4" aria-hidden="true" />
         </button>

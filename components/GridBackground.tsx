@@ -72,10 +72,31 @@ export default function GridBackground() {
       );
     };
 
+    // Zones (the hero photo cluster) where the spotlight stays off and the
+    // pointer is just the native cursor. Re-entering the hero proper snaps the
+    // spotlight back to the pointer through the normal "coming back" path.
+    const inNoSpotlightZone = (clientX: number, clientY: number) =>
+      Array.from(hero.querySelectorAll("[data-no-spotlight]")).some((node) => {
+        const r = node.getBoundingClientRect();
+        return (
+          clientX >= r.left &&
+          clientX <= r.right &&
+          clientY >= r.top &&
+          clientY <= r.bottom
+        );
+      });
+
     const onPointerMove = (event: PointerEvent) => {
       // Hero scrolled away under a stationary pointer: stop as soon as we see it.
       if (!inHero(event.clientX, event.clientY)) {
         deactivate();
+        return;
+      }
+      if (inNoSpotlightZone(event.clientX, event.clientY)) {
+        cancelAnimationFrame(frame);
+        frame = 0;
+        visible = false;
+        el.dataset.spotlight = "off";
         return;
       }
       targetX = event.clientX;
